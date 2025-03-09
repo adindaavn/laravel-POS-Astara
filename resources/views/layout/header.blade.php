@@ -83,9 +83,19 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
 
     <!-- endbuild -->
-
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/maxLength/maxLength.css" />
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/select2/select2.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/fonts/flag-icons.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/apex-charts/apex-charts.css" />
+
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/flatpickr/flatpickr.css" />
+    <!-- Row Group CSS -->
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css" />
+    <!-- Form Validation -->
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/@form-validation/form-validation.css" />
 
     <!-- Page CSS -->
 
@@ -191,14 +201,71 @@
 
                     <!-- Apps & Pages -->
                     <li class="menu-header small">
-                        <span class="menu-header-text" data-i18n="Apps & Pages">Apps &amp; Pages</span>
+                        <span class="menu-header-text">Produk</span>
                     </li>
                     <li class="menu-item">
-                        <a href="app-kanban.html" class="menu-link">
-                            <i class="menu-icon icon-base bx bx-grid"></i>
-                            <div data-i18n="Kanban">Kanban</div>
+                        <a href="{{ route('kategori.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-category-alt"></i>
+                            <div data-i18n="Kategori">Kategori</div>
                         </a>
                     </li>
+                    <li class="menu-item">
+                        <a href="{{ route('pemasok.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-store-alt"></i>
+                            <div data-i18n="Pemasok">Pemasok</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('buku.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-book"></i>
+                            <div data-i18n="Buku">Buku</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-header small">
+                        <span class="menu-header-text">Toko</span>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('member.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user-badge"></i>
+                            <div data-i18n="Member">Member</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('voucher.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-discount"></i>
+                            <div data-i18n="Voucher">Voucher</div>
+                        </a>
+                    </li>
+
+                    <li class="menu-header small">
+                        <span class="menu-header-text">Transaksi</span>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('penjualan.create') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-cart"></i>
+                            <div data-i18n="Transaksi">Transaksi</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('penjualan.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-cart"></i>
+                            <div data-i18n="Data Transaksi">Data Transaksi</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('pembelian.create') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-cart"></i>
+                            <div data-i18n="beli">beli</div>
+                        </a>
+                    </li>
+                    <li class="menu-item">
+                        <a href="{{ route('pembelian.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-cart"></i>
+                            <div data-i18n="Data brli">Data brli</div>
+                        </a>
+                    </li>
+
                 </ul>
             </aside>
 
@@ -507,6 +574,35 @@
                     <div class="content-backdrop fade"></div>
                 </div>
                 <!-- Content wrapper -->
+
+                @if (Session::has('success'))
+                <div class="bs-toast toast toast-placement-ex m-2 bg-success bottom-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <i class="bx bx-bell me-2"></i>
+                        <div class="me-auto fw-medium">Success!</div>
+                    </div>
+                    <div class="toast-body">
+                        <i class="bx bx-check-circle"></i>
+                        {{ Session::get('success') }}
+                    </div>
+                </div>
+                @endif
+
+                @if(session('error'))
+                <div class="bs-toast toast toast-placement-ex m-2 bg-danger bottom-0 end-0" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <i class="bx bx-bell me-2"></i>
+                        <div class="me-auto fw-medium">Error!</div>
+                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        <i class="bx bx-check-circle"></i>
+                        {{ session('error') }}
+                    </div>
+                </div>
+                @endif
+
+
             </div>
             <!-- / Layout page -->
         </div>
@@ -526,21 +622,15 @@
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/theme.js  -->
 
-
-    <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
+    f
 
     <script src="{{ asset('assets') }}/vendor/libs/popper/popper.js"></script>
     <script src="{{ asset('assets') }}/vendor/js/bootstrap.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/@algolia/autocomplete-js.js"></script>
 
-
-
     <script src="{{ asset('assets') }}/vendor/libs/pickr/pickr.js"></script>
 
-
-
     <script src="{{ asset('assets') }}/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
 
     <script src="{{ asset('assets') }}/vendor/libs/hammer/hammer.js"></script>
 
@@ -548,19 +638,63 @@
 
 
     <script src="{{ asset('assets') }}/vendor/js/menu.js"></script>
-
     <!-- endbuild -->
 
     <!-- Vendors JS -->
+
+    <script src="{{ asset('assets') }}/vendor/libs/select2/select2.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/apex-charts/apexcharts.js"></script>
 
+    <!-- Vendors JS -->
+    <script src="{{ asset('assets') }}/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
+    <script src="{{ asset('assets') }}/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
+    <!-- Flat Picker -->
+    <script src="{{ asset('assets') }}/vendor/libs/moment/moment.js"></script>
+    <script src="{{ asset('assets') }}/vendor/libs/flatpickr/flatpickr.js"></script>
+    <!-- Form Validation -->
+    <script src="{{ asset('assets') }}/vendor/libs/@form-validation/popular.js"></script>
+    <script src="{{ asset('assets') }}/vendor/libs/@form-validation/bootstrap5.js"></script>
+    <script src="{{ asset('assets') }}/vendor/libs/@form-validation/auto-focus.js"></script>
     <!-- Main JS -->
 
     <script src="{{ asset('assets') }}/js/main.js"></script>
 
-
     <!-- Page JS -->
+    <script src="{{ asset('assets') }}/js/forms-extras.js"></script>
+    <script src="{{ asset('assets') }}/js/forms-selects.js"></script>
     <script src="{{ asset('assets') }}/js/dashboards-analytics.js"></script>
+    <script src="{{ asset('assets') }}/js/tables-datatables-basic.js"></script>
+    <script src="{{ asset('assets') }}/js/ui-toasts.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var $toast = $(".toast");
+
+            if ($toast.length) {
+                var toast = new bootstrap.Toast($toast[0]);
+                toast.show();
+            }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.form-repeater').repeater({
+                initEmpty: false,
+                defaultValues: {
+                    'text-input': ''
+                },
+                show: function() {
+                    $(this).slideDown();
+                },
+                hide: function(deleteElement) {
+                    if (confirm('Yakin ingin menghapus item ini?')) {
+                        $(this).slideUp(deleteElement);
+                    }
+                },
+                isFirstItemUndeletable: true
+            });
+        });
+    </script>
 
 </body>
 
