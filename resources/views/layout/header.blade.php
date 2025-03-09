@@ -165,7 +165,7 @@
                                 </svg>
                             </span>
                         </span>
-                        <span class="app-brand-text demo menu-text fw-bold ms-2">Sneat</span>
+                        <span class="app-brand-text demo menu-text fw-bold ms-2">Astara</span>
                     </a>
 
                     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -174,99 +174,85 @@
                 </div>
 
                 <div class="menu-inner-shadow"></div>
-
-
-
                 <ul class="menu-inner py-1">
                     <!-- Dashboards -->
-                    <li class="menu-item active open">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                    <li class="menu-item {{ request()->routeIs('home') ? 'active' : '' }}">
+                        <a href="{{ route('home') }}" class="menu-link">
                             <i class="menu-icon icon-base bx bx-home-smile"></i>
-                            <div data-i18n="Dashboards">Dashboards</div>
-                            <div class="badge text-bg-danger rounded-pill ms-auto">5</div>
+                            <div data-i18n="Dashboard">Dashboard</div>
                         </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item active">
-                                <a href="dashboards-analytics.html" class="menu-link">
-                                    <div data-i18n="Analytics">Analytics</div>
-                                </a>
-                            </li>
-                            <li class="menu-item">
-                                <a href="dashboards-crm.html" class="menu-link">
-                                    <div data-i18n="CRM">CRM</div>
-                                </a>
-                            </li>
-                        </ul>
                     </li>
 
-                    <!-- Apps & Pages -->
+                    <!-- Produk -->
                     <li class="menu-header small">
                         <span class="menu-header-text">Produk</span>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('kategori.index') ? 'active' : '' }}">
                         <a href="{{ route('kategori.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-category-alt"></i>
                             <div data-i18n="Kategori">Kategori</div>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('pemasok.index') ? 'active' : '' }}">
                         <a href="{{ route('pemasok.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-store-alt"></i>
                             <div data-i18n="Pemasok">Pemasok</div>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('buku.index') ? 'active' : '' }}">
                         <a href="{{ route('buku.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-book"></i>
                             <div data-i18n="Buku">Buku</div>
                         </a>
                     </li>
 
+                    <!-- Toko -->
                     <li class="menu-header small">
                         <span class="menu-header-text">Toko</span>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('member.index') ? 'active' : '' }}">
                         <a href="{{ route('member.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-user-badge"></i>
                             <div data-i18n="Member">Member</div>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('voucher.index') ? 'active' : '' }}">
                         <a href="{{ route('voucher.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-discount"></i>
                             <div data-i18n="Voucher">Voucher</div>
                         </a>
                     </li>
 
+                    <!-- Transaksi -->
                     <li class="menu-header small">
                         <span class="menu-header-text">Transaksi</span>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('penjualan.create') ? 'active' : '' }}">
                         <a href="{{ route('penjualan.create') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bxs-cart"></i>
+                            <i class="menu-icon tf-icons bx bx-cart"></i>
                             <div data-i18n="Transaksi">Transaksi</div>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('penjualan.index') ? 'active' : '' }}">
                         <a href="{{ route('penjualan.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bxs-cart"></i>
+                            <i class="menu-icon tf-icons bx bx-receipt"></i>
                             <div data-i18n="Data Transaksi">Data Transaksi</div>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('pembelian.create') ? 'active' : '' }}">
                         <a href="{{ route('pembelian.create') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bxs-cart"></i>
-                            <div data-i18n="beli">beli</div>
+                            <i class="menu-icon tf-icons bx bxs-package"></i>
+                            <div data-i18n="Pembelian">Pembelian</div>
                         </a>
                     </li>
-                    <li class="menu-item">
+                    <li class="menu-item {{ request()->routeIs('pembelian.index') ? 'active' : '' }}">
                         <a href="{{ route('pembelian.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bxs-cart"></i>
-                            <div data-i18n="Data brli">Data brli</div>
+                            <i class="menu-icon tf-icons bx bxs-receipt"></i>
+                            <div data-i18n="Data Pembelian">Data Pembelian</div>
                         </a>
                     </li>
-
                 </ul>
+
             </aside>
 
             <div class="menu-mobile-toggler d-xl-none rounded-1">
@@ -665,6 +651,7 @@
     <script src="{{ asset('assets') }}/js/dashboards-analytics.js"></script>
     <script src="{{ asset('assets') }}/js/tables-datatables-basic.js"></script>
     <script src="{{ asset('assets') }}/js/ui-toasts.js"></script>
+    <script src="{{ asset('assets') }}/js/cards-actions.js"></script>
 
     <script>
         $(document).ready(function() {

@@ -5,7 +5,7 @@
     <div class="mb-4 order-0">
         <button type="button" class="btn btn-primary btn-add"
             data-bs-toggle="modal"
-            data-bs-target="#modalEdit">
+            data-bs-target="#modalMember">
             <div class="d-flex align-content-center py-1">
                 <i class="menu-icon tf-icons bx bx-plus"></i>
                 <h5 class="text-white m-0">Tambah</h5>
@@ -43,7 +43,7 @@
                                     <button type="button"
                                         class="btn btn-edit"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#modalEdit"
+                                        data-bs-target="#modalMember"
                                         data-id="{{$data->id}}"
                                         data-point="{{$data->point}}"
                                         data-nama="{{$data->nama}}"
@@ -67,77 +67,9 @@
         </div>
     </div>
 </div>
+@include('member.modal')
 
-<!-- edit modal -->
-<div class="modal fade" id="modalEdit" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <form id="jenis-form" action="{{ route('member.store') }}" method="post">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modalCenterTitle"></h5>
-                    <button
-                        type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body py-2">
-                    <div class="row">
-
-                        <input type="hidden" name="_method" id="form-method" value="POST">
-                        <input type="hidden" name="id" id="id">
-
-                        <div class="col-12 mb-3">
-                            <label for="nama" class="form-label">Nama</label>
-                            <input
-                                type="text"
-                                id="nama"
-                                class="form-control"
-                                placeholder="Nama"
-                                name="nama" />
-                        </div>
-
-                        <div class="col-12 mb-3">
-                            <label for="alamat" class="form-label">Alamat</label>
-                            <textarea name="alamat" id="alamat" class="form-control"></textarea>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label for="telp" class="form-label">No Telepon</label>
-                                <input
-                                    type="text"
-                                    id="telp"
-                                    class="form-control"
-                                    placeholder="No. Telepon"
-                                    name="telp" />
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    class="form-control"
-                                    placeholder="Email"
-                                    name="email" />
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        Close
-                    </button>
-                    <button type="submit" class="btn btn-primary" id="submit-btn"></button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script src="{{ asset('assets') }}/plugins/jquery/jquery.min.js"></script>
+<script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 <script>
     $(document).ready(function() {
 

@@ -74,18 +74,18 @@
                                     id="stok"
                                     class="form-control"
                                     placeholder="Stok"
-                                    name="stok" readonly />
+                                    name="stok" />
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6 mb-3">
-                                <label for="pemasok" class="form-label">Pemasok</label>
+                                <label for="penerbit" class="form-label">Penerbit</label>
                                 <input
                                     type="text"
-                                    id="pemasok"
+                                    id="penerbit"
                                     class="form-control"
-                                    placeholder="Pemasok"
-                                    name="pemasok" />
+                                    placeholder="Penerbit"
+                                    name="penerbit" />
                             </div>
                             <div class="col-6 mb-3">
                                 <label for="thn_terbit" class="form-label">Tahun Terbit</label>

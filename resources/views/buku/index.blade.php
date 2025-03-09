@@ -73,7 +73,7 @@
                                         <th class="fw-bold">Judul</th>
                                         <th class="fw-bold">Penulis</th>
                                         <th class="fw-bold">Kategori</th>
-                                        <th class="fw-bold">Pemasok</th>
+                                        <th class="fw-bold">Penerbit</th>
                                         <th class="fw-bold">Tahun Terbit</th>
                                         <th></th>
                                     </tr>
@@ -92,7 +92,7 @@
                                             @endif
                                             @endforeach
                                         </td>
-                                        <td>{{$data->pemasok}}</td>
+                                        <td>{{$data->penerbit}}</td>
                                         <td>{{$data->thn_terbit}}</td>
                                         <td>
                                             <div class="d-flex align-items-center justify-content-center">
@@ -107,7 +107,7 @@
                                                     data-kategori_id="{{$data->kategori_id}}"
                                                     data-harga="{{$data->harga}}"
                                                     data-stok="{{$data->stok}}"
-                                                    data-pemasok="{{$data->pemasok}}"
+                                                    data-penerbit="{{$data->penerbit}}"
                                                     data-thn_terbit="{{$data->thn_terbit}}">
                                                     <span class="badge rounded-pill bg-label-info"><i class="bx bx-edit-alt text-dark"></i></span>
                                                 </button>
@@ -130,7 +130,7 @@
     </div>
 </div>
 
-
+@include('buku.modal')
 <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 <script>
     $(document).ready(function() {
@@ -144,7 +144,7 @@
             $('#kategori_id').val('');
             $('#harga').val('');
             $('#stok').val('');
-            $('#pemasok').val('');
+            $('#penerbit').val('');
             $('#isbn').val('');
             $('#thn_terbit').val('');
             $('#submit-btn').text('Tambah');
@@ -158,7 +158,7 @@
             let kategori_id = $(this).data('kategori_id');
             let harga = $(this).data('harga');
             let stok = $(this).data('stok');
-            let pemasok = $(this).data('pemasok');
+            let penerbit = $(this).data('penerbit');
             let isbn = $(this).data('isbn');
             let thn_terbit = $(this).data('thn_terbit');
 
@@ -173,7 +173,7 @@
             $('#kategori_id').val(kategori_id);
             $('#harga').val(harga);
             $('#stok').val(stok);
-            $('#pemasok').val(pemasok);
+            $('#penerbit').val(penerbit);
             $('#isbn').val(isbn);
             $('#thn_terbit').val(thn_terbit);
             $('#jml_halaman').val(jml_halaman);
