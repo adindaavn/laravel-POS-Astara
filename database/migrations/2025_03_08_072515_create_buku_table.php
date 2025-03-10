@@ -19,7 +19,6 @@ return new class extends Migration
             $table->string('penerbit')->nullable();
             $table->foreignId('kategori_id')->nullable()->constrained('kategori')->nullOnDelete()->cascadeOnUpdate();
             $table->double('harga');
-            $table->integer('stok')->nullable();
             $table->year('thn_terbit')->nullable();
             $table->timestamps();
         });

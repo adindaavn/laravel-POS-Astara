@@ -18,7 +18,8 @@ return new class extends Migration
             $table->foreignId('member_id')->nullable()->constrained('member')->nullOnDelete()->cascadeOnUpdate();
             $table->date('tgl');
             $table->double('total_bayar');
-            $table->string('pembayaran');
+            $table->enum('metode_bayar', ['cash', 'transfer', 'e-wallet', 'debit'])->default('cash');
+            $table->string('no_rekening', 50)->nullable();
             $table->timestamps();
         });
     }
