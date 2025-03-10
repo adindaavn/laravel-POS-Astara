@@ -37,6 +37,16 @@
                                 name="penulis" />
                         </div>
 
+                        <div class="col-12 mb-3">
+                            <label for="harga" class="form-label">Harga</label>
+                            <input
+                                type="number"
+                                id="harga"
+                                class="form-control"
+                                placeholder="Harga"
+                                name="harga" />
+                        </div>
+
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label for="isbn" class="form-label">ISBN</label>
@@ -57,26 +67,6 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-6 mb-3">
-                                <label for="harga" class="form-label">Harga</label>
-                                <input
-                                    type="number"
-                                    id="harga"
-                                    class="form-control"
-                                    placeholder="Harga"
-                                    name="harga" />
-                            </div>
-                            <div class="col-6 mb-3">
-                                <label for="stok" class="form-label">Stok</label>
-                                <input
-                                    type="number"
-                                    id="stok"
-                                    class="form-control"
-                                    placeholder="Stok"
-                                    name="stok" />
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-6 mb-3">
                                 <label for="penerbit" class="form-label">Penerbit</label>

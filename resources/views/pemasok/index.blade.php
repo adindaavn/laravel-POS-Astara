@@ -1,22 +1,26 @@
 @extends('layout.header')
 @section('title', 'Pemasok')
+@php
+$breadcrumbs = [
+['label' => 'Produk', 'route' => 'pemasok.index'],
+['label' => 'Pemasok', 'route' => 'pemasok.index'],
+];
+@endphp
 @section('content')
 <div class="row">
-    <div class="mb-4 order-0">
-        <button type="button" class="btn btn-primary btn-add"
-            data-bs-toggle="modal"
-            data-bs-target="#modalPemasok">
-            <div class="d-flex align-content-center py-1">
-                <i class="menu-icon tf-icons bx bx-plus"></i>
-                <h5 class="text-white m-0">Tambah</h5>
-            </div>
-        </button>
-    </div>
-
+    <x-breadcrumb :breadcrumbs="$breadcrumbs" />
     <div class="col-lg-12 mb-4 order-0">
         <div class="card">
+            <button type="button" class="btn btn-primary btn-add"
+                data-bs-toggle="modal"
+                data-bs-target="#modalPemasok">
+                <div class="d-flex align-content-center py-1">
+                    <i class="icon-base bx bx-plus me-1"></i>
+                    <span>Tambah</span>
+                </div>
+            </button>
             <h5 class="card-header pb-0 fw-bold">Data Pemasok</h5>
-            <div class="table-responsive text-nowrap p-3">
+            <div id="tableData" class="table-responsive text-nowrap p-5">
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr class="table-primary">

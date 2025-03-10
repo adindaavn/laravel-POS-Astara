@@ -1,8 +1,14 @@
 @extends('layout.header')
 @section('title', 'Kategori')
+@php
+$breadcrumbs = [
+['label' => 'Produk', 'route' => 'kategori.index'],
+['label' => 'Kategori', 'route' => 'kategori.index'],
+];
+@endphp
 @section('content')
 <div class="row">
-
+    <x-breadcrumb :breadcrumbs="$breadcrumbs" />
     <div class="col-lg-4 mb-4 order-0">
         <div class="accordion" id="accordionExample">
             <div class="card accordion-item p-1 active">
@@ -47,7 +53,7 @@
     <div class="col-lg-12 mb-4 order-0">
         <div class="card">
             <h5 class="card-header pb-0 fw-bold">Data Kategori</h5>
-            <div class="table-responsive text-nowrap p-3">
+            <div id="tableData" class="table-responsive text-nowrap p-5">
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr class="table-primary">
@@ -123,17 +129,16 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
                         Close
                     </button>
-                    <button type="button" class="btn btn-primary">Edit</button>
+                    <button type="submit" class="btn btn-primary">Edit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<script src="{{ asset('assets') }}/plugins/jquery/jquery.min.js"></script>
+<script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 <script>
     $(document).ready(function() {
-        // Ketika tombol "Edit" ditekan
         $('.btn-edit').click(function() {
             let id = $(this).data('id');
             let nama = $(this).data('nama');

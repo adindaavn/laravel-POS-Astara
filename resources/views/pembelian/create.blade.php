@@ -1,32 +1,55 @@
 @extends('layout.header')
 @section('title', 'Pendataan Buku')
+@php
+$breadcrumbs = [
+['label' => 'Transaksi', 'route' => 'pembelian.create'],
+['label' => 'Pembelian', 'route' => 'pembelian.create'],
+];
+@endphp
 @section('content')
 <div class="row">
+    <x-breadcrumb :breadcrumbs="$breadcrumbs" />
+    @if ($errors->any())
+    <div class="alert alert-danger">
+        <ul class="mb-0">
+            @foreach ($errors->all() as $error)
+            <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+    @endif
     <div class="col-lg-12 mb-4 order-0">
         <div class="card">
             <form id="formPembelian" action="{{ route('pembelian.store') }}" method="post">
                 @csrf
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
-                        <h5 class="pb-0 fw-bold">Transaksi</h5>
-                        <button type="submit" class="btn btn-primary" id="submit-btn">Bayar</button>
+                        <h5 class="pb-0 fw-bold">Pendataan Buku</h5>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">Tambah</button>
                     </div>
                     <div class="row">
-                        <div class="col-6 mb-3">
-                            <label for="pemasok_id" class="form-label">Pemasok</label>
-                            <div class="row">
-                                <div class="col-8">
-                                    <select class="select2 form-select" id="pemasok_id" name="pemasok_id" data-allow-clear="true">
-                                        @foreach($pemasok as $p)
-                                        <option value="{{$p->id}}">{{$p->nama}}</option>
-                                        @endforeach
-                                    </select>
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="pemasok_id" class="form-label">Pemasok</label>
+                                <div class="row">
+                                    <div class="col-8">
+                                        <select class="select2 form-select" id="pemasok_id" name="pemasok_id" data-allow-clear="true">
+                                            @foreach($pemasok as $p)
+                                            <option value="{{$p->id}}">{{$p->nama}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPemasok" type="button">
+                                            <i class="icon-base bx bx-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-4">
-                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPemasok" type="button">
-                                        <i class="icon-base bx bx-plus"></i>
-                                    </button>
-                                </div>
+
+                            </div>
+                            <div class="col-3 mb-3">
+                                <label for="total" class="form-label">Total Bayar</label>
+                                <input type="number" id="total" class="form-control" placeholder="Total Bayar" name="total" readonly />
                             </div>
                         </div>
 
@@ -46,10 +69,6 @@
                             </div>
                         </div>
 
-                        <div class="col-6 mb-3">
-                            <label for="total" class="form-label">Total Bayar</label>
-                            <input type="number" id="total" class="form-control" placeholder="Total Bayar" name="total" readonly />
-                        </div>
                     </div>
                 </div>
                 <input type="hidden" name="buku" id="bukuData">
@@ -70,11 +89,11 @@
         function getBukuItem() {
             return `
             <div class="buku-item row">
-                <div class="mb-6 col-lg-6 col-xl-4 col-12 mb-0">
+                <div class="mb-6 col-lg-6 col-xl-5 col-12 mb-0">
                     <label class="form-label">Judul Buku</label>
                     <select class="select2 form-select buku_id" data-allow-clear="true">
                         @foreach($buku as $b)
-                        <option value="{{$b->id}}">{{$b->nama}}</option>
+                        <option value="{{$b->id}}">{{$b->judul}} by {{$b->penulis}} ({{$b->isbn}})</option>
                         @endforeach
                     </select>
                 </div>
@@ -82,7 +101,7 @@
                     <label class="form-label">Harga</label>
                     <input type="number" class="form-control harga" />
                 </div>
-                <div class="mb-6 col-lg-6 col-xl-2 col-12 mb-0">
+                <div class="mb-6 col-lg-6 col-xl-1 col-12 mb-0">
                     <label class="form-label">Jumlah</label>
                     <input type="number" class="form-control jumlah" />
                 </div>

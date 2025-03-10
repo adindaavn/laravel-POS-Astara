@@ -1,10 +1,15 @@
 @extends('layout.header')
 @section('title', 'Transaksi Buku')
+@php
+$breadcrumbs = [
+['label' => 'Transaksi', 'route' => 'penjualan.create'],
+['label' => 'Penjualan', 'route' => 'penjualan.create'],
+];
+@endphp
 @section('content')
 <div class="row">
-
+    <x-breadcrumb :breadcrumbs="$breadcrumbs" />
     <div class="col-lg-8 mb-4 order-0">
-
         <div class="col-12">
             <div class="card card-action mb-6">
                 <div class="card-header">
@@ -19,7 +24,7 @@
                 </div>
                 <div class="collapse">
                     <div class="card-body pt-0">
-                        <div class="table-responsive text-nowrap p-3">
+                        <div class="table-responsive text-nowrap p-5">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr class="table-primary">
@@ -53,7 +58,7 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="table-responsive text-nowrap p-3">
+                    <div class="table-responsive text-nowrap p-5">
                         <table class="table table-striped table-bordered">
                             <thead>
                                 <tr class="table-primary">
@@ -99,38 +104,39 @@
                 @csrf
                 <div class="card-body">
                     <h5 class="pb-0 fw-bold">Transaksi</h5>
-                    
+
+                    <hr class="mx-n6" />
+                    <div class="row">
+                        <div class="col-1 d-flex align-items-center">
+                            <span><i class="icon-base bx bxs-user-badge"></i></span>
+                        </div>
+                        <div class="col-8">
+                            <select class="select2 form-select" id="member_id" name="member_id" data-allow-clear="true" aria-placeholder="Pilih Member">
+                                <option value="">Search Member</option>
+                                @foreach($member as $m)
+                                <option value="{{$m->id}}">{{$m->nama}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-3">
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalMember" type="button">
+                                <i class="icon-base bx bx-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+
                     <hr class="mx-n6" />
                     <h6>Order Details</h6>
                     <dl class="row mb-0 text-heading" id="itemList">
                     </dl>
 
                     <hr class="mx-n6" />
-                    <div class="col-12">
-                        <label for="member_id" class="form-label my-0">
-                            <h6>Member</h6>
-                        </label>
-                        <div class="row">
-                            <div class="col-8">
-                                <select class="select2 form-select" id="member_id" name="member_id" data-allow-clear="true" aria-placeholder="Member">
-                                    <option value="">Search Member</option>
-                                    @foreach($member as $m)
-                                    <option value="{{$m->id}}">{{$m->nama}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-4">
-                                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalMember" type="button">
-                                    <i class="icon-base bx bx-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <hr class="mx-n6" />
                     <div class="row">
                         <div class="col-8 col-xxl-8 col-xl-12">
-                            <input type="text" class="form-control" placeholder="Enter Promo Code" aria-label="Enter Promo Code" />
+                            <div class="input-group input-group-merge">
+                                <span class="input-group-text" id="voucher"><i class="icon-base bx bxs-discount"></i></span>
+                                <input type="text" class="form-control" placeholder="Enter Promo Code" aria-label="Enter Promo Code" aria-describedby="voucher" />
+                            </div>
                         </div>
                         <div class="col-4 col-xxl-4 col-xl-12">
                             <div class="d-grid">

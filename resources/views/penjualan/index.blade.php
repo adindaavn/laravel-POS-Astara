@@ -1,11 +1,18 @@
 @extends('layout.header')
 @section('title', 'Penjualan')
+@php
+$breadcrumbs = [
+['label' => 'Transaksi', 'route' => 'penjualan.index'],
+['label' => 'Penjualan', 'route' => 'penjualan.index'],
+];
+@endphp
 @section('content')
 <div class="row">
+    <x-breadcrumb :breadcrumbs="$breadcrumbs" />
     <div class="col-lg-12 mb-4 order-0">
         <div class="card">
             <h5 class="card-header pb-0 fw-bold">Data Penjualan</h5>
-            <div class="table-responsive text-nowrap p-3">
+            <div id="tableData" class="table-responsive text-nowrap p-5">
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr class="table-primary">
@@ -35,7 +42,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="table-responsive text-nowrap p-3">
+            <div id="tableData" class="table-responsive text-nowrap p-5">
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr class="table-primary">
@@ -70,4 +77,6 @@
         </div>
     </div>
 </div>
+
+<script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 @endsection

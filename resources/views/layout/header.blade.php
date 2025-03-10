@@ -415,7 +415,7 @@
                                                 <div class="d-flex">
                                                     <div class="flex-shrink-0 me-3">
                                                         <div class="avatar">
-                                                            <img src="{{ asset('assets') }}/img/avatars/1.png" alt class="rounded-circle" />
+                                                            <img src="{{ asset('assets') }}/img/avatars/mokaa.jpg" alt class="rounded-circle" />
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1">
@@ -463,7 +463,7 @@
                             <li class="nav-item navbar-dropdown dropdown-user dropdown">
                                 <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
                                     <div class="avatar avatar-online">
-                                        <img src="{{ asset('assets') }}/img/avatars/1.png" alt class="rounded-circle" />
+                                        <img src="{{ asset('assets') }}/img/avatars/mokaa.jpg" alt class="rounded-circle" />
                                     </div>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-end">
@@ -472,12 +472,12 @@
                                             <div class="d-flex">
                                                 <div class="flex-shrink-0 me-3">
                                                     <div class="avatar avatar-online">
-                                                        <img src="{{ asset('assets') }}/img/avatars/1.png" alt class="w-px-40 h-auto rounded-circle" />
+                                                        <img src="{{ asset('assets') }}/img/avatars/mokaa.jpg" alt class="w-px-40 h-auto rounded-circle" />
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="mb-0">John Doe</h6>
-                                                    <small class="text-body-secondary">Admin</small>
+                                                    <h6 class="mb-0">{{ auth()->user()->name }}</h6>
+                                                    <small class="text-body-secondary">{{ auth()->user()->role }}</small>
                                                 </div>
                                             </div>
                                         </a>
@@ -512,7 +512,14 @@
                                         <div class="dropdown-divider my-1"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="auth-login-cover.html" target="_blank"> <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log Out</span> </a>
+                                        <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
+                                            <form action="{{ route('logout')}}" method="post">
+                                                @csrf
+                                                <button type="submit" class="btn btn-label-primary">
+                                                    <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log Out</span></i>
+                                                </button>
+                                            </form>
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
@@ -613,36 +620,29 @@
     <script src="{{ asset('assets') }}/vendor/libs/popper/popper.js"></script>
     <script src="{{ asset('assets') }}/vendor/js/bootstrap.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/@algolia/autocomplete-js.js"></script>
-
     <script src="{{ asset('assets') }}/vendor/libs/pickr/pickr.js"></script>
-
     <script src="{{ asset('assets') }}/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
-
     <script src="{{ asset('assets') }}/vendor/libs/hammer/hammer.js"></script>
-
     <script src="{{ asset('assets') }}/vendor/libs/i18n/i18n.js"></script>
-
-
     <script src="{{ asset('assets') }}/vendor/js/menu.js"></script>
     <!-- endbuild -->
 
     <!-- Vendors JS -->
-
     <script src="{{ asset('assets') }}/vendor/libs/select2/select2.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/apex-charts/apexcharts.js"></script>
-
-    <!-- Vendors JS -->
     <script src="{{ asset('assets') }}/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
+
     <!-- Flat Picker -->
     <script src="{{ asset('assets') }}/vendor/libs/moment/moment.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/flatpickr/flatpickr.js"></script>
+
     <!-- Form Validation -->
     <script src="{{ asset('assets') }}/vendor/libs/@form-validation/popular.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/@form-validation/bootstrap5.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/@form-validation/auto-focus.js"></script>
-    <!-- Main JS -->
 
+    <!-- Main JS -->
     <script src="{{ asset('assets') }}/js/main.js"></script>
 
     <!-- Page JS -->
@@ -652,6 +652,64 @@
     <script src="{{ asset('assets') }}/js/tables-datatables-basic.js"></script>
     <script src="{{ asset('assets') }}/js/ui-toasts.js"></script>
     <script src="{{ asset('assets') }}/js/cards-actions.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#tableData table').each(function() {
+                let table = $(this);
+                let tableTitle = table.closest('.card').find('.card-header').text().trim();
+                table.closest('.card').find('.card-header').remove();
+
+                table.DataTable({
+                    dom: "<'row'<'col-sm-6 d-flex align-items-center'<'table-title fw-bold mx-3'>>" +
+                        "<'col-sm-6 d-flex justify-content-end'B<<'btn-add-wrapper'>> >>" +
+                        "<'row'<'col-sm-6 my-0'l><'col-sm-6 my-0'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5 px-1'i><'col-sm-7 d-flex justify-content-end'p>>",
+
+                    buttons: [{
+                        extend: 'collection',
+                        className: "btn btn-label-primary dropdown-toggle",
+                        text: '<span class="d-flex align-items-center gap-2"><i class="icon-base bx bx-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span></span>',
+                        buttons: [{
+                            extend: "print",
+                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bx-printer me-1"></i>Print</span>',
+                            className: "dropdown-item",
+                        }, {
+                            extend: "csv",
+                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bx-file me-1"></i>Csv</span>',
+                            className: "dropdown-item",
+                        }, {
+                            extend: "excel",
+                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-export me-1"></i>Excel</span>',
+                            className: "dropdown-item",
+                        }, {
+                            extend: "pdf",
+                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-pdf me-1"></i>Pdf</span>',
+                            className: "dropdown-item",
+                        }, {
+                            extend: "copy",
+                            text: '<i class="icon-base bx bx-copy me-1"></i>Copy',
+                            className: "dropdown-item",
+                        }]
+                    }],
+                    paging: true,
+                    searching: true,
+                    ordering: true,
+                    language: {
+                        paginate: {
+                            next: '<i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>',
+                            previous: '<i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>',
+                        },
+                    },
+                    initComplete: function() {
+                        table.closest('.card').find('.table-title').html(`<h5 class="fw-bold mb-0">${tableTitle}</h5>`);
+                        table.closest('.card').find(".btn-add-wrapper").append(table.closest('.card').find(".btn-add")).addClass('ms-3');
+                        table.closest('.card').find(".buttons-collection").removeClass("btn-secondary").addClass("btn-label-primary");
+                    }
+                });
+            });
+        });
+    </script>
 
     <script>
         $(document).ready(function() {
