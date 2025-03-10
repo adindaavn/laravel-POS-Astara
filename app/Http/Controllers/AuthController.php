@@ -18,11 +18,11 @@ class AuthController extends Controller
     public function auth(Request $request)
     {
         $request->validate([
-            'name' => 'required',
+            'username' => 'required',
             'password' => 'required'
         ]);
 
-        $user = User::where('name', $request->name)->first();
+        $user = User::where('username', $request->username)->first();
 
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
