@@ -41,12 +41,12 @@ class PenjualanController extends Controller
             [
                 'total_bayar' => 'required|numeric|min:0',
                 'member_id' => 'nullable|exists:member,id',
-                'user_id' => 'nullable|exists:users,id', //req
                 'buku' => 'required|array',
                 'buku.*.buku_id' => 'required|integer|exists:buku,id',
                 'buku.*.harga_jual' => 'required|numeric|min:0',
                 'buku.*.jumlah' => 'required|integer|min:1',
-
+                'metode_bayar' => 'nullable|in:cash,transfer,e-wallet,debit',
+                'no_rekening' => 'nullable|string',
             ]
         );
 
@@ -56,7 +56,9 @@ class PenjualanController extends Controller
             $penjualan = Penjualan::create([
                 'total_bayar' => $request->total_bayar,
                 'member_id' => $request->member_id,
-                'user_id' => $request->user_id
+                'user_id' => $request->user_id,
+                'metode_bayar' => $request->metode_bayar,
+                'no_rekening' => $request->no_rekening
             ]);
 
             foreach ($request->buku as $item) {
@@ -68,7 +70,6 @@ class PenjualanController extends Controller
                     'sub_total' => $item['harga_jual'] * $item['jumlah'],
                 ]);
             }
-
 
             DB::commit();
 

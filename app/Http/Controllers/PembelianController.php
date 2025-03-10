@@ -14,11 +14,9 @@ class PembelianController extends Controller
 {
     function index()
     {
-        $pembelian  = Pembelian::all();
-        $detail     = PembelianDetail::all();
-        $buku       = Buku::all();
-        $pemasok    = Pemasok::all();
-        return view('pembelian.index', compact('pembelian','detail','pemasok','buku'));
+        $pembelian = Pembelian::with(['detailPembelian.buku', 'pemasok', 'user'])->get();
+
+        return view('pembelian.index', compact('pembelian'));
     }
 
     public function create()
@@ -26,17 +24,20 @@ class PembelianController extends Controller
         $pemasok = Pemasok::all();
         $buku = Buku::all();
         $kategori = Kategori::all();
-        return view('pembelian.create', compact('pemasok', 'buku','kategori'));
+        return view('pembelian.create', compact('pemasok', 'buku', 'kategori'));
     }
 
     function store(Request $request)
     {
+        $bukuArray = json_decode($request->buku, true);
+        if ($bukuArray === null) {
+            return redirect()->route('penjualan.index')->with('error', 'Data buku tidak valid!');
+        }
+        $request->merge(['buku' => $bukuArray]);
         $request->validate(
             [
-                'tgl' => 'required|date',
                 'total' => 'required|numeric',
-                'pemasok_id' => 'nullable|integer|exists:pemasok,id',
-                'user_id' => 'nullable|integer|exists:users,id',
+                'pemasok_id' => 'required|integer|exists:pemasok,id',
                 'buku' => 'required|array',
                 'buku.*.buku_id' => 'required|integer|exists:buku,id',
                 'buku.*.harga_beli' => 'required|numeric|min:0',
@@ -66,10 +67,10 @@ class PembelianController extends Controller
 
             DB::commit();
 
-            return redirect()->route('pembelian.index')->with('success', 'Pembelian berhasil ditambahkan');
+            return redirect()->back()->with('success', 'Pembelian berhasil ditambahkan');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('pembelian.index')->with('error', 'Pembelian gagal ditambahkan :' . $e->getMessage());
+            return redirect()->back()->with('error', 'Pembelian gagal ditambahkan :' . $e->getMessage());
         }
     }
     public function show(string $id)

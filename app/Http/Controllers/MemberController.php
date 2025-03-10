@@ -29,9 +29,9 @@ class MemberController extends Controller
         );
         try {
             Member::create($validated);
-            return redirect()->route('member.index')->with('success', 'member berhasil ditambahkan');
+            return redirect()->back()->with('success', 'member berhasil ditambahkan');
         } catch (\Exception $e) {
-            return redirect()->route('member.index')->with('error', 'member gagal ditambahkan :' . $e->getMessage());
+            return redirect()->back()->with('error', 'member gagal ditambahkan :' . $e->getMessage());
         }
     }
     public function show(string $id)
@@ -59,9 +59,9 @@ class MemberController extends Controller
 
         try {
             $member->update($validated);
-            return redirect()->route('member.index')->with('success', 'member berhasil diedit');
+            return redirect()->back()->with('success', 'member berhasil diedit');
         } catch (\Exception $e) {
-            return redirect()->route('member.index')->with('error', 'member gagal diedit :' . $e->getMessage());
+            return redirect()->back()->with('error', 'member gagal diedit :' . $e->getMessage());
         }
     }
 
@@ -70,14 +70,14 @@ class MemberController extends Controller
         $member = Member::where('id', $id)->first();
 
         if (!$member) {
-            return redirect()->route('member.index')->with('error', 'member not found.');
+            return redirect()->back()->with('error', 'member not found.');
         }
 
         try {
             $member->delete();
-            return redirect()->route('member.index')->with('success', 'member deleted successfully.');
+            return redirect()->back()->with('success', 'member deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('member.index')->with('error', 'Failed to delete member : ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete member : ' . $e->getMessage());
         }
     }
 }

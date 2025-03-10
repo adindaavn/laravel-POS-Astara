@@ -63,9 +63,9 @@ class PemasokController extends Controller
 
         try {
             $pemasok->update($validated);
-            return redirect()->route('pemasok.index')->with('success', 'pemasok berhasil diedit');
+            return redirect()->back()->with('success', 'pemasok berhasil diedit');
         } catch (\Exception $e) {
-            return redirect()->route('pemasok.index')->with('error', 'pemasok gagal diedit :' . $e->getMessage());
+            return redirect()->back()->with('error', 'pemasok gagal diedit :' . $e->getMessage());
         }
     }
 
@@ -74,14 +74,14 @@ class PemasokController extends Controller
         $pemasok = Pemasok::where('id', $id)->first();
 
         if (!$pemasok) {
-            return redirect()->route('pemasok.index')->with('error', 'pemasok not found.');
+            return redirect()->back()->with('error', 'pemasok not found.');
         }
 
         try {
             $pemasok->delete();
-            return redirect()->route('pemasok.index')->with('success', 'pemasok deleted successfully.');
+            return redirect()->back()->with('success', 'pemasok deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('pemasok.index')->with('error', 'Failed to delete pemasok : ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete pemasok : ' . $e->getMessage());
         }
     }
 }

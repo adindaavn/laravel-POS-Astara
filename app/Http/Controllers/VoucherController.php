@@ -21,7 +21,7 @@ class VoucherController extends Controller
     function store(Request $request)
     {
         $validated = $request->validate([
-            'diskon' => 'required|string|in:fixed,percent',
+            'diskon' => 'required|numeric',
             'deskripsi' => 'nullable|string',
             'expired' => 'nullable|date'
         ]);
@@ -30,9 +30,9 @@ class VoucherController extends Controller
 
             Voucher::create($validated);
 
-            return redirect()->route('voucher.index')->with('success', 'voucher berhasil ditambahkan');
+            return redirect()->back()->with('success', 'voucher berhasil ditambahkan');
         } catch (\Exception $e) {
-            return redirect()->route('voucher.index')->with('error', 'voucher gagal ditambahkan :' . $e->getMessage());
+            return redirect()->back()->with('error', 'voucher gagal ditambahkan :' . $e->getMessage());
         }
     }
     public function show(string $id)
@@ -50,7 +50,7 @@ class VoucherController extends Controller
         $voucher = Voucher::findOrFail($id);
 
         $validated = $request->validate([
-            'diskon' => 'required|string|in:fixed,percent',
+            'diskon' => 'required|numeric',
             'deskripsi' => 'nullable|string',
             'expired' => 'nullable|date'
         ]);
@@ -59,9 +59,9 @@ class VoucherController extends Controller
 
             $voucher->update($validated);
 
-            return redirect()->route('voucher.index')->with('success', 'voucher berhasil diedit');
+            return redirect()->back()->with('success', 'voucher berhasil diedit');
         } catch (\Exception $e) {
-            return redirect()->route('voucher.index')->with('error', 'voucher gagal diedit :' . $e->getMessage());
+            return redirect()->back()->with('error', 'voucher gagal diedit :' . $e->getMessage());
         }
     }
 
@@ -70,14 +70,14 @@ class VoucherController extends Controller
         $voucher = Voucher::where('id', $id)->first();
 
         if (!$voucher) {
-            return redirect()->route('voucher.index')->with('error', 'voucher not found.');
+            return redirect()->back()->with('error', 'voucher not found.');
         }
 
         try {
             $voucher->delete();
-            return redirect()->route('voucher.index')->with('success', 'voucher deleted successfully.');
+            return redirect()->back()->with('success', 'voucher deleted successfully.');
         } catch (\Exception $e) {
-            return redirect()->route('voucher.index')->with('error', 'Failed to delete voucher : ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to delete voucher : ' . $e->getMessage());
         }
     }
 }
