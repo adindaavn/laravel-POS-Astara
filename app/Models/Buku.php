@@ -12,7 +12,7 @@ class Buku extends Model
         "isbn",
         "judul",
         "penulis",
-        "pemasok",
+        "penerbit",
         "kategori_id",
         "harga",
         "stok",

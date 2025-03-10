@@ -14,4 +14,14 @@ class PenjualanDetail extends Model
         "jumlah",
         "subtotal"
     ];
+
+    public function buku()
+    {
+        return $this->belongsTo(Buku::class, 'buku_id');
+    }
+
+    public function penjualan()
+    {
+        return $this->belongsTo(Penjualan::class, 'penjualan_id');
+    }
 }

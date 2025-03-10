@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\DB;
 
 class PembelianDetail extends Model
 {
@@ -15,4 +14,14 @@ class PembelianDetail extends Model
         "jumlah",
         "subtotal"
     ];
+
+    public function buku()
+    {
+        return $this->belongsTo(Buku::class, 'buku_id');
+    }
+
+    public function pembelian()
+    {
+        return $this->belongsTo(Pembelian::class, 'pembelian_id');
+    }
 }
