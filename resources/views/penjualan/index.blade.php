@@ -16,59 +16,40 @@ $breadcrumbs = [
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr class="table-primary">
-                            <th class="fw-bold">No</th>
-                            <th class="fw-bold">No Transaksi</th>
-                            <th class="fw-bold">Tanggal</th>
-                            <th class="fw-bold">Total</th>
+                            <th class="fw-bold">No. Transaksi</th>
+                            <th class="fw-bold">User</th>
                             <th class="fw-bold">Member</th>
+                            <th class="fw-bold">Daftar Buku</th>
+                            <th class="fw-bold">Total</th>
+                            <th class="fw-bold">Tanggal</th>
+                            <th class="fw-bold">Metode Bayar</th>
+                            <th class="fw-bold">No. Rekening</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($penjualan as $data)
                         <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$data->no_transaksi}}</td>
-                            <td>{{$data->tgl_transaksi}}</td>
-                            <td>{{$data->total_bayar}}</td>
+                            <td>{{ $data->no_transaksi }}</td>
+                            <td>{{ $data->user->name }}</td>
+                            <td>{{ optional($data->member)->nama }}</td>
                             <td>
-                                @foreach($member as $m)
-                                @if($m->id == $data->member_id)
-                                {{$m->nama}}
-                                @endif
-                                @endforeach
+                                <div class="">
+                                    <ul class="list-group list-group-timeline">
+                                        @foreach ($data->detailPenjualan as $detail)
+                                        <li class="list-group-item list-group-timeline-primary">
+                                            {{ $detail->buku->judul }}
+                                            ({{ $detail->jumlah }} x Rp. {{ number_format($detail->harga_jual, 0, ',', '.') }}
+                                            = Rp. {{ number_format($detail->subtotal, 0, ',', '.') }})
+                                        </li>
+                                        @endforeach
+
+                                    </ul>
+                                </div>
                             </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-            <div id="tableData" class="table-responsive text-nowrap p-5">
-                <table class="table table-striped table-bordered">
-                    <thead>
-                        <tr class="table-primary">
-                            <th class="fw-bold">No</th>
-                            <th class="fw-bold">ID Transaksi</th>
-                            <th class="fw-bold">Judul</th>
-                            <th class="fw-bold">Harga</th>
-                            <th class="fw-bold">Jumlah</th>
-                            <th class="fw-bold">SUb tOtal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($detail as $data)
-                        <tr>
-                            <td>{{$loop->iteration}}</td>
-                            <td>{{$data->penjualan_id}}</td>
-                            <td>
-                                @foreach($buku as $b)
-                                @if($b->id == $data->buku_id)
-                                {{$b->judul}}
-                                @endif
-                                @endforeach
-                            </td>
-                            <td>{{$data->harga_jual}}</td>
-                            <td>{{$data->jumlah}}</td>
-                            <td>{{$data->sub_total}}</td>
+                            <td>Rp. {{ number_format($data->total_bayar, 0, ',', '.') }}</td>
+                            <td>{{ $data->tgl }}</td>
+                            <td>{{ $data->metode_bayar }}</td>
+                            <td>{{ $data->no_rekening }}</td>
                         </tr>
                         @endforeach
                     </tbody>

@@ -53,7 +53,7 @@ class Penjualan extends Model
             
             $model->no_transaksi = sprintf("TRX%s%04d", $tahun, $newNum);
             
-            $model->tgl_transaksi = now();
+            $model->tgl = now();
             $model->user_id = Auth::id();
         });
     }

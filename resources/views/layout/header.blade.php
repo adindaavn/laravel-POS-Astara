@@ -92,6 +92,8 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/flatpickr/flatpickr.css" />
+
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/dropzone/dropzone.css" />
     <!-- Row Group CSS -->
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css" />
     <!-- Form Validation -->
@@ -632,6 +634,7 @@
     <script src="{{ asset('assets') }}/vendor/libs/apex-charts/apexcharts.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
+    <script src="{{ asset('assets') }}/vendor/libs/dropzone/dropzone.js"></script>
 
     <!-- Flat Picker -->
     <script src="{{ asset('assets') }}/vendor/libs/moment/moment.js"></script>
@@ -652,6 +655,7 @@
     <script src="{{ asset('assets') }}/js/tables-datatables-basic.js"></script>
     <script src="{{ asset('assets') }}/js/ui-toasts.js"></script>
     <script src="{{ asset('assets') }}/js/cards-actions.js"></script>
+    <script src="{{ asset('assets') }}/js/forms-file-upload.js"></script>
     <script>
         $(document).ready(function() {
             $('#tableData table').each(function() {
@@ -708,6 +712,25 @@
                     }
                 });
             });
+            let tableTransaksi = $('#tableTransaksi table').DataTable({
+                dom: "<'row'<'col-sm-6 my-0'l><'col-sm-6 my-0'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5 px-1'i><'col-sm-7 d-flex justify-content-end'p>>",
+
+                paging: true,
+                searching: true,
+                ordering: true,
+                language: {
+                    paginate: {
+                        next: '<i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>',
+                        previous: '<i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>',
+                    },
+                },
+            });
+            $('#kategori_id').on('change', function() {
+                let selectedCategory = $(this).val();
+                tableTransaksi.column(4).search(selectedCategory ? '^' + selectedCategory + '$' : '', true, false).draw();
+            });
         });
     </script>
 
@@ -719,25 +742,6 @@
                 var toast = new bootstrap.Toast($toast[0]);
                 toast.show();
             }
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('.form-repeater').repeater({
-                initEmpty: false,
-                defaultValues: {
-                    'text-input': ''
-                },
-                show: function() {
-                    $(this).slideDown();
-                },
-                hide: function(deleteElement) {
-                    if (confirm('Yakin ingin menghapus item ini?')) {
-                        $(this).slideUp(deleteElement);
-                    }
-                },
-                isFirstItemUndeletable: true
-            });
         });
     </script>
 

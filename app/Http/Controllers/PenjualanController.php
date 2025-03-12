@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\Member;
-use App\Models\Pemasok;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
 use Illuminate\Http\Request;
@@ -16,25 +15,24 @@ class PenjualanController extends Controller
 
     function index()
     {
-        $penjualan = Penjualan::all();
-        $detail = PenjualanDetail::all();
-        $buku = Buku::all();
-        $member = Member::all();
-        return view('penjualan.index', compact('penjualan', 'detail', 'buku', 'member'));
+        $penjualan = Penjualan::with(['detailPenjualan.buku', 'member', 'user'])->get();
+        return view('penjualan.index', compact('penjualan'));
     }
 
     public function create()
     {
+        $stok = DB::table('view_buku_stok')->get();
         $member = Member::all();
         $buku = Buku::all();
-        return view('penjualan.create', compact('member', 'buku'));
+        $kategori = Kategori::all();
+        return view('penjualan.create', compact('member', 'buku', 'stok','kategori'));
     }
 
     function store(Request $request)
     {
         $bukuArray = json_decode($request->buku, true);
         if ($bukuArray === null) {
-            return redirect()->route('penjualan.index')->with('error', 'Data buku tidak valid!');
+            return redirect()->back()->with('error', 'Data buku tidak valid!');
         }
         $request->merge(['buku' => $bukuArray]);
         $request->validate(
@@ -67,16 +65,16 @@ class PenjualanController extends Controller
                     'buku_id' => $item['buku_id'],
                     'harga_jual' => $item['harga_jual'],
                     'jumlah' => $item['jumlah'],
-                    'sub_total' => $item['harga_jual'] * $item['jumlah'],
+                    'subtotal' => $item['harga_jual'] * $item['jumlah'],
                 ]);
             }
 
             DB::commit();
 
-            return redirect()->route('penjualan.index')->with('success', 'Transaksi berhasil ditambahkan!');
+            return redirect()->back()->with('success', 'Transaksi berhasil ditambahkan!');
         } catch (\Exception $e) {
             DB::rollBack();
-            return redirect()->route('penjualan.index')->with('error', 'Transaksi gagal! ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Transaksi gagal! ' . $e->getMessage());
         }
     }
 
