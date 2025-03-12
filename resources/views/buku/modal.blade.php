@@ -1,7 +1,7 @@
 <div class="modal fade" id="modalBuku" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <form id="jenis-form" action="{{ route('buku.store') }}" method="post">
+            <form id="jenis-form" action="{{ route('buku.store') }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalCenterTitle">Tambah Buku</h5>
@@ -85,6 +85,16 @@
                                     class="form-control"
                                     placeholder="Tahun Terbit"
                                     name="thn_terbit" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div action="/upload" class="dropzone needsclick" id="dropzone-basic">
+                                <div class="dz-message needsclick">
+                                    Drop files here or click to upload
+                                </div>
+                                <div class="fallback">
+                                    <input name="gambar" id="gambar" type="file" />
+                                </div>
                             </div>
                         </div>
                     </div>

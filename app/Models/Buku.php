@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Buku extends Model
 {
+    use HasFactory;
     protected $table = "buku";
     protected $fillable = [
         "isbn",
@@ -15,7 +17,7 @@ class Buku extends Model
         "penerbit",
         "kategori_id",
         "harga",
-        "stok",
+        "gambar",
         "thn_terbit"
     ];
 }

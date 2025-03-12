@@ -6,6 +6,7 @@ use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BukuController extends Controller
 {
@@ -33,13 +34,15 @@ class BukuController extends Controller
                 'harga'         => 'nullable|numeric||min:0',
                 'penerbit'       => 'nullable|string',
                 'isbn'          => 'required|string|max:20',
+                'gambar'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'thn_terbit'    => 'nullable|integer'
             ]
         );
+        if ($request->hasFile('gambar')) {
+            $validated['gambar'] = $request->file('gambar')->store('uploads/buku', 'public');
+        }
         try {
-
             Buku::create($validated);
-
             return redirect()->back()->with('success', 'buku berhasil ditambahkan');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'buku gagal ditambahkan :' . $e->getMessage());
@@ -67,9 +70,19 @@ class BukuController extends Controller
                 'harga'         => 'nullable|numeric||min:0',
                 'penerbit'       => 'nullable|string',
                 'isbn'          => 'required|string|min:0|max:20',
+                'gambar'        => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'thn_terbit'    => 'nullable|integer'
             ]
         );
+
+        if ($request->hasFile('gambar')) {
+            if ($buku->gambar) {
+                Storage::disk('public')->delete($buku->gambar);
+            }
+            $gambarPath = $request->file('gambar')->store('uploads/buku', 'public');
+        } else {
+            $gambarPath = $buku->gambar;
+        }
 
         try {
             $buku->update($validated);
@@ -86,7 +99,9 @@ class BukuController extends Controller
         if (!$buku) {
             return redirect()->back()->with('error', 'buku not found.');
         }
-
+        if ($buku->gambar) {
+            Storage::disk('public')->delete($buku->gambar);
+        }
         try {
             $buku->delete();
             return redirect()->back()->with('success', 'buku deleted successfully.');

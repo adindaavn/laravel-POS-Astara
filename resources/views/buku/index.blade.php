@@ -89,6 +89,7 @@ $breadcrumbs = [
                                         <thead>
                                             <tr class="table-primary">
                                                 <th class="fw-bold">No</th>
+                                                <th class="fw-bold">Cover</th>
                                                 <th class="fw-bold">ISBN</th>
                                                 <th class="fw-bold">Judul</th>
                                                 <th class="fw-bold">Penulis</th>
@@ -102,6 +103,11 @@ $breadcrumbs = [
                                             @foreach ($buku as $data)
                                             <tr>
                                                 <td>{{$loop->iteration}}</td>
+                                                <td>
+                                                    @if($data->gambar != null)
+                                                    <img src="{{ asset('storage/' . $data->gambar) }}" width="100">
+                                                    @endif
+                                                </td>
                                                 <td>{{$data->isbn}}</td>
                                                 <td>{{$data->judul}}</td>
                                                 <td>{{$data->penulis}}</td>
@@ -167,6 +173,7 @@ $breadcrumbs = [
             $('#penerbit').val('');
             $('#isbn').val('');
             $('#thn_terbit').val('');
+            $('#gambar').val('');
             $('#submit-btn').text('Tambah');
         });
 
@@ -179,6 +186,7 @@ $breadcrumbs = [
             let harga = $(this).data('harga');
             let penerbit = $(this).data('penerbit');
             let isbn = $(this).data('isbn');
+            let gambar = $(this).data('gambar');
             let thn_terbit = $(this).data('thn_terbit');
 
             $('.modal-title').text('Edit Buku');
@@ -193,6 +201,7 @@ $breadcrumbs = [
             $('#harga').val(harga);
             $('#penerbit').val(penerbit);
             $('#isbn').val(isbn);
+            $('#gambar').val(gambar);
             $('#thn_terbit').val(thn_terbit);
             $('#jml_halaman').val(jml_halaman);
         });

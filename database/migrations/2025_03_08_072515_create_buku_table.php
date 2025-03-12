@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('kategori_id')->nullable()->constrained('kategori')->nullOnDelete()->cascadeOnUpdate();
             $table->double('harga');
             $table->year('thn_terbit')->nullable();
+            $table->string('gambar')->nullable();
             $table->timestamps();
         });
     }
