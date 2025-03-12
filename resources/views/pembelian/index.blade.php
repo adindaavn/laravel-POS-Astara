@@ -6,10 +6,9 @@ $breadcrumbs = [
 ['label' => 'Pembelian', 'route' => 'pembelian.index'],
 ];
 @endphp
-
-<x-breadcrumb :breadcrumbs="$breadcrumbs" />
 @section('content')
 <div class="row">
+    <x-breadcrumb :breadcrumbs="$breadcrumbs" />
     <div class="col-lg-12 mb-4 order-0">
         <div class="card">
             <h5 class="card-header pb-0 fw-bold">Data Pembelian</h5>
