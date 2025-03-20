@@ -7,6 +7,7 @@ use App\Models\Kategori;
 use App\Models\Member;
 use App\Models\Penjualan;
 use App\Models\PenjualanDetail;
+use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -23,9 +24,10 @@ class PenjualanController extends Controller
     {
         $stok = DB::table('view_buku_stok')->get();
         $member = Member::all();
+        $voucher = Voucher::all();
         $buku = Buku::all();
         $kategori = Kategori::all();
-        return view('penjualan.create', compact('member', 'buku', 'stok','kategori'));
+        return view('penjualan.create', compact('member', 'buku', 'stok', 'kategori', 'voucher'));
     }
 
     function store(Request $request)
@@ -38,24 +40,25 @@ class PenjualanController extends Controller
         $request->validate(
             [
                 'total_bayar' => 'required|numeric|min:0',
+                'total_bersih' => 'required|numeric|min:0',
                 'member_id' => 'nullable|exists:member,id',
                 'buku' => 'required|array',
                 'buku.*.buku_id' => 'required|integer|exists:buku,id',
                 'buku.*.harga_jual' => 'required|numeric|min:0',
                 'buku.*.jumlah' => 'required|integer|min:1',
-                'metode_bayar' => 'nullable|in:cash,transfer,e-wallet,debit',
+                'metode_bayar' => 'nullable|in:cash,transfer,kartu',
                 'no_rekening' => 'nullable|string',
             ]
         );
-
         try {
             DB::beginTransaction();
 
             $penjualan = Penjualan::create([
                 'total_bayar' => $request->total_bayar,
+                'total_bersih' => $request->total_bersih,
                 'member_id' => $request->member_id,
                 'user_id' => $request->user_id,
-                'metode_bayar' => $request->metode_bayar,
+                'metode_bersih' => $request->metode_bayar,
                 'no_rekening' => $request->no_rekening
             ]);
 
@@ -71,7 +74,17 @@ class PenjualanController extends Controller
 
             DB::commit();
 
-            return redirect()->back()->with('success', 'Transaksi berhasil ditambahkan!');
+            return redirect()->route('penjualan.create', ['print' => 'true'])->with([
+                'success' => 'Transaksi berhasil ditambahkan!',
+                'no_transaksi' => $penjualan->no_transaksi, 
+                'kembali' => $request->kembali, 
+                'pajak' => $request->pajak, 
+                'total_bersih' => $request->total_bersih, 
+                'total_bayar' => $request->total_bayar, 
+                'bayar' => $request->bayar, 
+                'buku' => $bukuArray, 
+                'created_at' => $penjualan->created_at->format('Y-m-d H:i:s')
+            ]);
         } catch (\Exception $e) {
             DB::rollBack();
             return redirect()->back()->with('error', 'Transaksi gagal! ' . $e->getMessage());

@@ -21,7 +21,9 @@ $breadcrumbs = [
                         data-bs-target="#navs-stok"
                         aria-controls="navs-stok"
                         aria-selected="true">
-                        <i class="tf-icons bx bx-home"></i> Stok Buku
+                        <span class="d-none d-sm-inline-flex align-items-center">
+                            <i class="icon-base bx bx-book icon-sm me-1_5"></i>Stok Buku
+                        </span>
                     </button>
                 </li>
                 <li class="nav-item">
@@ -33,7 +35,7 @@ $breadcrumbs = [
                         data-bs-target="#navs-data"
                         aria-controls="navs-data"
                         aria-selected="false">
-                        <i class="tf-icons bx bx-user"></i> Data Buku
+                        <span class="d-none d-sm-inline-flex align-items-center"><i class="icon-base bx bxs-book-add icon-sm me-1_5"></i>Data Buku</span>
                     </button>
                 </li>
 
@@ -41,32 +43,36 @@ $breadcrumbs = [
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="navs-stok" role="tabpanel">
                     <div class="card shadow-none">
-                        <h5 class="card-header pb-0 fw-bold">Stok Buku</h5>
-                        <div id="tableData" class="table-responsive text-nowrap p-5">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr class="table-primary">
-                                        <th class="fw-bold">No</th>
-                                        <th class="fw-bold">ISBN</th>
-                                        <th class="fw-bold">Judul</th>
-                                        <th class="fw-bold">Kategori</th>
-                                        <th class="fw-bold">Harga</th>
-                                        <th class="fw-bold">Stok</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($stok as $data)
-                                    <tr>
-                                        <td>{{$loop->iteration}}</td>
-                                        <td>{{$data->isbn}}</td>
-                                        <td>{{$data->judul}}</td>
-                                        <td>{{$data->kategori}}</td>
-                                        <td>{{$data->harga}}</td>
-                                        <td>{{$data->stok}}</td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                        <div class="row">
+                            <div class="col-lg-12 mb-4 order-0">
+                                <h5 class="card-header pb-0 fw-bold">Stok Buku</h5>
+                                <div id="tableData" class="table-responsive text-nowrap p-5">
+                                    <table class="table table-striped table-bordered">
+                                        <thead>
+                                            <tr class="table-primary">
+                                                <th class="fw-bold">No</th>
+                                                <th class="fw-bold">ISBN</th>
+                                                <th class="fw-bold">Judul</th>
+                                                <th class="fw-bold">Kategori</th>
+                                                <th class="fw-bold">Harga</th>
+                                                <th class="fw-bold">Stok</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($stok as $data)
+                                            <tr>
+                                                <td>{{$loop->iteration}}</td>
+                                                <td>{{$data->isbn}}</td>
+                                                <td>{{$data->judul}}</td>
+                                                <td>{{$data->kategori}}</td>
+                                                <td>Rp. {{ number_format($data->harga, 0, ',', '.') }}</td>
+                                                <td>{{$data->stok}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

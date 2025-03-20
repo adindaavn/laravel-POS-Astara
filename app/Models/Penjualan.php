@@ -15,6 +15,7 @@ class Penjualan extends Model
         "user_id",
         "tgl",
         "total_bayar",
+        "total_bersih",
         "metode_bayar",
         "no_rekening"
     ];

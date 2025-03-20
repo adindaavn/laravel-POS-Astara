@@ -36,39 +36,47 @@
                                 </select>
                             </div>
                         </div>
-                        <table id="tableBuku" class="table table-striped table-bordered">
-                            <thead>
-                                <tr class="table-primary">
-                                    <th></th>
-                                    <th class="fw-bold">ISBN</th>
-                                    <th class="fw-bold">Judul</th>
-                                    <th class="fw-bold">Penulis</th>
-                                    <th class="fw-bold">Harga</th>
-                                    <th class="fw-bold">Kategori</th>
-                                    <th class="fw-bold">Stok</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($stok as $data)
-                                <tr>
-                                    <td>
-                                        <button class="btn rounded-pill btn-outline-success btn-sm add-buku"
-                                            data-id="{{$data->id}}"
-                                            data-judul="{{$data->judul}}"
-                                            data-harga="{{$data->harga}}">
-                                            <i class="menu-icon tf-icons bx bx-plus m-0"></i>
-                                        </button>
-                                    </td>
-                                    <td>{{$data->isbn}}</td>
-                                    <td>{{$data->judul}}</td>
-                                    <td>{{$data->penulis}}</td>
-                                    <td>Rp. {{ number_format($data->harga, 0, ',', '.') }}</td>
-                                    <td>{{$data->kategori}}</td>
-                                    <td>{{$data->stok}}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div id="tableContainer">
+                            <table id="tableBuku" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr class="table-primary">
+                                        <th></th>
+                                        <th class="fw-bold">ID</th>
+                                        <th class="fw-bold">ISBN</th>
+                                        <th class="fw-bold">Judul</th>
+                                        <th class="fw-bold">Penulis</th>
+                                        <th class="fw-bold">Harga</th>
+                                        <th class="fw-bold">Kategori</th>
+                                        <th class="fw-bold">Stok</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($stok as $data)
+                                    <tr>
+                                        <td>
+                                            <button class="btn rounded-pill btn-outline-success btn-sm add-buku"
+                                                data-id="{{$data->id}}"
+                                                data-judul="{{$data->judul}}"
+                                                data-harga="{{$data->harga}}">
+                                                <i class="menu-icon tf-icons bx bx-plus m-0"></i>
+                                            </button>
+                                        </td>
+                                        <td>{{$data->id}}</td>
+                                        <td>{{$data->isbn}}</td>
+                                        <td>{{$data->judul}}</td>
+                                        <td>{{$data->penulis}}</td>
+                                        <td>Rp. {{ number_format($data->harga, 0, ',', '.') }}</td>
+                                        <td>{{$data->kategori}}</td>
+                                        <td>{{$data->stok}}</td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Container untuk Card -->
+                        <div id="cardContainer" class="row mt-3"></div>
+
                     </div>
                 </div>
             </div>
@@ -103,18 +111,23 @@
 
                     <hr class="px-2" />
                     <h6>Order Details</h6>
-                    <dl class="col-12 mb-0 text-heading" id="itemList">
+                    <dl class="col-12 mb-0 text-heading itemList">
                     </dl>
 
                     <hr class="px-2" />
                     <div class="row">
-                        <div class="col-8 col-xxl-8 col-xl-12">
-                            <div class="input-group input-group-merge">
-                                <span class="input-group-text" id="voucher"><i class="icon-base bx bxs-discount"></i></span>
-                                <input type="text" class="form-control" placeholder="Enter Promo Code" aria-label="Enter Promo Code" aria-describedby="voucher" />
-                            </div>
+                        <div class="col-1 d-flex align-items-center">
+                            <span><i class="icon-base bx bxs-discount"></i></span>
                         </div>
-                        <div class="col-4 col-xxl-4 col-xl-12">
+                        <div class="col-7">
+                            <select class="select2 form-select" id="voucher_id" name="voucher_id" data-allow-clear="true" aria-placeholder="Pilih Voucher">
+                                <option value="">Search Voucher</option>
+                                @foreach($voucher as $v)
+                                <option value="{{$v->id}}">{{$v->kode}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-4">
                             <div class="d-grid">
                                 <button type="button" class="btn btn-label-primary">Apply</button>
                             </div>
@@ -124,13 +137,18 @@
                     <hr class="px-2" />
                     <dl class="row mb-0">
                         <dt class="col-6">Subtotal</dt>
-                        <dd id="subtotal" class="col-6 fw-medium text-end mb-1">0</dd>
+                        <dd class="subtotal col-6 fw-medium text-end mb-1">0</dd>
                         <dt class="col-6">Pajak</dt>
-                        <dd id="pajak" class="col-6 fw-medium text-end mb-1">0</dd>
+                        <dd class="pajak col-6 fw-medium text-end mb-1">0</dd>
                         <dt class="col-6 text-heading">Total</dt>
-                        <dd id="total" class="col-6 fw-medium text-end text-heading mb-1">0</dd>
+                        <dd class="total col-6 fw-medium text-end text-heading mb-1">0</dd>
                     </dl>
-                    <input type="number" id="total_bayar" name="total_bayar" step="0.01" hidden />
+                    <input type="hidden" id="total_bersih" name="total_bersih" step="0.01" />
+                    <input type="hidden" id="total_bayar" name="total_bayar" step="0.01" />
+                    <input type="hidden" id="no_rekening" name="no_rekening">
+                    <input type="hidden" id="kembali" name="kembali">
+                    <input type="hidden" id="bayar" name="bayar">
+                    <input type="hidden" id="pajak" name="pajak">
                     <input type="hidden" name="buku" id="bukuData">
                 </div>
                 <div class="d-grid card-footer">
@@ -160,34 +178,72 @@
                         </div>
                         <div class="col-md mb-3">
                             <div class="form-check custom-option custom-option-icon">
-                                <label class="form-check-label custom-option-content" for="qris">
+                                <label class="form-check-label custom-option-content" for="transfer">
                                     <span class="custom-option-body">
                                         <i class="icon-base bx bx-qr-scan"></i>
-                                        <span class="custom-option-title">QRIS</span>
+                                        <span class="custom-option-title">Transfer</span>
                                     </span>
-                                    <input hidden name="metode_bayar" class="form-check-input" type="radio" value="qris" id="qris" />
+                                    <input hidden name="metode_bayar" class="form-check-input" type="radio" value="transfer" id="transfer" />
                                 </label>
                             </div>
                         </div>
                     </div>
-                    <button type="submit" id="submit-btn" class="btn btn-primary btn-next">Bayar</button>
+                    <button type="submit" id="submit-btn" class="btn btn-primary btn-next" hidden>Bayar</button>
+                    <button type="button"
+                        id="btn-bayar"
+                        class="btn btn-primary"
+                        data-total_bayar=""
+                        data-bs-target="#modalCash"
+                        data-bs-toggle="modal"
+                        data-bs-dismiss="modal">
+                        Bayar
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-
 </div>
 @include('member.modal')
+@include('penjualan.modal')
+@include('penjualan.fraktur')
 
 <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 <script>
     $(document).ready(function() {
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("print") === "true") {
+            const fraktur = document.getElementById("fraktur");
+            if (fraktur) {
+                const originalContents = document.body.innerHTML;
+                document.body.innerHTML = fraktur.outerHTML;
+                window.print();
+                document.body.innerHTML = originalContents;
+
+                // Hapus "print=true" dari URL tanpa refresh
+                const newUrl = window.location.pathname;
+                history.replaceState(null, "", newUrl);
+            }
+        }
+
         let selectedBuku = [];
 
-        $(".add-buku").click(function() {
+        $(document).on("click", ".add-buku", function() {
+            console.log("Harga sebelum parsing:", $(this).data("harga"));
+
             let id = $(this).data("id");
             let judul = $(this).data("judul");
-            let harga = parseFloat($(this).data("harga"));
+            let harga = $(this).data("harga");
+
+            // Cek apakah harga valid
+            if (!harga) {
+                console.error("Harga tidak ditemukan!", this);
+                return;
+            }
+
+            // Bersihkan format harga dan ubah ke angka
+            harga = parseFloat(harga.toString().replace("Rp. ", "").replace(/\./g, ""));
+
             let existing = selectedBuku.find(item => item.buku_id == id);
 
             if (existing) {
@@ -202,7 +258,15 @@
                     subtotal: harga
                 });
             }
+            let jumlahInput = `
+                    <div class="d-flex justify-content-center align-items-center gap-2">
+                        <button class="btn btn-label-danger btn-sm btn-minus" data-id="${id}">-</button>
+                        <input type="number" class="form-control text-center input-jumlah" data-id="${id}" value="1" min="0" style="width: 60px;">
+                        <button class="btn btn-label-success btn-sm btn-plus" data-id="${id}">+</button>
+                    </div>
 
+            `;
+            $(this).replaceWith(jumlahInput);
             updateTable();
         });
 
@@ -223,6 +287,46 @@
             updateTable();
         });
 
+        $(document).on("click", ".btn-plus", function() {
+            let id = $(this).data("id");
+            let input = $(`.input-jumlah[data-id='${id}']`);
+            let item = selectedBuku.find(b => b.buku_id == id);
+
+            if (item) {
+                item.jumlah++;
+                item.subtotal = item.harga_jual * item.jumlah;
+                input.val(item.jumlah);
+            }
+
+            updateTable();
+        });
+
+        // Event untuk tombol - (decrement)
+        $(document).on("click", ".btn-minus", function() {
+            let id = $(this).data("id");
+            let input = $(`.input-jumlah[data-id='${id}']`);
+            let item = selectedBuku.find(b => b.buku_id == id);
+
+            if (item) {
+                if (item.jumlah > 1) {
+                    item.jumlah--;
+                    item.subtotal = item.harga_jual * item.jumlah;
+                    input.val(item.jumlah);
+                } else {
+                    // Hapus item dan balikin ke tombol tambah
+                    selectedBuku = selectedBuku.filter(b => b.buku_id != id);
+                    let tombolTambah = `<button class="btn btn-outline-success btn-sm add-buku"
+                        data-id="${id}" data-judul="${item.judul}" data-harga="${item.harga_jual}">
+                        <i class="bx bx-plus"></i> Tambah
+                    </button>`;
+                    input.closest(".input-group").replaceWith(tombolTambah);
+                }
+            }
+
+            updateTable();
+        });
+
+
         $(document).on("click", ".btn-delete", function() {
             let id = $(this).data("id");
             selectedBuku = selectedBuku.filter(b => b.buku_id != id);
@@ -230,7 +334,7 @@
         });
 
         function updateTable() {
-            let itemList = $("#itemList");
+            let itemList = $(".itemList");
 
             itemList.empty();
             let subtotal = 0;
@@ -241,31 +345,127 @@
                 subtotal += buku.subtotal;
 
                 itemList.append(`
-            <div class="row mb-1">
-                <dt class="col-2 d-flex align-items-center">
-                    <input type="number" class="form-control input-jumlah" data-id="${buku.buku_id}" value="${buku.jumlah}" min="0" style="width: 60px;">
-                </dt>
-                <div class="col-10">
-                    <div class="fw-bold">${buku.judul}</div>
-                    <div class="d-flex justify-content-between">
-                        <span>${buku.harga_jual.toLocaleString()}</span>
-                        <span class="text-end">${buku.subtotal.toLocaleString()}</span>
+                    <div class="row mb-1">
+                        <dt class="col-12 fw-bold mb-1">${buku.judul}</dt>
+                        <dd class="col-3">${buku.harga_jual.toLocaleString()}</dd>
+                        <dd class="col-3 d-flex">x${buku.jumlah}</dd>
+                        <dd class="col-6 text-end">${buku.subtotal.toLocaleString()}</dd>
                     </div>
-                </div>
-            </div>
-            `);
+                `);
 
             });
 
             pajak = (subtotal * 11 / 100);
             total = subtotal + pajak;
 
-            $("#subtotal").text(subtotal.toLocaleString());
-            $("#pajak").text(pajak.toLocaleString());
-            $("#total").text(total.toLocaleString());
+            $(".subtotal").text(subtotal.toLocaleString());
+            $(".pajak").text(pajak.toLocaleString());
+            $(".total").text(total.toLocaleString());
+
+            $("#pajak").val(pajak);
             $("#total_bayar").val(total);
+            $("#total_bersih").val(subtotal);
 
             $("#bukuData").val(JSON.stringify(selectedBuku));
+            $("#btn-bayar").attr('data-total_bayar', total);
+            $("#btn-bayar").attr('data-total_format', total.toLocaleString());
+
+            console.log("Data dikirim:", JSON.stringify(selectedBuku));
+            console.log($("#formPenjualan").serializeArray());
+        }
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get("print") === "true") {
+            setTimeout(() => {
+                const fraktur = document.getElementById("fraktur");
+                if (fraktur) {
+                    const originalContents = document.body.innerHTML;
+                    document.body.innerHTML = fraktur.outerHTML;
+                    window.print();
+                    document.body.innerHTML = originalContents;
+
+                    history.replaceState(null, "", window.location.pathname);
+                }
+            }, 500);
+        }
+
+        $('#modalCash').on('show.bs.modal', function(event) {
+            $("#nominal_bayar").focus();
+            let totalBayar = $("#btn-bayar").attr('data-total_bayar');
+            let totalFormat = $("#btn-bayar").attr('data-total_format');
+            $("#bayar_cash").text(totalFormat);
+            $("#cash").val(totalBayar);
+        });
+
+        $("#nominal_bayar").on("input", function() {
+            let totalBayar = parseFloat($("#cash").val()) || 0;
+            let nominalBayar = parseFloat($(this).val()) || 0;
+            let kembalian = nominalBayar - totalBayar;
+
+            $("#kembalian").text(kembalian >= 0 ? kembalian.toLocaleString() : "Nominal kurang");
+            $("#kembali").val(kembalian);
+            $("#bayar").val(nominalBayar);
+        });
+
+        $('input[name="metode_bayar"]').change(function() {
+            let metodeBayar = $('input[name="metode_bayar"]:checked').val();
+            let targetModal = '';
+
+            switch (metodeBayar) {
+                case 'cash':
+                    targetModal = '#modalCash';
+                    break;
+                case 'kartu':
+                    targetModal = '#modalKartu';
+                    break;
+                case 'transfer':
+                    targetModal = '#modalTransfer';
+                    break;
+            }
+
+            $('#btn-bayar').attr('data-bs-target', targetModal);
+        });
+
+        $(".card-credit-mask").each(function() {
+            new Cleave(this, {
+                creditCard: true
+            });
+        });
+
+        $("#modalKartu .btn-primary").on("click", function() {
+            var noRekening = $("#noRekCC").val();
+
+            $("#no_rekening").val(String(noRekening));
+
+            submitWithPrint();
+        });
+
+        $("#modalCash .btn-primary").on("click", function() {
+            $("input[name='metode_bayar']").val("cash");
+
+            submitWithPrint();
+        });
+
+        $("#modalTransfer .btn-primary").on("click", function() {
+            var noRekening = $("#noRekTf").val();
+            var noHp = $("#noRekHp").val();
+
+            if (noRekening != null) {
+                $("#no_rekening").val(String(noRekening));
+            } else {
+                $("#no_rekening").val(String(noHp));
+            }
+
+            submitWithPrint();
+        });
+
+        function submitWithPrint() {
+            const form = $("#formPenjualan");
+            form.attr("action", form.attr("action") + "?print=true"); // Tambah param print
+            form.submit();
         }
     });
 </script>

@@ -1,0 +1,82 @@
+[
+    {
+        "id":"1",
+        "nama":"Novel"
+    },
+    {
+        "id":"2",
+        "nama":"Cergam"
+    },
+    {
+        "id":"3",
+        "nama":"Komik"
+    },
+    {
+        "id":"4",
+        "nama":"Ensiklopedi"
+    },
+    {
+        "id":"5",
+        "nama":"Nomik"
+    },
+    {
+        "id":"6",
+        "nama":"Antologi"
+    },
+    {
+        "id":"7",
+        "nama":"Dongeng"
+    },
+    {
+        "id":"8",
+        "nama":"Biografi"
+    },
+    {
+        "id":"9",
+        "nama":"Catatan Harian"
+    },
+    {
+        "id":"10",
+        "nama":"Novelet"
+    },
+    {
+        "id":"11",
+        "nama":"Fotografi"
+    },
+    {
+        "id":"12",
+        "nama":"Karya Ilmiah"
+    },
+    {
+        "id":"13",
+        "nama":"Tafsir"
+    },
+    {
+        "id":"14",
+        "nama":"Kamus"
+    },
+    {
+        "id":"15",
+        "nama":"Panduan (how to)"
+    },
+    {
+        "id":"16",
+        "nama":"Atlas"
+    },
+    {
+        "id":"17",
+        "nama":"Buku Ilmiah"
+    },
+    {
+        "id":"18",
+        "nama":"Teks"
+    },
+    {
+        "id":"19",
+        "nama":"Majalah"
+    },
+    {
+        "id":"20",
+        "nama":"Buku Digital"
+    }
+]

@@ -3,12 +3,12 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Faker\Factory as FakerFactory; 
+use Faker\Factory as FakerFactory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Pemasok>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Member>
  */
-class PemasokFactory extends Factory
+class MemberFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -19,8 +19,9 @@ class PemasokFactory extends Factory
     {
         $faker = FakerFactory::create('id_ID');
         return [
-            "nama"      => $faker->company(),
-            "email"     => $faker->email(),
+            "nama"      => $faker->firstName() . ' ' . $faker->lastName(),
+            "point"      => $faker->numberBetween(0, 500),
+            "email"     => $faker->safeEmail(),
             "telp"      => $faker->phoneNumber(),
             "alamat"    => $faker->address(),
         ];

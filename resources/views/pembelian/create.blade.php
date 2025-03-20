@@ -93,12 +93,12 @@ $breadcrumbs = [
                     <label class="form-label">Judul Buku</label>
                     <select class="select2 form-select buku_id" data-allow-clear="true">
                         @foreach($buku as $b)
-                        <option value="{{$b->id}}">{{$b->judul}} by {{$b->penulis}} ({{$b->isbn}})</option>
+                        <option value="{{$b->id}}">{{$b->judul}} by {{$b->penulis}} ({{$b->harga}})</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="mb-6 col-lg-6 col-xl-2 col-12 mb-0">
-                    <label class="form-label">Harga</label>
+                    <label class="form-label">Harga Beli</label>
                     <input type="number" class="form-control harga" />
                 </div>
                 <div class="mb-6 col-lg-6 col-xl-1 col-12 mb-0">

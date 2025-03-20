@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Buku;
 use App\Models\Kategori;
+use App\Models\Member;
 use App\Models\Pemasok;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -17,25 +18,34 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Kategori::factory()->createMany([
-        //     ['nama' => 'Novel'],
-        //     ['nama' => 'Komik'],
-        //     ['nama' => 'Majalah'],
-        //     ['nama' => 'Ensiklopedia'],
-        //     ['nama' => 'Biografi'],
-        //     ['nama' => 'Pelajaran'],
-        //     ['nama' => 'Dongeng'],
-        //     ['nama' => 'Sains'],
-        //     ['nama' => 'Agama'],
-        // ]);
-        // Buku::factory()->count(50)->create();
-        // User::factory()->create([
-        //     'id' => '1',
-        //     'name' => 'Sakai Moka',
-        //     'username' => 'mokamoka',
-        //     'password' => Hash::make('moka!'),
-        //     'role' => 'owner',
-        // ]);
-        Pemasok::factory()->count(20)->create();
+        // $this->call(KategoriSeeder::class);
+        // $this->call(PemasokSeeder::class);
+        User::factory()->create([
+            'id'       => '1',
+            'name'     => 'Sakai Moka',
+            'username' => 'moka',
+            'password' => Hash::make('moka!'),
+            'role'     => 'owner',
+        ]);
+
+        User::factory()->create([
+            'id'       => '2',
+            'name'     => 'Naoi Rei',
+            'username' => 'rei',
+            'password' => Hash::make('naoi'),
+            'role'     => 'kasir',
+        ]);
+
+        User::factory()->create([
+            'id'       => '3',
+            'name'     => 'Hanni Pham',
+            'username' => 'hanni',
+            'password' => Hash::make('pham:3'),
+            'role'     => 'admin',
+        ]);
+
+        // Pemasok::factory()->count(15)->create();
+        // Buku::factory()->count(30)->create();
+        // Member::factory()->count(10)->create();
     }
 }

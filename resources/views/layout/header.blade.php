@@ -31,17 +31,6 @@
 
     <title>@yield('title')</title>
 
-    <!-- Canonical SEO -->
-    <meta name="description" content="Sneat is the best bootstrap 5 dashboard for responsive web apps. Streamline your app development process with ease." />
-
-    <meta name="keywords" content="Sneat bootstrap dashboard, sneat bootstrap 5 dashboard, themeselection, html dashboard, web dashboard, frontend dashboard, responsive bootstrap theme" />
-    <meta property="og:title" content="Sneat Bootstrap 5 Dashboard PRO by ThemeSelection" />
-    <meta property="og:type" content="product" />
-    <meta property="og:url" content="https://themeselection.com/item/sneat-dashboard-pro-bootstrap/" />
-    <meta property="og:image" content="https://themeselection.com/wp-content/uploads/edd/2024/08/sneat-dashboard-pro-bootstrap-smm-image.png" />
-    <meta property="og:description" content="Sneat is the best bootstrap 5 dashboard for responsive web apps. Streamline your app development process with ease." />
-    <meta property="og:site_name" content="ThemeSelection" />
-    <link rel="canonical" href="https://themeselection.com/item/sneat-dashboard-pro-bootstrap/" />
 
     <!-- ? PROD Only: Google Tag Manager (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
     <script>
@@ -89,6 +78,7 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/apex-charts/apex-charts.css" />
 
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-bs5/datatables.bootstrap5.css" />
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/jquery-dataTables/jquery.dataTables.min.css">
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/flatpickr/flatpickr.css" />
@@ -100,6 +90,27 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/@form-validation/form-validation.css" />
 
     <!-- Page CSS -->
+
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #fraktur>div,
+            #fraktur * {
+                visibility: visible;
+            }
+
+            #fraktur>div {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                display: block !important;
+            }
+        }
+    </style>
 
     <!-- Helpers -->
     <script src="{{ asset('assets') }}/vendor/js/helpers.js"></script>
@@ -115,11 +126,6 @@
 </head>
 
 <body>
-
-    <!-- ?PROD Only: Google Tag Manager (noscript) (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DDHKGP" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <!-- Layout wrapper -->
     <div class="layout-wrapper layout-content-navbar  ">
         <div class="layout-container">
@@ -129,7 +135,7 @@
             <aside id="layout-menu" class="layout-menu menu-vertical menu">
 
                 <div class="app-brand demo ">
-                    <a href="index.html" class="app-brand-link">
+                    <a href="{{ route('home') }}" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <span class="text-primary">
 
@@ -189,6 +195,7 @@
                     <li class="menu-header small">
                         <span class="menu-header-text">Produk</span>
                     </li>
+                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('kategori.index') ? 'active' : '' }}">
                         <a href="{{ route('kategori.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-category-alt"></i>
@@ -201,6 +208,7 @@
                             <div data-i18n="Pemasok">Pemasok</div>
                         </a>
                     </li>
+                    @endif
                     <li class="menu-item {{ request()->routeIs('buku.index') ? 'active' : '' }}">
                         <a href="{{ route('buku.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-book"></i>
@@ -218,12 +226,14 @@
                             <div data-i18n="Member">Member</div>
                         </a>
                     </li>
+                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('voucher.index') ? 'active' : '' }}">
                         <a href="{{ route('voucher.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-discount"></i>
                             <div data-i18n="Voucher">Voucher</div>
                         </a>
                     </li>
+                    @endif
 
                     <!-- Transaksi -->
                     <li class="menu-header small">
@@ -241,6 +251,7 @@
                             <div data-i18n="Data Transaksi">Data Transaksi</div>
                         </a>
                     </li>
+                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('pembelian.create') ? 'active' : '' }}">
                         <a href="{{ route('pembelian.create') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-package"></i>
@@ -253,6 +264,7 @@
                             <div data-i18n="Data Pembelian">Data Pembelian</div>
                         </a>
                     </li>
+                    @endif
                 </ul>
 
             </aside>
@@ -280,6 +292,7 @@
                             <div class="nav-item navbar-search-wrapper mb-0">
                                 <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
                                     <span class="d-inline-block text-body-secondary fw-normal" id="autocomplete"></span>
+                                    <h6 id="greeting"></h6>
                                 </a>
                             </div>
                         </div>
@@ -361,7 +374,7 @@
                                                 <span class="dropdown-shortcuts-icon rounded-circle mb-3">
                                                     <i class="icon-base bx bx-pie-chart-alt-2 icon-26px text-heading"></i>
                                                 </span>
-                                                <a href="index.html" class="stretched-link">Dashboard</a>
+                                                <a href="{{ route('home') }}" class="stretched-link">Dashboard</a>
                                                 <small>User Dashboard</small>
                                             </div>
                                             <div class="dropdown-shortcuts-item col">
@@ -421,7 +434,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="flex-grow-1">
-                                                        <h6 class="small mb-0">Congratulation Lettie 🎉</h6>
+                                                        <h6 class="small mb-0">Congratulation Moka 🎉</h6>
                                                         <small class="mb-1 d-block text-body">Won the monthly best seller gold badge</small>
                                                         <small class="text-body-secondary">1h ago</small>
                                                     </div>
@@ -613,12 +626,9 @@
 
     </div>
     <!-- / Layout wrapper -->
-
+    <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/theme.js  -->
-
-    f
-
     <script src="{{ asset('assets') }}/vendor/libs/popper/popper.js"></script>
     <script src="{{ asset('assets') }}/vendor/js/bootstrap.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/@algolia/autocomplete-js.js"></script>
@@ -630,8 +640,10 @@
     <!-- endbuild -->
 
     <!-- Vendors JS -->
+    <script src="{{ asset('assets') }}/vendor/libs/cleave-zen/cleave-zen.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/select2/select2.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/apex-charts/apexcharts.js"></script>
+    <script src="{{ asset('assets') }}/vendor/libs/jquery-dataTables//jquery.dataTables.min.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/dropzone/dropzone.js"></script>
@@ -650,12 +662,34 @@
 
     <!-- Page JS -->
     <script src="{{ asset('assets') }}/js/forms-extras.js"></script>
+    <script src="{{ asset('assets') }}/js/modal-add-new-cc.js"></script>
     <script src="{{ asset('assets') }}/js/forms-selects.js"></script>
     <script src="{{ asset('assets') }}/js/dashboards-analytics.js"></script>
     <script src="{{ asset('assets') }}/js/tables-datatables-basic.js"></script>
+    <script src="{{ asset('assets') }}/js/dashboards-crm.js"></script>
     <script src="{{ asset('assets') }}/js/ui-toasts.js"></script>
     <script src="{{ asset('assets') }}/js/cards-actions.js"></script>
     <script src="{{ asset('assets') }}/js/forms-file-upload.js"></script>
+    <script>
+        $(document).ready(function() {
+            let userName = "{{ Auth::user()->name ?? 'Guest' }}";
+            let now = new Date();
+            let hour = now.getHours();
+            let greeting = '';
+
+            if (hour >= 5 && hour < 12) {
+                greeting = 'Good Morning, ' + userName + '! ☀️';
+            } else if (hour >= 12 && hour < 17) {
+                greeting = 'Good Afternoon, ' + userName + '! 🌤️';
+            } else if (hour >= 17 && hour < 20) {
+                greeting = 'Good Evening, ' + userName + '! 🌆';
+            } else {
+                greeting = 'Good Night, ' + userName + '! 🌙';
+            }
+
+            $("#greeting").text(`${greeting}`);
+        });
+    </script>
     <script>
         $(document).ready(function() {
             $('#tableData table').each(function() {
@@ -712,10 +746,59 @@
                     }
                 });
             });
-            let tableTransaksi = $('#tableTransaksi table').DataTable({
-                dom: "<'row'<'col-sm-6 my-0'l><'col-sm-6 my-0'f>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5 px-1'i><'col-sm-7 d-flex justify-content-end'p>>",
+        });
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            let tableTransaksi;
+
+            function renderCards() {
+                if (!tableTransaksi) {
+                    console.warn("❌ tableTransaksi belum siap, renderCards() batal.");
+                    return;
+                }
+
+                let data = tableTransaksi.rows({
+                    page: 'current'
+                }).data();
+
+                $("#cardContainer").empty();
+
+                if (data.length === 0) {
+                    return;
+                }
+
+                let rowHtml = '<div class="row">';
+                for (let i = 0; i < data.length; i++) {
+                    let row = data[i];
+
+                    rowHtml += `
+                <div class="col-md-4 mb-3">
+                    <div class="card shadow-sm" style="border-radius: 10px;">
+                        <div class="card-body text-center">
+                            <h5 class="card-title">${row[3]}</h5>
+                            <p class="card-text text-muted">Penulis: ${row[4]}</p>
+                            <p class="card-text fw-bold text-success">${row[5]}</p>
+                            <span class="badge bg-primary">${row[6]}</span>
+                            <p class="text-muted mt-1">Stok: ${row[7]}</p>
+                            <button class="btn btn-outline-success btn-sm add-buku"
+                                data-id="${row[1]}" data-judul="${row[3]}" data-harga="${row[5]}">
+                                <i class="bx bx-plus"></i> Tambah
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+                }
+                rowHtml += '</div>';
+                $("#cardContainer").html(rowHtml);
+            }
+
+            tableTransaksi = $('#tableBuku').DataTable({
+                dom: "<'row'<'col-sm-3 my-0'f><'col-sm-9 d-flex justify-content-end'p>>" +
+                    "<'row'<'col-sm-12'tr d-none>>" +
+                    "<'row'<'col-sm-12'<'#cardContainer'>>>",
 
                 paging: true,
                 searching: true,
@@ -726,14 +809,25 @@
                         previous: '<i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>',
                     },
                 },
+                initComplete: function() {
+                    setTimeout(() => {
+                        renderCards();
+                        $('#tableBuku').addClass('d-none'); // Pastikan tabel hilang
+                    }, 100);
+                },
+                drawCallback: function() {
+                    setTimeout(() => {
+                        renderCards();
+                    }, 50);
+                }
             });
+
             $('#kategori_id').on('change', function() {
                 let selectedCategory = $(this).val();
-                tableTransaksi.column(4).search(selectedCategory ? '^' + selectedCategory + '$' : '', true, false).draw();
+                tableTransaksi.column(5).search(selectedCategory ? '^' + selectedCategory + '$' : '', true, false).draw();
             });
         });
     </script>
-
     <script>
         $(document).ready(function() {
             var $toast = $(".toast");
@@ -743,8 +837,29 @@
                 toast.show();
             }
         });
-    </script>
 
+        $(".credit-card-mask").each(function() {
+            new Cleave(this, {
+                creditCard: true
+            });
+        });
+
+        // No. HP (Format Indonesia +62)
+        $(".phone-mask").each(function() {
+            new Cleave(this, {
+                phone: true,
+                phoneRegionCode: 'ID' // Indonesia
+            });
+        });
+
+        // QRIS (Bisa disesuaikan nanti)
+        $(".qris-mask").each(function() {
+            new Cleave(this, {
+                blocks: [5, 5, 5, 5, 5, 5], // Contoh format QRIS
+                numericOnly: true
+            });
+        });
+    </script>
 </body>
 
 </html>
