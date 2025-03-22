@@ -80,7 +80,7 @@ $breadcrumbs = [
                                     <form action="{{ route('kategori.destroy', $data->id) }}" method="post">
                                         @csrf
                                         @method('delete')
-                                        <button type="submit" class="btn"><span class="badge rounded-pill bg-label-danger"><i class="bx bx-trash text-danger"></i></span></button>
+                                        <button type="submit" class="btn btn-destroy"><span class="badge rounded-pill bg-label-danger"><i class="bx bx-trash text-danger"></i></span></button>
                                     </form>
                                 </div>
                             </td>

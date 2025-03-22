@@ -69,12 +69,12 @@ document.addEventListener("DOMContentLoaded", function (o) {
             },
             series: [
                 {
-                    name: "Last Month",
-                    data: [20, 54, 20, 38, 22, 28, 16, 19, 11],
+                    name: "Transaksi",
+                    data: transaksiData,
                 },
                 {
-                    name: "This Month",
-                    data: [20, 32, 22, 65, 40, 46, 34, 70, 75],
+                    name: "Penjualan",
+                    data: penjualanData,
                 },
             ],
             stroke: { curve: "smooth", dashArray: [8, 0], width: [3, 4] },
@@ -102,7 +102,7 @@ document.addEventListener("DOMContentLoaded", function (o) {
                     {
                         fillColor: config.colors.white,
                         seriesIndex: 1,
-                        dataPointIndex: 3,
+                        dataPointIndex: 6,
                         strokeColor: config.colors.black,
                         size: 6,
                     },
@@ -112,17 +112,7 @@ document.addEventListener("DOMContentLoaded", function (o) {
             xaxis: {
                 labels: { style: { colors: t, fontSize: "13px" } },
                 axisTicks: { show: !1 },
-                categories: [
-                    " ",
-                    "Jan",
-                    "Feb",
-                    "Mar",
-                    "Apr",
-                    "May",
-                    "Jun",
-                    "Jul",
-                    " ",
-                ],
+                categories: categories,
                 axisBorder: { show: !1 },
             },
             yaxis: { show: !1 },

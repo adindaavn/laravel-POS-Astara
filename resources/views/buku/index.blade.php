@@ -8,10 +8,13 @@ $breadcrumbs = [
 @endphp
 @section('content')
 <div class="row">
+    <!-- Breadcrumbs -->
     <x-breadcrumb :breadcrumbs="$breadcrumbs" />
     <div class="col-xl-12">
         <div class="nav-align-top mb-4">
+            <!-- Tabs -->
             <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
+                <!-- Tab Stok Buku -->
                 <li class="nav-item">
                     <button
                         type="button"
@@ -27,6 +30,7 @@ $breadcrumbs = [
                     </button>
                 </li>
                 <li class="nav-item">
+                    <!-- Tab Data Buku -->
                     <button
                         type="button"
                         class="nav-link"
@@ -40,6 +44,7 @@ $breadcrumbs = [
                 </li>
 
             </ul>
+            <!-- Tab Content Stok Buku -->
             <div class="tab-content">
                 <div class="tab-pane fade show active" id="navs-stok" role="tabpanel">
                     <div class="card shadow-none">
@@ -66,7 +71,13 @@ $breadcrumbs = [
                                                 <td>{{$data->judul}}</td>
                                                 <td>{{$data->kategori}}</td>
                                                 <td>Rp. {{ number_format($data->harga, 0, ',', '.') }}</td>
-                                                <td>{{$data->stok}}</td>
+                                                <td>
+                                                    @if($data->stok <= 0)
+                                                        <span class="badge rounded-pill bg-label-danger">{{$data->stok}}</span>
+                                                        @else
+                                                        <span class="badge rounded-pill bg-label-success">{{$data->stok}}</span>
+                                                        @endif
+                                                </td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -76,6 +87,7 @@ $breadcrumbs = [
                         </div>
                     </div>
                 </div>
+                <!-- Tab Content Data Buku -->
                 <div class="tab-pane fade" id="navs-data" role="tabpanel">
                     <div class="card shadow-none">
                         <div class="row">
@@ -111,7 +123,7 @@ $breadcrumbs = [
                                                 <td>{{$loop->iteration}}</td>
                                                 <td>
                                                     @if($data->gambar != null)
-                                                    <img src="{{ asset('storage/' . $data->gambar) }}" width="100">
+                                                    <img src="/gambar/{{ $data->gambar }}" height="100px">
                                                     @endif
                                                 </td>
                                                 <td>{{$data->isbn}}</td>

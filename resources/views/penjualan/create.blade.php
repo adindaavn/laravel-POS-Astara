@@ -48,6 +48,7 @@
                                         <th class="fw-bold">Harga</th>
                                         <th class="fw-bold">Kategori</th>
                                         <th class="fw-bold">Stok</th>
+                                        <th class="fw-bold">Cover</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -68,6 +69,7 @@
                                         <td>Rp. {{ number_format($data->harga, 0, ',', '.') }}</td>
                                         <td>{{$data->kategori}}</td>
                                         <td>{{$data->stok}}</td>
+                                        <td>{{$data->gambar}}</td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -113,7 +115,7 @@
                     <h6>Order Details</h6>
                     <dl class="col-12 mb-0 text-heading itemList">
                     </dl>
-
+                    <!-- 
                     <hr class="px-2" />
                     <div class="row">
                         <div class="col-1 d-flex align-items-center">
@@ -132,7 +134,7 @@
                                 <button type="button" class="btn btn-label-primary">Apply</button>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <hr class="px-2" />
                     <dl class="row mb-0">
@@ -227,13 +229,11 @@
         }
 
         let selectedBuku = [];
-
         $(document).on("click", ".add-buku", function() {
-            console.log("Harga sebelum parsing:", $(this).data("harga"));
-
             let id = $(this).data("id");
             let judul = $(this).data("judul");
             let harga = $(this).data("harga");
+            let stok = $(this).data("stok");
 
             // Cek apakah harga valid
             if (!harga) {
@@ -247,25 +247,28 @@
             let existing = selectedBuku.find(item => item.buku_id == id);
 
             if (existing) {
-                existing.jumlah++;
-                existing.subtotal = existing.jumlah * existing.harga_jual;
+                if (existing.jumlah < stok) {
+                    existing.jumlah++;
+                    existing.subtotal = existing.jumlah * existing.harga_jual;
+                }
             } else {
                 selectedBuku.push({
                     buku_id: id,
                     judul: judul,
                     harga_jual: harga,
                     jumlah: 1,
-                    subtotal: harga
+                    subtotal: harga,
+                    stok: stok
                 });
             }
-            let jumlahInput = `
-                    <div class="d-flex justify-content-center align-items-center gap-2">
-                        <button class="btn btn-label-danger btn-sm btn-minus" data-id="${id}">-</button>
-                        <input type="number" class="form-control text-center input-jumlah" data-id="${id}" value="1" min="0" style="width: 60px;">
-                        <button class="btn btn-label-success btn-sm btn-plus" data-id="${id}">+</button>
-                    </div>
 
-            `;
+            let jumlahInput = `
+        <div class="d-flex justify-content-center align-items-center gap-2">
+            <button class="btn btn-label-danger btn-sm btn-minus" data-id="${id}">-</button>
+            <input type="number" class="form-control text-center input-jumlah" data-id="${id}" value="1" min="1" max="${stok}" style="width: 60px;">
+            <button class="btn btn-label-success btn-sm btn-plus" data-id="${id}">+</button>
+        </div>
+    `;
             $(this).replaceWith(jumlahInput);
             updateTable();
         });
@@ -274,16 +277,19 @@
             let id = $(this).data("id");
             let newJumlah = parseInt($(this).val());
             let item = selectedBuku.find(b => b.buku_id == id);
+            let stok = item ? item.stok : 0;
 
             if (item) {
                 if (newJumlah <= 0) {
-                    selectedBuku = selectedBuku.filter(b => b.buku_id != id); // Hapus jika 0
+                    selectedBuku = selectedBuku.filter(b => b.buku_id != id);
+                } else if (newJumlah > stok) {
+                    item.jumlah = stok;
+                    $(this).val(stok);
                 } else {
                     item.jumlah = newJumlah;
-                    item.subtotal = item.harga_jual * item.jumlah;
                 }
+                item.subtotal = item.harga_jual * item.jumlah;
             }
-
             updateTable();
         });
 
@@ -292,16 +298,14 @@
             let input = $(`.input-jumlah[data-id='${id}']`);
             let item = selectedBuku.find(b => b.buku_id == id);
 
-            if (item) {
+            if (item && item.jumlah < item.stok) {
                 item.jumlah++;
                 item.subtotal = item.harga_jual * item.jumlah;
                 input.val(item.jumlah);
             }
-
             updateTable();
         });
 
-        // Event untuk tombol - (decrement)
         $(document).on("click", ".btn-minus", function() {
             let id = $(this).data("id");
             let input = $(`.input-jumlah[data-id='${id}']`);
@@ -313,25 +317,17 @@
                     item.subtotal = item.harga_jual * item.jumlah;
                     input.val(item.jumlah);
                 } else {
-                    // Hapus item dan balikin ke tombol tambah
                     selectedBuku = selectedBuku.filter(b => b.buku_id != id);
                     let tombolTambah = `<button class="btn btn-outline-success btn-sm add-buku"
-                        data-id="${id}" data-judul="${item.judul}" data-harga="${item.harga_jual}">
-                        <i class="bx bx-plus"></i> Tambah
-                    </button>`;
-                    input.closest(".input-group").replaceWith(tombolTambah);
+                data-id="${id}" data-judul="${item.judul}" data-harga="${item.harga_jual}" data-stok="${item.stok}">
+                <i class="bx bx-plus"></i> Tambah
+            </button>`;
+                    input.closest(".d-flex").replaceWith(tombolTambah);
                 }
             }
-
             updateTable();
         });
 
-
-        $(document).on("click", ".btn-delete", function() {
-            let id = $(this).data("id");
-            selectedBuku = selectedBuku.filter(b => b.buku_id != id);
-            updateTable();
-        });
 
         function updateTable() {
             let itemList = $(".itemList");

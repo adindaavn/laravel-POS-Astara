@@ -87,15 +87,16 @@
                                     name="thn_terbit" />
                             </div>
                         </div>
-                        <div class="row">
-                            <div action="/upload" class="dropzone needsclick" id="dropzone-basic">
-                                <div class="dz-message needsclick">
-                                    Drop files here or click to upload
-                                </div>
-                                <div class="fallback">
-                                    <input name="gambar" id="gambar" type="file" />
-                                </div>
-                            </div>
+                        <div class="col-12 mb-3">
+                            <label for="gambar" class="form-label">Gambar</label>
+                            <input
+                                type="file"
+                                name="gambar"
+                                class="form-control"
+                                id="gambar">
+                            @error('gambar')
+                            <div class="form-text text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                 </div>

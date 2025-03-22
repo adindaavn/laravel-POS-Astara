@@ -25,7 +25,7 @@ $breadcrumbs = [
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <h5 class="pb-0 fw-bold">Pendataan Buku</h5>
-                        <button type="submit" class="btn btn-primary" id="submit-btn">Tambah</button>
+                        <button type="submit" class="btn btn-primary" id="submit-btn">Simpan Transaksi</button>
                     </div>
                     <div class="row">
                         <div class="row">
@@ -45,30 +45,51 @@ $breadcrumbs = [
                                         </button>
                                     </div>
                                 </div>
-
                             </div>
                             <div class="col-3 mb-3">
                                 <label for="total" class="form-label">Total Bayar</label>
-                                <input type="number" id="total" class="form-control" placeholder="Total Bayar" name="total" readonly />
+                                <input type="number" class="total_bayar form-control" placeholder="Total Bayar" readonly />
+                                <input type="hidden" id="total" name="total" />
                             </div>
                         </div>
 
                         <div class="col-12 mb-3">
                             <label for="buku" class="form-label">Buku</label>
-                            <br>
-                            <div id="buku-container"></div>
-                            <div class="mb-0">
-                                <div class="d-flex">
-                                    <button type="button" class="btn btn-primary me-2" id="add-buku">
-                                        <i class="icon-base bx bx-plus"></i>
-                                    </button>
+                            <div class="row">
+                                <div class="col-8">
+                                    <select class="select2 form-select" id="buku" name="buku" data-allow-clear="true">
+                                        @foreach($buku as $b)
+                                        <option value="{{$b->id}}" data-cover="{{ $b->gambar }}" data-judul="{{ $b->judul }}" data-penulis="{{ $b->penulis }}" data-isbn="{{ $b->isbn }}" data-harga="{{ $b->harga }}">
+                                            {{$b->judul}} by {{$b->penulis}} ({{$b->isbn}})
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-2">
                                     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalBuku">
                                         <span class="align-middle">Buku Baru</span>
                                     </button>
                                 </div>
                             </div>
+                            <div class="mt-5">
+                                <table class="table">
+                                    <thead>
+                                        <tr class="table-primary">
+                                            <th class="fw-bold text-center w-10">No</th>
+                                            <th class="fw-bold text-center w-10">Cover</th>
+                                            <th class="fw-bold w-50">Buku</th>
+                                            <th class="fw-bold text-center w-20">Harga Jual</th>
+                                            <th class="fw-bold text-center w-20">Harga Beli</th>
+                                            <th class="fw-bold text-center w-10">Jumlah</th>
+                                            <th class="fw-bold text-center w-20">Subtotal</th>
+                                            <th class="fw-bold"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="buku-container">
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-
                     </div>
                 </div>
                 <input type="hidden" name="buku" id="bukuData">
@@ -84,55 +105,53 @@ $breadcrumbs = [
 <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 <script>
     $(document).ready(function() {
-        let bukuContainer = $("#buku-container");
+        $('#buku').change(function() {
+            var selectedOption = $(this).find('option:selected');
+            var cover = selectedOption.data('cover');
+            var judul = selectedOption.data('judul');
+            var penulis = selectedOption.data('penulis');
+            var isbn = selectedOption.data('isbn');
+            var harga = selectedOption.data('harga');
 
-        function getBukuItem() {
-            return `
-            <div class="buku-item row">
-                <div class="mb-6 col-lg-6 col-xl-5 col-12 mb-0">
-                    <label class="form-label">Judul Buku</label>
-                    <select class="select2 form-select buku_id" data-allow-clear="true">
-                        @foreach($buku as $b)
-                        <option value="{{$b->id}}">{{$b->judul}} by {{$b->penulis}} ({{$b->harga}})</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-6 col-lg-6 col-xl-2 col-12 mb-0">
-                    <label class="form-label">Harga Beli</label>
-                    <input type="number" class="form-control harga" />
-                </div>
-                <div class="mb-6 col-lg-6 col-xl-1 col-12 mb-0">
-                    <label class="form-label">Jumlah</label>
-                    <input type="number" class="form-control jumlah" />
-                </div>
-                <div class="mb-6 col-lg-6 col-xl-2 col-12 mb-0">
-                    <label class="form-label">Subtotal</label>
-                    <input type="number" class="form-control subtotal" readonly />
-                </div>
-                <div class="mb-6 col-lg-6 col-xl-2 col-12 d-flex align-items-end mb-0">
-                    <button type="button" class="btn btn-label-danger remove-buku">
-                        <i class="icon-base bx bx-x"></i>
-                    </button>
-                </div>
-                <hr />
-            </div>`;
-        }
+            // Create a new row
+            var newRow = `
+                <tr class="buku-item">
+                    <td></td>
+                    <td><img src="/gambar/${cover}" alt="Cover" style="width: 70px; height: auto;" /></td>
+                    <td>
+                        <strong>${judul}</strong><br>
+                        ${penulis}<br>
+                        (${isbn})
+                    </td>
+                    <td><input type="number" class="form-control harga-jual" value="${harga}" readonly/></td>
+                    <td><input type="number" class="form-control harga" /></td>
+                    <td><input type="number" class="form-control jumlah" /></td>
+                    <td><input type="number" class="form-control subtotal" readonly/></td>
+                    <td>
+                        <input type="hidden" class="buku_id" name="buku[][buku_id]" value="${selectedOption.val()}" />
+                        <button type="button" class="btn btn-label-danger remove-buku">
+                            <i class="icon-base bx bx-x"></i>
+                        </button>
+                    </td>
+                </tr>
+                `;
 
-        // Add new book item
-        $("#add-buku").click(function() {
-            bukuContainer.append(getBukuItem());
-            $(".select2").select2(); // Reinitialize select2
+
+            // Append the new row to the table body
+            $('#buku-container').append(newRow);
+            updateRowNumbers(); // Update row numbers after adding a new row
         });
 
         // Remove book item
-        bukuContainer.on("click", ".remove-buku", function() {
-            $(this).closest(".buku-item").remove();
+        $('#buku-container').on("click", ".remove-buku", function() {
+            $(this).closest("tr").remove();
+            updateRowNumbers();
             updateTotal();
         });
 
         // Calculate subtotal
-        bukuContainer.on("input", ".harga, .jumlah", function() {
-            let row = $(this).closest(".buku-item");
+        $('#buku-container').on("input", ".harga, .jumlah", function() {
+            let row = $(this).closest("tr");
             let harga = parseFloat(row.find(".harga").val()) || 0;
             let jumlah = parseInt(row.find(".jumlah").val()) || 0;
             let subtotal = harga * jumlah;
@@ -146,12 +165,18 @@ $breadcrumbs = [
             $(".subtotal").each(function() {
                 total += parseFloat($(this).val()) || 0;
             });
+            $(".total_bayar").val(total.toLocaleString());
             $("#total").val(total);
         }
 
+        function updateRowNumbers() {
+            $('#buku-container tr.buku-item').each(function(index) {
+                $(this).find('td:first').text(index + 1);
+            });
+        }
         // Prepare data before submit
         $("#submit-btn").click(function(event) {
-            event.preventDefault(); // Prevent form from submitting normally
+            event.preventDefault();
 
             let bukuArray = [];
             $(".buku-item").each(function() {
@@ -164,7 +189,7 @@ $breadcrumbs = [
             });
 
             $("#bukuData").val(JSON.stringify(bukuArray));
-            $("#formPembelian").submit(); // Submit form
+            $("#formPembelian").submit();
         });
     });
 </script>

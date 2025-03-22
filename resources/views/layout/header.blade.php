@@ -31,25 +31,6 @@
 
     <title>@yield('title')</title>
 
-
-    <!-- ? PROD Only: Google Tag Manager (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
-    <script>
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-5DDHKGP');
-    </script>
-    <!-- End Google Tag Manager -->
-
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets') }}/img/favicon/favicon.ico" />
 
@@ -82,8 +63,6 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css" />
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/flatpickr/flatpickr.css" />
-
-    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/dropzone/dropzone.css" />
     <!-- Row Group CSS -->
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css" />
     <!-- Form Validation -->
@@ -215,6 +194,12 @@
                             <div data-i18n="Buku">Buku</div>
                         </a>
                     </li>
+                    <li class="menu-item {{ request()->routeIs('pengajuan.index') ? 'active' : '' }}">
+                        <a href="{{ route('pengajuan.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-book-content"></i>
+                            <div data-i18n="Pengajuan Buku">Pengajuan Buku</div>
+                        </a>
+                    </li>
 
                     <!-- Toko -->
                     <li class="menu-header small">
@@ -226,14 +211,14 @@
                             <div data-i18n="Member">Member</div>
                         </a>
                     </li>
-                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
+                    <!-- @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('voucher.index') ? 'active' : '' }}">
                         <a href="{{ route('voucher.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-discount"></i>
                             <div data-i18n="Voucher">Voucher</div>
                         </a>
                     </li>
-                    @endif
+                    @endif -->
 
                     <!-- Transaksi -->
                     <li class="menu-header small">
@@ -646,7 +631,6 @@
     <script src="{{ asset('assets') }}/vendor/libs/jquery-dataTables//jquery.dataTables.min.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/datatables-bs5/datatables-bootstrap5.js"></script>
     <script src="{{ asset('assets') }}/vendor/libs/jquery-repeater/jquery-repeater.js"></script>
-    <script src="{{ asset('assets') }}/vendor/libs/dropzone/dropzone.js"></script>
 
     <!-- Flat Picker -->
     <script src="{{ asset('assets') }}/vendor/libs/moment/moment.js"></script>
@@ -666,10 +650,12 @@
     <script src="{{ asset('assets') }}/js/forms-selects.js"></script>
     <script src="{{ asset('assets') }}/js/dashboards-analytics.js"></script>
     <script src="{{ asset('assets') }}/js/tables-datatables-basic.js"></script>
-    <script src="{{ asset('assets') }}/js/dashboards-crm.js"></script>
     <script src="{{ asset('assets') }}/js/ui-toasts.js"></script>
     <script src="{{ asset('assets') }}/js/cards-actions.js"></script>
     <script src="{{ asset('assets') }}/js/forms-file-upload.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- nama -->
     <script>
         $(document).ready(function() {
             let userName = "{{ Auth::user()->name ?? 'Guest' }}";
@@ -690,6 +676,34 @@
             $("#greeting").text(`${greeting}`);
         });
     </script>
+    <!-- swal -->
+
+    <script>
+        $(document).on('click', '.btn-destroy', function(e) {
+            e.preventDefault();
+
+            let form = $(this).closest('form');
+            let actionUrl = form.attr('action');
+
+            Swal.fire({
+                title: "Are you sure?",
+                text: "Ga bakal bisa dibalikin tauu",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: "Hapus aja",
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-label-secondary ms-2",
+                },
+                buttonsStyling: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        });
+    </script>
+    <!-- tabledata -->
     <script>
         $(document).ready(function() {
             $('#tableData table').each(function() {
@@ -748,7 +762,70 @@
             });
         });
     </script>
+    <!-- table pengajuan -->
+    <script>
+        $(document).ready(function() {
+            $('#tablePengajuan table').each(function() {
+                let table = $(this);
+                let tableTitle = table.closest('.card').find('.card-header').text().trim();
+                table.closest('.card').find('.card-header').remove();
 
+                table.DataTable({
+                    dom: "<'row'<'col-sm-6 d-flex align-items-center'<'table-title fw-bold mx-3'>>" +
+                        "<'col-sm-6 d-flex justify-content-end'B<<'btn-add-wrapper'>> >>" +
+                        "<'row'<'col-sm-6 my-0'l><'col-sm-6 my-0'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5 px-1'i><'col-sm-7 d-flex justify-content-end'p>>",
+
+                    buttons: [{
+                        extend: 'collection',
+                        className: "btn btn-label-primary dropdown-toggle",
+                        text: '<span class="d-flex align-items-center gap-2"><i class="icon-base bx bx-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span></span>',
+                        buttons: [{
+                            extend: "print",
+                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bx-printer me-1"></i>Print</span>',
+                            className: "dropdown-item",
+                        }, {
+                            extend: "csv",
+                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bx-file me-1"></i>Csv</span>',
+                            className: "dropdown-item",
+                        }, {
+                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-export me-1"></i>Excel</span>',
+                            className: "dropdown-item",
+                            action: function() {
+                                window.location.href = "{{ url('/pengajuan/excel') }}";
+                            }
+                        }, {
+                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-pdf me-1"></i>Pdf</span>',
+                            className: "dropdown-item",
+                            action: function() {
+                                window.location.href = "{{ url('/pengajuan/pdf') }}";
+                            }
+                        }, {
+                            extend: "copy",
+                            text: '<i class="icon-base bx bx-copy me-1"></i>Copy',
+                            className: "dropdown-item",
+                        }]
+                    }],
+                    paging: true,
+                    searching: true,
+                    ordering: true,
+                    language: {
+                        paginate: {
+                            next: '<i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>',
+                            previous: '<i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>',
+                        },
+                    },
+                    initComplete: function() {
+                        table.closest('.card').find('.table-title').html(`<h5 class="fw-bold mb-0">${tableTitle}</h5>`);
+                        table.closest('.card').find(".btn-add-wrapper").append(table.closest('.card').find(".btn-add")).addClass('ms-3');
+                        table.closest('.card').find(".buttons-collection").removeClass("btn-secondary").addClass("btn-label-primary");
+                    }
+                });
+            });
+        });
+    </script>
+    <!-- table transaksi -->
     <script>
         $(document).ready(function() {
             let tableTransaksi;
@@ -774,22 +851,23 @@
                     let row = data[i];
 
                     rowHtml += `
-                <div class="col-md-4 mb-3">
-                    <div class="card shadow-sm" style="border-radius: 10px;">
-                        <div class="card-body text-center">
-                            <h5 class="card-title">${row[3]}</h5>
-                            <p class="card-text text-muted">Penulis: ${row[4]}</p>
-                            <p class="card-text fw-bold text-success">${row[5]}</p>
-                            <span class="badge bg-primary">${row[6]}</span>
-                            <p class="text-muted mt-1">Stok: ${row[7]}</p>
-                            <button class="btn btn-outline-success btn-sm add-buku"
-                                data-id="${row[1]}" data-judul="${row[3]}" data-harga="${row[5]}">
-                                <i class="bx bx-plus"></i> Tambah
-                            </button>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm" style="border-radius: 10px;">
+                            <img src="/gambar/${row[8]}" class="card-img-top mx-auto d-block" alt="${row[3]}" style="width: 150px; height: 200px; object-fit: cover;">
+                                <div class="card-body text-center">
+                                    <h5 class="card-title">${row[3]}</h5>
+                                    <p class="card-text text-muted">Penulis: ${row[4]}</p>
+                                    <p class="card-text fw-bold text-success">${row[5]}</p> 
+                                    <span class="badge bg-primary">${row[6]}</span>
+                                    <p class="text-muted mt-1">Stok: ${row[7]}</p>
+                                    <button class="btn btn-outline-success btn-sm add-buku"
+                                        data-id="${row[1]}" data-judul="${row[3]}" data-harga="${row[5]}" data-stok="${row[7]}">
+                                        <i class="bx bx-plus"></i> Tambah
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            `;
+                    `;
                 }
                 rowHtml += '</div>';
                 $("#cardContainer").html(rowHtml);
@@ -824,10 +902,12 @@
 
             $('#kategori_id').on('change', function() {
                 let selectedCategory = $(this).val();
-                tableTransaksi.column(5).search(selectedCategory ? '^' + selectedCategory + '$' : '', true, false).draw();
+                console.log(selectedCategory);
+                tableTransaksi.column(6).search(selectedCategory ? '^' + selectedCategory + '$' : '', true, false).draw();
             });
         });
     </script>
+    <!-- toast -->
     <script>
         $(document).ready(function() {
             var $toast = $(".toast");

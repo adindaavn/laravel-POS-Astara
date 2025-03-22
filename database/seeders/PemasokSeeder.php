@@ -13,6 +13,6 @@ class PemasokSeeder extends Seeder
      */
     public function run(): void
     {
-        Pemasok::factory()->count(9)->create();
+        Pemasok::factory()->count(10)->create();
     }
 }

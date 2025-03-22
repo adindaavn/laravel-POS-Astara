@@ -18,8 +18,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // $this->call(KategoriSeeder::class);
-        // $this->call(PemasokSeeder::class);
+        $this->call(KategoriSeeder::class);
+        $this->call(PemasokSeeder::class);
+
         User::factory()->create([
             'id'       => '1',
             'name'     => 'Sakai Moka',
@@ -44,8 +45,7 @@ class DatabaseSeeder extends Seeder
             'role'     => 'admin',
         ]);
 
-        // Pemasok::factory()->count(15)->create();
-        // Buku::factory()->count(30)->create();
-        // Member::factory()->count(10)->create();
+        Buku::factory()->count(30)->create();
+        Member::factory()->count(10)->create();
     }
 }

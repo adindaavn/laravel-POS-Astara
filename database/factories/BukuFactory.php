@@ -26,12 +26,17 @@ class BukuFactory extends Factory
 
         return [
             "isbn"          => $faker->unique()->isbn13(),
-            "judul"         => $faker->sentence(2),
+            "judul"         => $faker->sentence(1),
             "penulis"       => $faker->firstName() . ' ' . $faker->lastName(),
             "penerbit"      =>$faker->company(),
             "kategori_id"   => $kategori->id,
             "harga"         => $faker->numberBetween(30000, 200000),
             "thn_terbit"    => $faker->year(),
+            "gambar" => $faker->randomElement([
+                "20250320225904.jpg",
+                "2025032022608.jpg",
+                "2025032022831.jpg"
+            ]),
             'created_at'    => now(),
             'updated_at'    => now(),
         ];

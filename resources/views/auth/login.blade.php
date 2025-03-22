@@ -42,24 +42,6 @@
     <meta property="og:site_name" content="ThemeSelection" />
     <link rel="canonical" href="https://themeselection.com/item/sneat-dashboard-pro-bootstrap/" />
 
-    <!-- ? PROD Only: Google Tag Manager (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
-    <script>
-        (function(w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s),
-                dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        })(window, document, 'script', 'dataLayer', 'GTM-5DDHKGP');
-    </script>
-    <!-- End Google Tag Manager -->
-
     <!-- Favicon -->
     <link rel="icon" type="image/x-icon" href="{{ asset('assets') }}/img/favicon/favicon.ico" />
 
@@ -162,9 +144,17 @@
                             </a>
                         </div>
                         <!-- /Logo -->
-                        <h4 class="mb-1">Welcome to Astara! 👋</h4>
-                        <p class="mb-6">Please sign-in to your account and start the adventure</p>
+                        <!-- <h4 class="mb-1">Welcome to Astara! 👋</h4>
+                        <p class="mb-6">Please sign-in to your account and start the adventure</p> -->
 
+                        @if($errors->has('loginError'))
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <span class="fw-bold">Error!</span> {{ $errors->first('loginError') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        @endif
+                        
+                        <!-- form login -->
                         <form id="formAuthentication" class="mb-6" action="{{ route('login.auth') }}" method="post">
                             @csrf
                             <div class="mb-6 form-control-validation">
@@ -178,27 +168,18 @@
                                     <span class="input-group-text cursor-pointer"><i class="icon-base bx bx-hide"></i></span>
                                 </div>
                             </div>
-                            <!-- <div class="mb-7">
-                                <div class="d-flex justify-content-between">
-                                    <div class="form-check mb-0">
-                                        <input class="form-check-input" type="checkbox" id="remember-me" />
-                                        <label class="form-check-label" for="remember-me"> Remember Me </label>
-                                    </div>
-                                    <a href="auth-forgot-password-basic.html">
-                                        <span>Forgot Password?</span>
-                                    </a>
-                                </div>
-                            </div> -->
                             <div class="mb-6">
                                 <button class="btn btn-primary d-grid w-100" type="submit">Login</button>
                             </div>
                         </form>
+                        <!-- form login end -->
                     </div>
                 </div>
                 <!-- /Login -->
             </div>
         </div>
     </div>
+
 
     <!-- / Content -->
     <!-- Core JS -->
@@ -224,11 +205,20 @@
     <!-- Main JS -->
 
     <script src="{{ asset('assets') }}/js/main.js"></script>
-
+    <script src="{{ asset('assets') }}/js/ui-toasts.js"></script>
 
     <!-- Page JS -->
     <script src="{{ asset('assets') }}/js/pages-auth.js"></script>
+    <script>
+        $(document).ready(function() {
+            var $toast = $(".toast");
 
+            if ($toast.length) {
+                var toast = new bootstrap.Toast($toast[0]);
+                toast.show();
+            }
+        });
+    </script>
 </body>
 
 </html>
