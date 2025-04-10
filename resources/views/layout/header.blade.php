@@ -69,6 +69,7 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/libs/@form-validation/form-validation.css" />
 
     <!-- Page CSS -->
+    <link rel="stylesheet" href="{{ asset('assets') }}/vendor/css/pages/card-analytics.css" />
 
     <style>
         @media print {
@@ -646,10 +647,9 @@
 
     <!-- Page JS -->
     <script src="{{ asset('assets') }}/js/forms-extras.js"></script>
-    <script src="{{ asset('assets') }}/js/modal-add-new-cc.js"></script>
     <script src="{{ asset('assets') }}/js/forms-selects.js"></script>
-    <script src="{{ asset('assets') }}/js/dashboards-analytics.js"></script>
     <script src="{{ asset('assets') }}/js/tables-datatables-basic.js"></script>
+    <script src="{{ asset('assets') }}/js/app-ecommerce-dashboard.js"></script>
     <script src="{{ asset('assets') }}/js/ui-toasts.js"></script>
     <script src="{{ asset('assets') }}/js/cards-actions.js"></script>
     <script src="{{ asset('assets') }}/js/forms-file-upload.js"></script>
@@ -667,10 +667,8 @@
                 greeting = 'Good Morning, ' + userName + '! ☀️';
             } else if (hour >= 12 && hour < 17) {
                 greeting = 'Good Afternoon, ' + userName + '! 🌤️';
-            } else if (hour >= 17 && hour < 20) {
-                greeting = 'Good Evening, ' + userName + '! 🌆';
             } else {
-                greeting = 'Good Night, ' + userName + '! 🌙';
+                greeting = 'Good Evening, ' + userName + '! 🌙';
             }
 
             $("#greeting").text(`${greeting}`);
@@ -851,16 +849,18 @@
                     let row = data[i];
 
                     rowHtml += `
-                        <div class="col-md-4 mb-3">
+                        <div class="col-4 col-md-3 mb-3">
                             <div class="card shadow-sm" style="border-radius: 10px;">
-                            <img src="/gambar/${row[8]}" class="card-img-top mx-auto d-block" alt="${row[3]}" style="width: 150px; height: 200px; object-fit: cover;">
+                            <img src="/gambar/${row[8]}" class="card-img-top mx-auto d-block py-1" alt="${row[3]}" style="width: 100px; height: 140px; object-fit: cover;">
                                 <div class="card-body text-center">
-                                    <h5 class="card-title">${row[3]}</h5>
-                                    <p class="card-text text-muted">Penulis: ${row[4]}</p>
-                                    <p class="card-text fw-bold text-success">${row[5]}</p> 
-                                    <span class="badge bg-primary">${row[6]}</span>
-                                    <p class="text-muted mt-1">Stok: ${row[7]}</p>
-                                    <button class="btn btn-outline-success btn-sm add-buku"
+                                    <h6 class="card-title fs-7 mb-1">${row[3]}</h6>
+                                    <p class="card-text text-muted fs-7 mb-1">${row[4]}</p>
+                                    <p class="card-text fw-bold text-primary fs-7 mb-1">${row[5]}</p> 
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <small class="text-muted fs-7">Stok: ${row[7]}</small>
+                                        <span class="badge rounded-pill bg-label-dark fs-7">${row[6]}</span>
+                                    </div>
+                                    <button class="btn rounded-pill btn-primary btn-outline-primary btn-sm add-buku mt-1"
                                         data-id="${row[1]}" data-judul="${row[3]}" data-harga="${row[5]}" data-stok="${row[7]}">
                                         <i class="bx bx-plus"></i> Tambah
                                     </button>

@@ -51,26 +51,30 @@ class PenjualanController extends Controller
         $request->validate([
             'total_bayar' => 'required|numeric|min:0',
             'total_bersih' => 'required|numeric|min:0',
+            'diskon' => 'nullable|numeric|min:0',
+            'pajak' => 'nullable|numeric|min:0',
             'member_id' => 'nullable|exists:member,id',
+            'nama_cust' => 'nullable|string',
             'buku' => 'required|array',
             'buku.*.buku_id' => 'required|integer|exists:buku,id',
             'buku.*.harga_jual' => 'required|numeric|min:0',
             'buku.*.jumlah' => 'required|integer|min:1',
-            'metode_bayar' => 'nullable|in:cash,transfer,kartu',
-            'no_rekening' => 'nullable|string',
+            'metode_bayar' => 'nullable|in:cash,qris',
         ]);
 
         try {
             DB::beginTransaction();
-
+            
             // Membuat entri baru dalam tabel Penjualan
             $penjualan = Penjualan::create([
-                'total_bayar' => $request->total_bayar,
-                'total_bersih' => $request->total_bersih,
+                'nama_cust' => $request->member_id,
                 'member_id' => $request->member_id,
                 'user_id' => $request->user_id,
                 'metode_bayar' => $request->metode_bayar,
-                'no_rekening' => $request->no_rekening
+                'total_bersih' => $request->total_bersih,
+                'total_bayar' => $request->total_bayar,
+                'diskon' => $request->diskon,
+                'pajak' => $request->pajak,
             ]);
 
             // Menambahkan detail penjualan berdasarkan buku yang dipilih
@@ -91,6 +95,7 @@ class PenjualanController extends Controller
                 'no_transaksi' => $penjualan->no_transaksi,
                 'kembali' => $request->kembali,
                 'pajak' => $request->pajak,
+                'diskon' => $request->diskon,
                 'total_bersih' => $request->total_bersih,
                 'total_bayar' => $request->total_bayar,
                 'bayar' => $request->bayar,

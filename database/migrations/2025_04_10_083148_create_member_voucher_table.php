@@ -12,19 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pengajuan_buku', function (Blueprint $table) {
+        Schema::create('member_voucher', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('voucher_id')->nullable()->constrained('voucher')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('member_id')->nullable()->constrained('member')->nullOnDelete()->cascadeOnUpdate();
-            $table->string('judul');
-            $table->string('penulis')->nullable();
-            $table->string('nama_pengaju')->nullable();
-            $table->string('no_telp')->nullable();
-            $table->text('catatan')->nullable();
-            $table->integer('qty')->nullable();
-            $table->enum('status', [0, 1])->nullable();
-            $table->date('tgl')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));;
         });
     }
 
@@ -33,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengajuan_buku');
+        Schema::dropIfExists('member_voucher');
     }
 };

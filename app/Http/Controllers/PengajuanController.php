@@ -37,12 +37,24 @@ class PengajuanController extends Controller
     function store(Request $request)
     {
         $validated = $request->validate([
-            'nama' => 'required|string',
+            'judul' => 'required|string',
+            'penulis' => 'required|string',
             'qty' => 'nullable|integer',
-            'member_id' => 'required|integer|exists:member,id',
+            'catatan' => 'nullable|string',
+            'nama_pengaju' => 'required_without:member_id|string',
+            'no_telp' => 'required_without:member_id|string',
+            'member_id' => 'nullable|integer|exists:member,id',
         ]);
 
         try {
+            if (!empty($validated['member_id'])) {
+                $member = Member::find($validated['member_id']);
+                if ($member) {
+                    $validated['nama_pengaju'] = $member->nama;
+                    $validated['no_telp'] = $member->no_telp;
+                }
+            }
+
             $pengajuan = PengajuanBuku::create($validated); // Membuat data pengajuan baru
             return redirect()->back()->with('success', 'Pengajuan buku berhasil ditambahkan');
         } catch (\Exception $e) {
@@ -75,8 +87,9 @@ class PengajuanController extends Controller
 
         $validated = $request->validate([
             'nama' => 'required|string',
+            'nama_pengaju' => 'nullable|string',
             'qty' => 'nullable|integer',
-            'member_id' => 'required|integer|exists:member,id',
+            'member_id' => 'nullable|integer|exists:member,id',
         ]);
 
         try {

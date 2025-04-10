@@ -13,12 +13,16 @@ class PengajuanBuku extends Model
 {
     use HasFactory;
 
-    protected $table = "pengajuan_barang";
+    protected $table = "pengajuan_buku";
     protected $fillable = [
         "member_id",
         "tgl",
-        "nama",
+        "judul",
+        "penulis",
+        "nama_pengaju",
+        "no_telp",
         "qty",
+        "catatan",
         "status",
     ];
 
@@ -47,7 +51,7 @@ class PengajuanBuku extends Model
         );
         static::created(function ($pengajuan) {
             Log::create([
-                'table_name' => 'pengajuan_barang',
+                'table_name' => 'pengajuan_buku',
                 'action' => 'create',
                 'user_id' => Auth::id(),
                 'data' => $pengajuan->toArray(),
@@ -57,7 +61,7 @@ class PengajuanBuku extends Model
 
         static::updated(function ($pengajuan) {
             Log::create([
-                'table_name' => 'pengajuan_barang',
+                'table_name' => 'pengajuan_buku',
                 'action' => 'update',
                 'user_id' => Auth::id(),
                 'data' => $pengajuan->toArray(),
@@ -67,7 +71,7 @@ class PengajuanBuku extends Model
 
         static::deleted(function ($pengajuan) {
             Log::create([
-                'table_name' => 'pengajuan_barang',
+                'table_name' => 'pengajuan_buku',
                 'action' => 'delete',
                 'user_id' => Auth::id(),
                 'data' => $pengajuan->toArray(),

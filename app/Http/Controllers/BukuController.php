@@ -21,10 +21,9 @@ class BukuController extends Controller
      */
     public function index()
     {
-        $stok = DB::table('view_buku_stok')->get();
-        $kategori = Kategori::all(); // Mengambil semua data buku dari database
-        $buku = Buku::all(); // Mengambil semua data buku dari database
-        return view('buku.index', compact('buku','stok', 'kategori')); // Mengirim data ke view
+        $buku = DB::table('view_buku_stok')->get();
+        $kategori = Kategori::all(); 
+        return view('buku.index', compact('buku','kategori')); // Mengirim data ke view
     }
 
     /**
@@ -56,6 +55,14 @@ class BukuController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'thn_terbit' => 'required|integer|min:1900|max:' . date('Y'),
         ]);
+
+        // Cek kalau ada file gambar diupload
+        if ($request->hasFile('gambar')) {
+            $file = $request->file('gambar');
+            $filename = $validated['isbn'] . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('gambar'), $filename);
+            $validated['gambar'] = $filename;
+        }
 
         // Menyimpan data ke database
         Buku::create($validated);
@@ -105,9 +112,26 @@ class BukuController extends Controller
             'harga' => 'required|numeric',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'thn_terbit' => 'required|integer|min:1900|max:' . date('Y'),
+            'old_img' => 'nullable|string'
         ]);
 
         $buku = Buku::findOrFail($id);
+        
+        if ($request->hasFile('gambar')) {
+            // Hapus gambar lama (kalau ada)
+            if ($request->old_img && file_exists(public_path('gambar/' . $request->old_img))) {
+                unlink(public_path('gambar/' . $request->old_img));
+            }
+
+            $file = $request->file('gambar');
+            $filename = $validated['isbn'] . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('gambar'), $filename);
+            $validated['gambar'] = $filename;
+        } else {
+            // Tetap pakai gambar lama kalau gak upload baru
+            $validated['gambar'] = $request->old_img;
+        }
+
         $buku->update($validated);
 
         return redirect()->route('buku.index')->with('success', 'Buku berhasil diperbarui.');

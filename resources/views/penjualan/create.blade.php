@@ -169,17 +169,6 @@
                         </div>
                         <div class="col-md mb-3">
                             <div class="form-check custom-option custom-option-icon">
-                                <label class="form-check-label custom-option-content" for="kartu">
-                                    <span class="custom-option-body">
-                                        <i class="icon-base bx bx-credit-card"></i>
-                                        <span class="custom-option-title">Kartu</span>
-                                    </span>
-                                    <input hidden name="metode_bayar" class="form-check-input" type="radio" value="kartu" id="kartu" />
-                                </label>
-                            </div>
-                        </div>
-                        <div class="col-md mb-3">
-                            <div class="form-check custom-option custom-option-icon">
                                 <label class="form-check-label custom-option-content" for="transfer">
                                     <span class="custom-option-body">
                                         <i class="icon-base bx bx-qr-scan"></i>
@@ -263,12 +252,13 @@
             }
 
             let jumlahInput = `
-        <div class="d-flex justify-content-center align-items-center gap-2">
-            <button class="btn btn-label-danger btn-sm btn-minus" data-id="${id}">-</button>
-            <input type="number" class="form-control text-center input-jumlah" data-id="${id}" value="1" min="1" max="${stok}" style="width: 60px;">
-            <button class="btn btn-label-success btn-sm btn-plus" data-id="${id}">+</button>
-        </div>
-    `;
+            <div class="d-flex align-items-center justify-content-center gap-1" style="font-size: 0.85rem;">
+                <button class="btn btn-outline-danger btn-sm rounded-pill px-2 btn-minus" data-id="${id}" style="min-width: 30px;">-</button>
+                <input type="number" class="form-control text-center form-control-sm input-jumlah" data-id="${id}" value="1" min="1" max="${stok}" 
+                    style="width: 50px; border-radius: 50px;">
+                <button class="btn btn-outline-success btn-sm rounded-pill px-2 btn-plus" data-id="${id}" style="min-width: 30px;">+</button>
+            </div>
+        `;
             $(this).replaceWith(jumlahInput);
             updateTable();
         });
@@ -318,11 +308,11 @@
                     input.val(item.jumlah);
                 } else {
                     selectedBuku = selectedBuku.filter(b => b.buku_id != id);
-                    let tombolTambah = `<button class="btn btn-outline-success btn-sm add-buku"
+                    let tombolTambah = `<button class="btn rounded-pill btn-primary btn-outline-primary btn-sm add-buku mt-1"
                 data-id="${id}" data-judul="${item.judul}" data-harga="${item.harga_jual}" data-stok="${item.stok}">
                 <i class="bx bx-plus"></i> Tambah
             </button>`;
-                    input.closest(".d-flex").replaceWith(tombolTambah);
+                    input.closest(".input-group").replaceWith(tombolTambah);
                 }
             }
             updateTable();

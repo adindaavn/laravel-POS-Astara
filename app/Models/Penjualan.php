@@ -16,11 +16,13 @@ class Penjualan extends Model
         "no_transaksi",
         "member_id",
         "user_id",
+        "nama_cust",
         "tgl",
         "total_bayar",
         "total_bersih",
-        "metode_bayar",
-        "no_rekening"
+        "diskon",
+        "pajak",
+        "metode_bayar"
     ];
 
     /**

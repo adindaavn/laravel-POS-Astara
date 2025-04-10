@@ -18,4 +18,14 @@ class Pemasok extends Model
         "telp",
         "alamat"
     ];
+
+    public function buku()
+    {
+        return $this->hasMany(Buku::class);
+    }
+
+    public function pembelian()
+    {
+        return $this->hasManyThrough(PembelianDetail::class, Buku::class, 'pemasok_id', 'buku_id');
+    }
 }

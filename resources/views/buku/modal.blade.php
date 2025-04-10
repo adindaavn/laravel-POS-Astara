@@ -16,35 +16,44 @@
 
                         <input type="hidden" name="_method" id="form-method" value="POST">
                         <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="old_img" id="old_img">
 
-                        <div class="col-12 mb-3">
-                            <label for="judul" class="form-label">Judul</label>
-                            <input
-                                type="text"
-                                id="judul"
-                                class="form-control"
-                                placeholder="Judul"
-                                name="judul" />
-                        </div>
+                        <div class="row">
+                            <div class="col-3">
+                                <div class="text-center">
+                                    <div id="icon-placeholder" class="rounded mt-2 bg-light d-flex justify-content-center align-items-center" style="height: 120px; cursor: pointer;">
+                                        <i class="menu-icon tf-icons bx bx-book fs-1 text-primary"></i>
+                                    </div>
 
-                        <div class="col-12 mb-3">
-                            <label for="penulis" class="form-label">Penulis</label>
-                            <input
-                                type="text"
-                                id="penulis"
-                                class="form-control"
-                                placeholder="Penulis"
-                                name="penulis" />
-                        </div>
+                                    <img id="preview-gambar" class="rounded mt-4"
+                                        style="max-width: 100px; max-height: 100px; object-fit: cover; cursor: pointer;">
 
-                        <div class="col-12 mb-3">
-                            <label for="harga" class="form-label">Harga</label>
-                            <input
-                                type="number"
-                                id="harga"
-                                class="form-control"
-                                placeholder="Harga"
-                                name="harga" />
+                                    @error('gambar')
+                                    <div class="form-text text-danger">{{ $message }}</div>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="col-12 mb-3">
+                                    <label for="judul" class="form-label">Judul</label>
+                                    <input
+                                        type="text"
+                                        id="judul"
+                                        class="form-control"
+                                        placeholder="Judul"
+                                        name="judul" />
+                                </div>
+
+                                <div class="col-12 mb-3">
+                                    <label for="penulis" class="form-label">Penulis</label>
+                                    <input
+                                        type="text"
+                                        id="penulis"
+                                        class="form-control"
+                                        placeholder="Penulis"
+                                        name="penulis" />
+                                </div>
+                            </div>
                         </div>
 
                         <div class="row">
@@ -87,17 +96,27 @@
                                     name="thn_terbit" />
                             </div>
                         </div>
-                        <div class="col-12 mb-3">
-                            <label for="gambar" class="form-label">Gambar</label>
-                            <input
-                                type="file"
-                                name="gambar"
-                                class="form-control"
-                                id="gambar">
-                            @error('gambar')
-                            <div class="form-text text-danger">{{ $message }}</div>
-                            @enderror
+
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="harga" class="form-label">Harga</label>
+                                <input
+                                    type="number"
+                                    id="harga"
+                                    class="form-control"
+                                    placeholder="Harga"
+                                    name="harga" />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="gambar" class="form-label">Gambar</label>
+                                <input
+                                    type="file"
+                                    name="gambar"
+                                    class="form-control"
+                                    id="gambar">
+                            </div>
                         </div>
+
                     </div>
                 </div>
                 <div class="modal-footer">

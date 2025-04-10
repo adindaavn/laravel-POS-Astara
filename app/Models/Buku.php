@@ -23,7 +23,8 @@ class Buku extends Model
         "kategori_id",
         "harga",
         "gambar",
-        "thn_terbit"
+        "thn_terbit",
+        "pajak",
     ];
 
     /**

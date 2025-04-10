@@ -10,164 +10,94 @@ $breadcrumbs = [
 <div class="row">
     <!-- Breadcrumbs -->
     <x-breadcrumb :breadcrumbs="$breadcrumbs" />
-    <div class="col-xl-12">
-        <div class="nav-align-top mb-4">
-            <!-- Tabs -->
-            <ul class="nav nav-pills mb-3 nav-fill" role="tablist">
-                <!-- Tab Stok Buku -->
-                <li class="nav-item">
-                    <button
-                        type="button"
-                        class="nav-link active"
-                        role="tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#navs-stok"
-                        aria-controls="navs-stok"
-                        aria-selected="true">
-                        <span class="d-none d-sm-inline-flex align-items-center">
-                            <i class="icon-base bx bx-book icon-sm me-1_5"></i>Stok Buku
-                        </span>
+    <div class="col-lg-12 mb-4 order-0">
+        <div class="card">
+            <div class="row">
+                <div class="mb-4 order-0">
+                    <button type="button" class="btn btn-primary btn-add"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalBuku">
+                        <i class="icon-base bx bx-plus me-1"></i>
+                        <span>Tambah</span>
                     </button>
-                </li>
-                <li class="nav-item">
-                    <!-- Tab Data Buku -->
-                    <button
-                        type="button"
-                        class="nav-link"
-                        role="tab"
-                        data-bs-toggle="tab"
-                        data-bs-target="#navs-data"
-                        aria-controls="navs-data"
-                        aria-selected="false">
-                        <span class="d-none d-sm-inline-flex align-items-center"><i class="icon-base bx bxs-book-add icon-sm me-1_5"></i>Data Buku</span>
-                    </button>
-                </li>
-
-            </ul>
-            <!-- Tab Content Stok Buku -->
-            <div class="tab-content">
-                <div class="tab-pane fade show active" id="navs-stok" role="tabpanel">
-                    <div class="card shadow-none">
-                        <div class="row">
-                            <div class="col-lg-12 mb-4 order-0">
-                                <h5 class="card-header pb-0 fw-bold">Stok Buku</h5>
-                                <div id="tableData" class="table-responsive text-nowrap p-5">
-                                    <table class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr class="table-primary">
-                                                <th class="fw-bold">No</th>
-                                                <th class="fw-bold">ISBN</th>
-                                                <th class="fw-bold">Judul</th>
-                                                <th class="fw-bold">Kategori</th>
-                                                <th class="fw-bold">Harga</th>
-                                                <th class="fw-bold">Stok</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($stok as $data)
-                                            <tr>
-                                                <td>{{$loop->iteration}}</td>
-                                                <td>{{$data->isbn}}</td>
-                                                <td>{{$data->judul}}</td>
-                                                <td>{{$data->kategori}}</td>
-                                                <td>Rp. {{ number_format($data->harga, 0, ',', '.') }}</td>
-                                                <td>
-                                                    @if($data->stok <= 0)
-                                                        <span class="badge rounded-pill bg-label-danger">{{$data->stok}}</span>
-                                                        @else
-                                                        <span class="badge rounded-pill bg-label-success">{{$data->stok}}</span>
-                                                        @endif
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-                <!-- Tab Content Data Buku -->
-                <div class="tab-pane fade" id="navs-data" role="tabpanel">
-                    <div class="card shadow-none">
-                        <div class="row">
-                            <div class="mb-4 order-0">
-                                <button type="button" class="btn btn-primary btn-add"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalBuku">
-                                    <i class="icon-base bx bx-plus me-1"></i>
-                                    <span>Tambah</span>
-                                </button>
-                            </div>
 
-                            <div class="col-lg-12 mb-4 order-0">
-                                <h5 class="card-header pb-0 fw-bold">Data Buku</h5>
-                                <div id="tableData" class="table-responsive text-nowrap p-5">
-                                    <table class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr class="table-primary">
-                                                <th class="fw-bold">No</th>
-                                                <th class="fw-bold">Cover</th>
-                                                <th class="fw-bold">ISBN</th>
-                                                <th class="fw-bold">Judul</th>
-                                                <th class="fw-bold">Penulis</th>
-                                                <th class="fw-bold">Kategori</th>
-                                                <th class="fw-bold">Penerbit</th>
-                                                <th class="fw-bold">Tahun Terbit</th>
-                                                <th></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($buku as $data)
-                                            <tr>
-                                                <td>{{$loop->iteration}}</td>
-                                                <td>
+                <div class="col-lg-12 mb-4 order-0">
+                    <h5 class="card-header pb-0 fw-bold">Data Buku</h5>
+                    <div id="tableData" class="table-responsive text-nowrap p-5">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr class="table-primary">
+                                    <th class="fw-bold">No</th>
+                                    <th class="fw-bold">Buku</th>
+                                    <th class="fw-bold">ISBN</th>
+                                    <th class="fw-bold">Kategori</th>
+                                    <th class="fw-bold">Harga</th>
+                                    <th class="fw-bold">Stok</th>
+                                    <th class="fw-bold">Penerbit (Thn terbit)</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($buku as $data)
+                                <tr>
+                                    <td>{{$loop->iteration}}</td>
+                                    <td>
+                                        <div class="d-flex justify-content-start align-items-center">
+                                            <div class="avatar-wrapper">
+                                                <div class="me-2 me-sm-4 bg-label-secondary">
                                                     @if($data->gambar != null)
-                                                    <img src="/gambar/{{ $data->gambar }}" height="100px">
+                                                    <img src="/gambar/{{ $data->gambar }}" width="50px" class="rounded">
                                                     @endif
-                                                </td>
-                                                <td>{{$data->isbn}}</td>
-                                                <td>{{$data->judul}}</td>
-                                                <td>{{$data->penulis}}</td>
-                                                <td>
-                                                    @foreach ($kategori as $k)
-                                                    @if ($k->id == $data->kategori_id)
-                                                    {{ $k->nama }}
-                                                    @endif
-                                                    @endforeach
-                                                </td>
-                                                <td>{{$data->penerbit}}</td>
-                                                <td>{{$data->thn_terbit}}</td>
-                                                <td>
-                                                    <div class="d-flex align-items-center justify-content-center">
-                                                        <button type="button"
-                                                            class="btn btn-edit"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#modalBuku"
-                                                            data-id="{{$loop->iteration}}"
-                                                            data-isbn="{{$data->isbn}}"
-                                                            data-judul="{{$data->judul}}"
-                                                            data-penulis="{{$data->penulis}}"
-                                                            data-kategori_id="{{$data->kategori_id}}"
-                                                            data-harga="{{$data->harga}}"
-                                                            data-penerbit="{{$data->penerbit}}"
-                                                            data-thn_terbit="{{$data->thn_terbit}}">
-                                                            <span class="badge rounded-pill bg-label-info"><i class="bx bx-edit-alt text-dark"></i></span>
-                                                        </button>
-                                                        <form action="{{ route('buku.destroy', $data->id) }}" method="post">
-                                                            @csrf
-                                                            @method('delete')
-                                                            <button type="submit" class="btn"><span class="badge rounded-pill bg-label-danger"><i class="bx bx-trash text-danger"></i></span></button>
-                                                        </form>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <h6 class="text-nowrap mb-0">{{$data->judul}}</h6>
+                                                <small class="text-truncate d-none d-sm-block">{{$data->penulis}}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>{{$data->isbn}}</td>
+                                    <td>{{$data->kategori}}</td>
+                                    <td>Rp. {{ number_format($data->harga, 0, ',', '.') }}</td>
+                                    <td>
+                                        @if($data->stok <= 0)
+                                            <span class="badge rounded-pill bg-label-danger">{{$data->stok}}</span>
+                                            @elseif($data->stok <= 5)
+                                                <span class="badge rounded-pill bg-label-warning">{{$data->stok}}</span>
+                                                @else
+                                                <span class="badge rounded-pill bg-label-success">{{$data->stok}}</span>
+                                                @endif
+                                    </td>
+                                    <td>{{$data->penerbit}} ({{$data->thn_terbit}})</td>
+                                    <td>
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <button type="button"
+                                                class="btn mx-0 px-1 btn-edit"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#modalBuku"
+                                                data-id="{{$loop->iteration}}"
+                                                data-isbn="{{$data->isbn}}"
+                                                data-gambar="{{$data->gambar}}"
+                                                data-judul="{{$data->judul}}"
+                                                data-penulis="{{$data->penulis}}"
+                                                data-kategori_id="{{$data->kategori_id}}"
+                                                data-harga="{{$data->harga}}"
+                                                data-penerbit="{{$data->penerbit}}"
+                                                data-thn_terbit="{{$data->thn_terbit}}">
+                                                <span class="badge rounded-pill bg-label-info"><i class="bx bx-edit-alt text-dark"></i></span>
+                                            </button>
+                                            <form action="{{ route('buku.destroy', $data->id) }}" method="post">
+                                                @csrf
+                                                @method('delete')
+                                                <button type="submit" class="btn mx-0 px-1"><span class="badge rounded-pill bg-label-danger"><i class="bx bx-trash text-danger"></i></span></button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -179,6 +109,13 @@ $breadcrumbs = [
 <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 <script>
     $(document).ready(function() {
+        $('#icon-placeholder').on('click', function() {
+            $('#gambar').trigger('click');
+        });
+
+        $('#preview-gambar').on('click', function() {
+            $('#gambar').trigger('click');
+        });
 
         $('.btn-add').click(function() {
             $('.modal-title').text('Tambah Buku');
@@ -193,6 +130,22 @@ $breadcrumbs = [
             $('#thn_terbit').val('');
             $('#gambar').val('');
             $('#submit-btn').text('Tambah');
+
+            $('#gambar').on('change', function() {
+                const file = this.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#preview-gambar').attr('src', e.target.result).show().removeClass('d-none');
+                        $('#icon-placeholder').hide().addClass('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#preview-gambar').hide().addClass('d-none');
+                    $('#icon-placeholder').show().removeClass('d-none');
+                }
+            });
         });
 
         $('.btn-edit').click(function() {
@@ -207,21 +160,49 @@ $breadcrumbs = [
             let gambar = $(this).data('gambar');
             let thn_terbit = $(this).data('thn_terbit');
 
-            $('.modal-title').text('Edit Buku');
-            $('#jenis-form').attr('action', `/buku/${id}`);
-            $('#form-method').val('PUT');
-            $('#submit-btn').text('Edit');
-            $('#id').val(id);
-            $('#kode').val(kode);
-            $('#judul').val(judul);
-            $('#penulis').val(penulis);
-            $('#kategori_id').val(kategori_id);
-            $('#harga').val(harga);
-            $('#penerbit').val(penerbit);
-            $('#isbn').val(isbn);
-            $('#gambar').val(gambar);
-            $('#thn_terbit').val(thn_terbit);
-            $('#jml_halaman').val(jml_halaman);
+            $('#modalBuku').on('shown.bs.modal', function() {
+                $('.modal-title').text('Edit Buku');
+                $('#jenis-form').attr('action', `/buku/${id}`);
+                $('#form-method').val('PUT');
+                $('#submit-btn').text('Edit');
+                $('#id').val(id);
+                $('#kode').val(kode);
+                $('#judul').val(judul);
+                $('#penulis').val(penulis);
+                $('#kategori_id').val(kategori_id);
+                $('#harga').val(harga);
+                $('#penerbit').val(penerbit);
+                $('#isbn').val(isbn);
+                $('#gambar').val('');
+                $('#old_img').val(gambar);
+                $('#thn_terbit').val(thn_terbit);
+
+                if (gambar) {
+                    $('#preview-gambar').attr('src', '/gambar/' + gambar).show().removeClass('d-none');
+                    $('#icon-placeholder').hide().addClass('d-none');
+                } else {
+                    $('#preview-gambar').hide().addClass('d-none');
+                    $('#icon-placeholder').show().removeClass('d-none');
+                }
+
+            });
+
+            $('#gambar').on('change', function() {
+                const file = this.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        $('#preview-gambar').attr('src', e.target.result).show().removeClass('d-none');
+                        $('#icon-placeholder').hide().addClass('d-none');
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    $('#preview-gambar').hide().addClass('d-none');
+                    $('#icon-placeholder').show().removeClass('d-none');
+                }
+            });
+
         });
 
     });

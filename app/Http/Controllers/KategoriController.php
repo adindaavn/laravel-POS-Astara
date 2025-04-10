@@ -18,7 +18,7 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        $kategori = Kategori::all(); // Ambil semua data kategori
+        $kategori = Kategori::withCount('buku')->get();
         return view('kategori.index', compact('kategori')); // Kirim data ke view
     }
 

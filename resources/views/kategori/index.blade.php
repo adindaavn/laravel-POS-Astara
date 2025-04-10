@@ -59,6 +59,7 @@ $breadcrumbs = [
                         <tr class="table-primary">
                             <th class="fw-bold">No</th>
                             <th class="fw-bold">Nama Kategori</th>
+                            <th class="fw-bold">Total Buku</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -67,6 +68,7 @@ $breadcrumbs = [
                         <tr>
                             <td>{{$loop->iteration}}</td>
                             <td>{{$data->nama}}</td>
+                            <td>{{$data->buku_count}}</td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <button type="button"

@@ -26,7 +26,7 @@ class PengajuanBukuTest extends TestCase
         ]);
 
         $response->assertStatus(302);
-        $this->assertDatabaseHas('pengajuan_barang', [
+        $this->assertDatabaseHas('pengajuan_buku', [
             'member_id' => $member->id,
             'nama'      => 'Buku Testing Laravel'
         ]);
@@ -44,18 +44,18 @@ class PengajuanBukuTest extends TestCase
         ]);
 
         $response->assertJson(['message' => 'Status berhasil diperbarui!']);
-        $this->assertDatabaseHas('pengajuan_barang', ['id' => $pengajuan->id, 'status' => '1']);
+        $this->assertDatabaseHas('pengajuan_buku', ['id' => $pengajuan->id, 'status' => '1']);
     }
 
     public function test_user_can_delete_pengajuan()
     {
-        $user = User::factory()->create(); 
+        $user = User::factory()->create();
         $member = Member::factory()->create();
         $pengajuan = PengajuanBuku::factory()->create(['member_id' => $member->id]);
 
         $response = $this->actingAs($user)->delete(route('pengajuan.destroy', $pengajuan->id));
 
         $response->assertStatus(302);
-        $this->assertDatabaseMissing('pengajuan_barang', ['id' => $pengajuan->id]);
+        $this->assertDatabaseMissing('pengajuan_buku', ['id' => $pengajuan->id]);
     }
 }

@@ -15,8 +15,13 @@ class Voucher extends Model
     protected $fillable = [
         "kode",
         "diskon",
+        "tipe",
+        "min_beli",
+        "max_diskon",
+        "kuota",
+        "point",
         "deskripsi",
-        "expired"
+        "kadaluarsa"
     ];
     /**
      * Event model untuk menangani pembuatan kode voucher otomatis.

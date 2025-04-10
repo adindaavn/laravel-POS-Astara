@@ -21,9 +21,9 @@ return new class extends Migration
             $table->date('tgl');
             $table->double('total_bersih');
             $table->double('total_bayar');
-            $table->enum('metode_bayar', ['cash', 'transfer', 'qris'])->default('cash');
-            $table->string('outlet_bayar')->nullable();
-            $table->string('no_rekening', 50)->nullable();
+            $table->double('diskon')->default(0);
+            $table->double('pajak')->default(0);
+            $table->enum('metode_bayar', ['cash', 'qris'])->default('cash');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));;
         });

@@ -27,6 +27,16 @@
                         </div>
 
                         <div class="col-12 mb-3">
+                            <label for="nama_pengaju" class="form-label">Nama Pengaju</label>
+                            <input
+                                type="text"
+                                id="nama_pengaju"
+                                class="form-control"
+                                placeholder="Nama Pengaju"
+                                name="nama_pengaju" />
+                        </div>
+
+                        <div class="col-12 mb-3">
                             <label for="nama" class="form-label">Nama</label>
                             <input
                                 type="text"
