@@ -1,11 +1,9 @@
-  <?php
+<?php
 
 namespace Database\Seeders;
 
 use App\Models\Buku;
-use App\Models\Kategori;
 use App\Models\Member;
-use App\Models\Pemasok;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

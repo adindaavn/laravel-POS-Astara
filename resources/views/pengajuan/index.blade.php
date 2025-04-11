@@ -25,8 +25,9 @@ $breadcrumbs = [
                     <thead>
                         <tr class="table-primary">
                             <th class="fw-bold">No</th>
-                            <th class="fw-bold">Nama Pengaju</th>
-                            <th class="fw-bold">Nama Buku</th>
+                            <th class="fw-bold">Buku</th>
+                            <th class="fw-bold">Pengaju</th>
+                            <th class="fw-bold">Member ID</th>
                             <th class="fw-bold">Tanggal Pengajuan</th>
                             <th class="fw-bold">Qty</th>
                             <th class="fw-bold">Terpenuhi?</th>
@@ -37,8 +38,9 @@ $breadcrumbs = [
                         @foreach ($pengajuan as $data)
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td>{{$data->member->nama}}</td>
-                            <td>{{$data->nama}}</td>
+                            <td>{{$data->judul}} ({{$data->penulis}})</td>
+                            <td>{{$data->nama_pengaju}} ({{$data->no_telp}})</td>
+                            <td>{{$data->member_id ?? '-'}}</td>
                             <td>{{$data->tgl}}</td>
                             <td>{{$data->qty}}</td>
                             <td>
@@ -131,6 +133,20 @@ $breadcrumbs = [
 
 <script>
     $(document).ready(function() {
+        function toggleFields() {
+            var selectedMember = $('#member_id').val();
+
+            if (selectedMember) {
+                $('#nama_pengaju').closest('.col-6').addClass('d-none');
+                $('#no_telp').closest('.col-6').addClass('d-none');
+            } else {
+                $('#nama_pengaju').closest('.col-6').removeClass('d-none');
+                $('#no_telp').closest('.col-6').removeClass('d-none');
+            }
+        }
+        toggleFields();
+        $('#member_id').change(toggleFields);
+
         $('.btn-add').click(function() {
             $('.modal-title').text('Tambah Pengajuan Buku');
             $('#jenis-form').attr('action', "{{ route('pengajuan.store') }}");

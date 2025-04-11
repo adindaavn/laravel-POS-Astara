@@ -98,15 +98,23 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-6 mb-3">
-                                <label for="harga" class="form-label">Harga</label>
+                            <div class="col-4 mb-3">
+                                <label for="harga" class="form-label">Harga Jual</label>
                                 <input
                                     type="number"
                                     id="harga"
                                     class="form-control"
-                                    placeholder="Harga"
+                                    placeholder="Harga Jual"
                                     name="harga" />
                             </div>
+
+                            <div class="col-2">
+                                <label for="pajak" class="form-label">Pajak</label>
+                                <div class="form-check mt-2">
+                                    <input class="form-check-input" type="checkbox" name="pajak" id="pajak" value="1">
+                                </div>
+                            </div>
+
                             <div class="col-6 mb-3">
                                 <label for="gambar" class="form-label">Gambar</label>
                                 <input
@@ -116,7 +124,6 @@
                                     id="gambar">
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <div class="modal-footer">

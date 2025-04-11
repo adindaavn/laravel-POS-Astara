@@ -55,6 +55,8 @@ class BukuController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'thn_terbit' => 'required|integer|min:1900|max:' . date('Y'),
         ]);
+        
+        $validated['pajak'] = $request->has('pajak') ? 1 : 0;
 
         // Cek kalau ada file gambar diupload
         if ($request->hasFile('gambar')) {

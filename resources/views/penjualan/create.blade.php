@@ -151,6 +151,7 @@
                     <input type="hidden" id="kembali" name="kembali">
                     <input type="hidden" id="bayar" name="bayar">
                     <input type="hidden" id="pajak" name="pajak">
+                    <input type="hidden" id="diskon" name="diskon">
                     <input type="hidden" name="buku" id="bukuData">
                 </div>
                 <div class="d-grid card-footer">
@@ -169,12 +170,12 @@
                         </div>
                         <div class="col-md mb-3">
                             <div class="form-check custom-option custom-option-icon">
-                                <label class="form-check-label custom-option-content" for="transfer">
+                                <label class="form-check-label custom-option-content" for="qris">
                                     <span class="custom-option-body">
                                         <i class="icon-base bx bx-qr-scan"></i>
-                                        <span class="custom-option-title">Transfer</span>
+                                        <span class="custom-option-title">QRIS</span>
                                     </span>
-                                    <input hidden name="metode_bayar" class="form-check-input" type="radio" value="transfer" id="transfer" />
+                                    <input hidden name="metode_bayar" class="form-check-input" type="radio" value="qris" id="qris" />
                                 </label>
                             </div>
                         </div>
@@ -404,46 +405,16 @@
                 case 'cash':
                     targetModal = '#modalCash';
                     break;
-                case 'kartu':
-                    targetModal = '#modalKartu';
-                    break;
-                case 'transfer':
-                    targetModal = '#modalTransfer';
+                case 'qris':
+                    targetModal = '#modalQris';
                     break;
             }
 
             $('#btn-bayar').attr('data-bs-target', targetModal);
         });
-
-        $(".card-credit-mask").each(function() {
-            new Cleave(this, {
-                creditCard: true
-            });
-        });
-
-        $("#modalKartu .btn-primary").on("click", function() {
-            var noRekening = $("#noRekCC").val();
-
-            $("#no_rekening").val(String(noRekening));
-
-            submitWithPrint();
-        });
-
+        
         $("#modalCash .btn-primary").on("click", function() {
             $("input[name='metode_bayar']").val("cash");
-
-            submitWithPrint();
-        });
-
-        $("#modalTransfer .btn-primary").on("click", function() {
-            var noRekening = $("#noRekTf").val();
-            var noHp = $("#noRekHp").val();
-
-            if (noRekening != null) {
-                $("#no_rekening").val(String(noRekening));
-            } else {
-                $("#no_rekening").val(String(noHp));
-            }
 
             submitWithPrint();
         });

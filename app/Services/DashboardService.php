@@ -34,9 +34,16 @@ class DashboardService
         return DB::table('detail_penjualan')
             ->join('penjualan', 'penjualan.id', '=', 'detail_penjualan.penjualan_id')
             ->join('buku', 'buku.id', '=', 'detail_penjualan.buku_id')
+            ->join('kategori', 'kategori.id', '=', 'buku.kategori_id')
             ->whereBetween('penjualan.tgl', [$from, $to])
-            ->select('buku.judul', 'buku.penulis', 'buku.gambar', 'buku.kategori_id', DB::raw('SUM(detail_penjualan.jumlah) as total_terjual'))
-            ->groupBy('buku.id', 'buku.judul', 'buku.penulis', 'buku.gambar', 'buku.kategori_id',)
+            ->select(
+                'buku.judul', 
+                'buku.penulis', 
+                'buku.gambar', 
+                'kategori.nama as nama_kategori', 
+                DB::raw('SUM(detail_penjualan.jumlah) as total_terjual'),
+                DB::raw('SUM(detail_penjualan.jumlah * detail_penjualan.harga_jual) as total_nominal'))
+            ->groupBy('buku.id', 'buku.judul', 'buku.penulis', 'buku.gambar', 'kategori.nama')
             ->orderByDesc('total_terjual')
             ->limit($limit)
             ->get();

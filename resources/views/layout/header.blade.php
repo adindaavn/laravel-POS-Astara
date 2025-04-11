@@ -72,23 +72,62 @@
     <link rel="stylesheet" href="{{ asset('assets') }}/vendor/css/pages/card-analytics.css" />
 
     <style>
+        .fraktur-container {
+            display: none;
+        }
+
         @media print {
+            .fraktur-container {
+                display: block !important;
+            }
+
+            @page {
+                size: 80mm auto;
+                margin: 5mm;
+            }
+
             body * {
                 visibility: hidden;
             }
 
-            #fraktur>div,
+            body {
+                font-family: monospace;
+                font-size: 12px;
+                margin: 0;
+                padding: 0;
+            }
+
+            #fraktur,
             #fraktur * {
                 visibility: visible;
             }
 
-            #fraktur>div {
+            #fraktur {
                 position: absolute;
                 left: 0;
                 top: 0;
-                width: 100%;
-                display: block !important;
+                width: 80mm;
+                padding: 5px;
+                margin: 0;
+                background-color: white;
             }
+
+            #fraktur hr {
+                border-top: 1px dashed #000;
+                margin: 4px 0;
+            }
+
+            #fraktur table {
+                width: 100%;
+                table-layout: fixed;
+            }
+
+            #fraktur td,
+            #fraktur th {
+                padding: 1px 6px;
+                margin: 0;
+            }
+
         }
     </style>
 

@@ -41,17 +41,16 @@ class PengajuanController extends Controller
             'penulis' => 'required|string',
             'qty' => 'nullable|integer',
             'catatan' => 'nullable|string',
-            'nama_pengaju' => 'required_without:member_id|string',
-            'no_telp' => 'required_without:member_id|string',
             'member_id' => 'nullable|integer|exists:member,id',
+            'nama_pengaju' => 'nullable|required_without:member_id|string',
+            'no_telp' => 'nullable|required_without:member_id|string',
         ]);
-
         try {
             if (!empty($validated['member_id'])) {
                 $member = Member::find($validated['member_id']);
                 if ($member) {
                     $validated['nama_pengaju'] = $member->nama;
-                    $validated['no_telp'] = $member->no_telp;
+                    $validated['no_telp'] = $member->telp;
                 }
             }
 

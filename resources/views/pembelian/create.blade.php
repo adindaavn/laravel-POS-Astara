@@ -48,7 +48,7 @@ $breadcrumbs = [
                             </div>
                             <div class="col-3 mb-3">
                                 <label for="total" class="form-label">Total Bayar</label>
-                                <input type="number" class="total_bayar form-control" placeholder="Total Bayar" readonly />
+                                <input type="text" class="total_bayar form-control" placeholder="Total Bayar" readonly />
                                 <input type="hidden" id="total" name="total" />
                             </div>
                         </div>
@@ -75,14 +75,14 @@ $breadcrumbs = [
                                 <table class="table">
                                     <thead>
                                         <tr class="table-primary">
-                                            <th class="fw-bold text-center w-10">No</th>
-                                            <th class="fw-bold text-center w-10">Cover</th>
-                                            <th class="fw-bold w-50">Buku</th>
-                                            <th class="fw-bold text-center w-20">Harga Jual</th>
-                                            <th class="fw-bold text-center w-20">Harga Beli</th>
-                                            <th class="fw-bold text-center w-10">Jumlah</th>
-                                            <th class="fw-bold text-center w-20">Subtotal</th>
-                                            <th class="fw-bold"></th>
+                                            <th class="fw-bold text-center col-1">No</th>
+                                            <th class="fw-bold text-center">Buku</th>
+                                            <th class="fw-bold col-4"></th>
+                                            <th class="fw-bold text-center col-2">Harga Jual</th>
+                                            <th class="fw-bold text-center col-2">Harga Beli</th>
+                                            <th class="fw-bold text-center col-1">Jumlah</th>
+                                            <th class="fw-bold text-center col-2">Subtotal</th>
+                                            <th class="fw-bold col-1"></th>
                                         </tr>
                                     </thead>
                                     <tbody id="buku-container">
@@ -123,10 +123,10 @@ $breadcrumbs = [
                         ${penulis}<br>
                         (${isbn})
                     </td>
-                    <td><input type="number" class="form-control harga-jual" value="${harga}" readonly/></td>
+                    <td><input type="text" class="form-control harga-jual" value="${harga.toLocaleString()}" readonly/></td>
                     <td><input type="number" class="form-control harga" /></td>
                     <td><input type="number" class="form-control jumlah" /></td>
-                    <td><input type="number" class="form-control subtotal" readonly/></td>
+                    <td><input type="text" id="sub_total" class="form-control" readonly/><input type="hidden" class="subtotal"/></td>
                     <td>
                         <input type="hidden" class="buku_id" name="buku[][buku_id]" value="${selectedOption.val()}" />
                         <button type="button" class="btn btn-label-danger remove-buku">
@@ -155,6 +155,7 @@ $breadcrumbs = [
             let harga = parseFloat(row.find(".harga").val()) || 0;
             let jumlah = parseInt(row.find(".jumlah").val()) || 0;
             let subtotal = harga * jumlah;
+            row.find("#sub_total").val(subtotal.toLocaleString());
             row.find(".subtotal").val(subtotal);
             updateTotal();
         });
@@ -165,7 +166,7 @@ $breadcrumbs = [
             $(".subtotal").each(function() {
                 total += parseFloat($(this).val()) || 0;
             });
-            $(".total_bayar").val(total.toLocaleString());
+            $(".total_bayar").val('Rp. ' + total.toLocaleString());
             $("#total").val(total);
         }
 

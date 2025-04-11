@@ -18,32 +18,55 @@
                         <input type="hidden" name="id" id="id">
 
                         <div class="col-12 mb-3">
-                            <label for="email" class="form-label">Member</label>
+                            <label for="member_id" class="form-label">Member</label>
                             <select class="form-select" name="member_id" id="member_id">
+                                <option value="">-- Pilih Member --</option>
                                 @foreach($member as $m)
                                 <option value="{{ $m->id }}">{{ $m->nama }}</option>
                                 @endforeach
                             </select>
                         </div>
 
-                        <div class="col-12 mb-3">
-                            <label for="nama_pengaju" class="form-label">Nama Pengaju</label>
-                            <input
-                                type="text"
-                                id="nama_pengaju"
-                                class="form-control"
-                                placeholder="Nama Pengaju"
-                                name="nama_pengaju" />
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="nama_pengaju" class="form-label">Nama Pengaju</label>
+                                <input
+                                    type="text"
+                                    id="nama_pengaju"
+                                    class="form-control"
+                                    placeholder="Nama Pengaju"
+                                    name="nama_pengaju" />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="no_telp" class="form-label">No. Telepon</label>
+                                <input
+                                    type="text"
+                                    id="no_telp"
+                                    class="form-control"
+                                    placeholder="No. Telepon"
+                                    name="no_telp" />
+                            </div>
                         </div>
 
-                        <div class="col-12 mb-3">
-                            <label for="nama" class="form-label">Nama</label>
-                            <input
-                                type="text"
-                                id="nama"
-                                class="form-control"
-                                placeholder="Nama"
-                                name="nama" />
+                        <div class="row">
+                            <div class="col-6 mb-3">
+                                <label for="judul" class="form-label">Judul</label>
+                                <input
+                                    type="text"
+                                    id="judul"
+                                    class="form-control"
+                                    placeholder="Judul"
+                                    name="judul" />
+                            </div>
+                            <div class="col-6 mb-3">
+                                <label for="penulis" class="form-label">Penulis</label>
+                                <input
+                                    type="text"
+                                    id="penulis"
+                                    class="form-control"
+                                    placeholder="Penulis"
+                                    name="penulis" />
+                            </div>
                         </div>
 
                         <div class="row">
@@ -55,6 +78,10 @@
                                     class="form-control"
                                     placeholder="Qty"
                                     name="qty" />
+                            </div>
+                            <div class="col-9 mb-3">
+                                <label for="catatan" class="form-label">Catatan</label>
+                                <textarea name="catatan" id="catatan" class="form-control"></textarea>
                             </div>
                         </div>
                     </div>

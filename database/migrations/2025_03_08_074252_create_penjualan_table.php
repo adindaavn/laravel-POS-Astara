@@ -20,10 +20,10 @@ return new class extends Migration
             $table->foreignId('member_id')->nullable()->constrained('member')->nullOnDelete()->cascadeOnUpdate();
             $table->date('tgl');
             $table->double('total_bersih');
-            $table->double('total_bayar');
-            $table->double('diskon')->default(0);
-            $table->double('pajak')->default(0);
-            $table->enum('metode_bayar', ['cash', 'qris'])->default('cash');
+            $table->double('total_bayar')->nullable();
+            $table->double('diskon')->nullable()->default(0);
+            $table->double('pajak')->nullable()->default(0);
+            $table->enum('metode_bayar', ['cash', 'qris'])->default('cash')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));;
         });

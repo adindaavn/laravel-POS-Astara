@@ -174,23 +174,27 @@
 <div class="row">
     <div class="col-lg-7 col-xxl-8 mb-6 mb-lg-0">
         <div class="card">
+            <div class="card-header">
+                <h5 class="card-title m-0 me-2">Top Penjualan Buku</h5>
+            </div>
             <div class="table-responsive text-nowrap">
                 <table class="table table-sm text-nowrap table-border-top-0">
-                    <thead>
+                    <!-- <thead>
                         <tr>
-                            <th>Product</th>
-                            <th>Category</th>
-                            <th>Payment</th>
-                            <th>Order Status</th>
-                            <th>Actions</th>
+                            <th>No</th>
+                            <th>Buku</th>
+                            <th>Kategori</th>
+                            <th>Volume</th>
+                            <th>Sales</th>
                         </tr>
-                    </thead>
+                    </thead> -->
                     <tbody class="table-border-bottom-0">
                         @foreach ($mostSoldBooks as $book)
                         <tr>
+                            <td>{{$loop->iteration}}</td>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <img src="/gambar/{{ $book->gambar }}" alt="Oneplus" height="32" width="32" class="me-3" />
+                                    <img src="/gambar/{{ $book->gambar }}" alt="Oneplus" height="100" class="me-3" />
                                     <div class="d-flex flex-column">
                                         <h6 class="mb-0">{{ $book->judul }}</h6>
                                         <small class="text-body">{{ $book->penulis }}</small>
@@ -198,21 +202,13 @@
                                 </div>
                             </td>
                             <td>
-                                <span class="badge bg-label-primary rounded-pill p-1_5 me-3"><i class="icon-base bx bx-book icon-xs"></i></span> {{ $book->kategori_id }}
+                                <span class="badge bg-label-primary rounded-pill p-1_5 me-3">{{ $book->nama_kategori }}</span>
                             </td>
                             <td>
-                                <div class="text-body"><span class="text-primary fw-medium">{{ $book->total_terjual }}</span> terjual</div>
-                                <small class="text-body">Periode ini</small>
+                                <div class="text-body"><span class="text-primary fw-medium">{{ $book->total_terjual }}</span></div>
                             </td>
-                            <td><span class="badge bg-label-primary">Laris</span></td>
                             <td>
-                                <div class="dropdown">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base bx bx-dots-vertical-rounded"></i></button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-edit-alt me-1"></i> View Details</a>
-                                        <a class="dropdown-item" href="javascript:void(0);"><i class="icon-base bx bx-trash me-1"></i> Delete</a>
-                                    </div>
-                                </div>
+                                <div class="text-body"><span class="fw-medium">Rp. {{ number_format($book->total_nominal, 0, ',', '.') }}</span></div>
                             </td>
                         </tr>
                         @endforeach
@@ -275,107 +271,108 @@
 </div>
 <!-- / Content -->
 <script>
-    // const penjualanData = @json($dailyPenjualan['data']);
-    // const penjualanCategories = @json($dailyPenjualan['categories']);
+    /* const penjualanData = @json($dailyPenjualan['data']);
+    const penjualanCategories = @json($dailyPenjualan['categories']);
 
-    // console.log(penjualanData, penjualanCategories);
+    console.log(penjualanData, penjualanCategories);
 
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     const isDark = isDarkStyle;
-    //     const cardColor = config.colors.cardColor;
-    //     const textColor = config.colors.textMuted;
-    //     const borderColor = config.colors.borderColor;
-    //     const fontFamily = config.fontFamily;
+    document.addEventListener("DOMContentLoaded", function() {
+        const isDark = isDarkStyle;
+        const cardColor = config.colors.cardColor;
+        const textColor = config.colors.textMuted;
+        const borderColor = config.colors.borderColor;
+        const fontFamily = config.fontFamily;
 
-    //     const totalIncomeChart = document.querySelector("#totalIncomeChart");
+        const totalIncomeChart = document.querySelector("#totalIncomeChart");
 
-    //     if (totalIncomeChart) {
-    //         const options = {
-    //             chart: {
-    //                 height: 290,
-    //                 type: "area",
-    //                 toolbar: false,
-    //                 dropShadow: {
-    //                     enabled: true,
-    //                     top: 14,
-    //                     left: 2,
-    //                     blur: 3,
-    //                     color: config.colors.primary,
-    //                     opacity: 0.15,
-    //                 },
-    //             },
-    //             series: [{
-    //                 data: penjualanData,
-    //             }, ],
-    //             dataLabels: {
-    //                 enabled: false
-    //             },
-    //             stroke: {
-    //                 width: 3,
-    //                 curve: "straight"
-    //             },
-    //             colors: [config.colors.primary],
-    //             fill: {
-    //                 type: "gradient",
-    //                 gradient: {
-    //                     shadeIntensity: 1,
-    //                     opacityFrom: 0.3,
-    //                     gradientToColors: [cardColor],
-    //                     opacityTo: 0.3,
-    //                     stops: [0, 100],
-    //                 },
-    //             },
-    //             grid: {
-    //                 show: true,
-    //                 strokeDashArray: 10,
-    //                 borderColor: borderColor,
-    //                 padding: {
-    //                     top: -15,
-    //                     bottom: -10,
-    //                     left: 0,
-    //                     right: 0
-    //                 },
-    //             },
-    //             xaxis: {
-    //                 categories: penjualanCategories,
-    //                 labels: {
-    //                     offsetX: 0,
-    //                     style: {
-    //                         colors: textColor,
-    //                         fontFamily: fontFamily,
-    //                         fontSize: "13px",
-    //                     },
-    //                 },
-    //                 axisBorder: {
-    //                     show: false
-    //                 },
-    //                 axisTicks: {
-    //                     show: false
-    //                 },
-    //                 lines: {
-    //                     show: false
-    //                 },
-    //             },
-    //             yaxis: {
-    //                 labels: {
-    //                     offsetX: -15,
-    //                     formatter: function(val) {
-    //                         return "$" + parseInt(val / 1000) + "k";
-    //                     },
-    //                     style: {
-    //                         fontSize: "13px",
-    //                         fontFamily: fontFamily,
-    //                         colors: textColor,
-    //                     },
-    //                 },
-    //                 min: 1000,
-    //                 max: 6000,
-    //                 tickAmount: 5,
-    //             },
-    //         };
+        if (totalIncomeChart) {
+            const options = {
+                chart: {
+                    height: 290,
+                    type: "area",
+                    toolbar: false,
+                    dropShadow: {
+                        enabled: true,
+                        top: 14,
+                        left: 2,
+                        blur: 3,
+                        color: config.colors.primary,
+                        opacity: 0.15,
+                    },
+                },
+                series: [{
+                    data: penjualanData,
+                }, ],
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    width: 3,
+                    curve: "straight"
+                },
+                colors: [config.colors.primary],
+                fill: {
+                    type: "gradient",
+                    gradient: {
+                        shadeIntensity: 1,
+                        opacityFrom: 0.3,
+                        gradientToColors: [cardColor],
+                        opacityTo: 0.3,
+                        stops: [0, 100],
+                    },
+                },
+                grid: {
+                    show: true,
+                    strokeDashArray: 10,
+                    borderColor: borderColor,
+                    padding: {
+                        top: -15,
+                        bottom: -10,
+                        left: 0,
+                        right: 0
+                    },
+                },
+                xaxis: {
+                    categories: penjualanCategories,
+                    labels: {
+                        offsetX: 0,
+                        style: {
+                            colors: textColor,
+                            fontFamily: fontFamily,
+                            fontSize: "13px",
+                        },
+                    },
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    lines: {
+                        show: false
+                    },
+                },
+                yaxis: {
+                    labels: {
+                        offsetX: -15,
+                        formatter: function(val) {
+                            return "$" + parseInt(val / 1000) + "k";
+                        },
+                        style: {
+                            fontSize: "13px",
+                            fontFamily: fontFamily,
+                            colors: textColor,
+                        },
+                    },
+                    min: 1000,
+                    max: 6000,
+                    tickAmount: 5,
+                },
+            };
 
-    //         new ApexCharts(totalIncomeChart, options).render();
-    //     }
-    // });
+            new ApexCharts(totalIncomeChart, options).render();
+        }
+    });
+    */
 </script>
 @endsection
