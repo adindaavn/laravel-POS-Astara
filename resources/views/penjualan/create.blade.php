@@ -100,7 +100,7 @@
                             <select class="select2 form-select" id="member_id" name="member_id" data-allow-clear="true" aria-placeholder="Pilih Member">
                                 <option value="">Search Member</option>
                                 @foreach($member as $m)
-                                <option value="{{$m->id}}">{{$m->nama}}</option>
+                                <option value="{{$m->id}}">{{$m->nama}} (XP {{$m->point}})</option>
                                 @endforeach
                             </select>
                         </div>
@@ -140,17 +140,15 @@
                     <dl class="row mb-0">
                         <dt class="col-6">Subtotal</dt>
                         <dd class="subtotal col-6 fw-medium text-end mb-1">0</dd>
-                        <dt class="col-6">Pajak</dt>
-                        <dd class="pajak col-6 fw-medium text-end mb-1">0</dd>
+                        <dt class="col-6">Diskon</dt>
+                        <dd class="diskon col-6 fw-medium text-end mb-1">0</dd>
                         <dt class="col-6 text-heading">Total</dt>
                         <dd class="total col-6 fw-medium text-end text-heading mb-1">0</dd>
                     </dl>
                     <input type="hidden" id="total_bersih" name="total_bersih" step="0.01" />
                     <input type="hidden" id="total_bayar" name="total_bayar" step="0.01" />
-                    <input type="hidden" id="no_rekening" name="no_rekening">
                     <input type="hidden" id="kembali" name="kembali">
                     <input type="hidden" id="bayar" name="bayar">
-                    <input type="hidden" id="pajak" name="pajak">
                     <input type="hidden" id="diskon" name="diskon">
                     <input type="hidden" name="buku" id="bukuData">
                 </div>
@@ -325,7 +323,7 @@
 
             itemList.empty();
             let subtotal = 0;
-            let pajak = 0;
+            let diskon = 0;
             let total = 0;
 
             $.each(selectedBuku, function(index, buku) {
@@ -342,14 +340,14 @@
 
             });
 
-            pajak = (subtotal * 11 / 100);
-            total = subtotal + pajak;
+            // diskon = (subtotal * 10 / 100);
+            total = subtotal - diskon;
 
             $(".subtotal").text(subtotal.toLocaleString());
-            $(".pajak").text(pajak.toLocaleString());
+            $(".diskon").text(diskon.toLocaleString());
             $(".total").text(total.toLocaleString());
 
-            $("#pajak").val(pajak);
+            $("#diskon").val(diskon);
             $("#total_bayar").val(total);
             $("#total_bersih").val(subtotal);
 

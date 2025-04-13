@@ -77,7 +77,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-6 mb-3">
+                            <div class="col-8 mb-3">
                                 <label for="penerbit" class="form-label">Penerbit</label>
                                 <input
                                     type="text"
@@ -86,7 +86,7 @@
                                     placeholder="Penerbit"
                                     name="penerbit" />
                             </div>
-                            <div class="col-6 mb-3">
+                            <div class="col-4 mb-3">
                                 <label for="thn_terbit" class="form-label">Tahun Terbit</label>
                                 <input
                                     type="number"
@@ -107,15 +107,8 @@
                                     placeholder="Harga Jual"
                                     name="harga" />
                             </div>
-
-                            <div class="col-2">
-                                <label for="pajak" class="form-label">Pajak</label>
-                                <div class="form-check mt-2">
-                                    <input class="form-check-input" type="checkbox" name="pajak" id="pajak" value="1">
-                                </div>
-                            </div>
-
-                            <div class="col-6 mb-3">
+                            
+                            <div class="col-8 mb-3">
                                 <label for="gambar" class="form-label">Gambar</label>
                                 <input
                                     type="file"

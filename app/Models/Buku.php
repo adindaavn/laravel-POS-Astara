@@ -24,7 +24,6 @@ class Buku extends Model
         "harga",
         "gambar",
         "thn_terbit",
-        "pajak",
     ];
 
     /**

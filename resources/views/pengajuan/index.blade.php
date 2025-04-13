@@ -20,8 +20,8 @@ $breadcrumbs = [
                 </div>
             </button>
             <h5 class="card-header pb-0 fw-bold">Pengajuan Buku</h5>
-            <div id="tablePengajuan" class="table-responsive text-nowrap p-5">
-                <table class="table table-striped table-bordered">
+            <div id="tableData" class="table-responsive text-nowrap p-5">
+                <table class="table table-striped table-bordered" data-tipe="pengajuan">
                     <thead>
                         <tr class="table-primary">
                             <th class="fw-bold">No</th>

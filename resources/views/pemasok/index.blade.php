@@ -20,7 +20,7 @@ $breadcrumbs = [
                 </div>
             </button>
             <h5 class="card-header pb-0 fw-bold">Data Pemasok</h5>
-            <div id="tableData" class="table-responsive text-nowrap p-5">
+            <div id="tableData" class="table-responsive text-nowrap p-5" data-tipe="pemasok">
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr class="table-primary">

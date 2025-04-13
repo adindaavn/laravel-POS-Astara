@@ -23,4 +23,13 @@ class Kategori extends Model
     {
         return $this->hasMany(Buku::class);
     }
+
+    public function toExportArray()
+    {
+        return [
+            'id' => $this->id,
+            'nama' => $this->nama,
+            'buku_count' => $this->buku_count
+        ];
+    }
 }

@@ -19,7 +19,7 @@ $breadcrumbs = [
                 <span>Tambah</span>
             </button>
             <h5 class="card-header pb-0 fw-bold">Data Voucher</h5>
-            <div id="tableData" class="table-responsive text-nowrap p-5">
+            <div id="tableData" class="table-responsive text-nowrap p-5" data-tipe="voucher">
                 <table class="table table-striped table-bordered">
                     <thead>
                         <tr class="table-primary">

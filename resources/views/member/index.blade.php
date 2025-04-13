@@ -19,7 +19,7 @@ $breadcrumbs = [
             </button>
             <h5 class="card-header pb-0 fw-bold">Data Member</h5>
             <div id="tableData" class="table-responsive text-nowrap p-5">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped table-bordered" data-tipe="member">
                     <thead>
                         <tr class="table-primary">
                             <th class="fw-bold">No</th>
@@ -27,7 +27,6 @@ $breadcrumbs = [
                             <th class="fw-bold">Point</th>
                             <th class="fw-bold">No. Telepon</th>
                             <th class="fw-bold">Email</th>
-                            <th class="fw-bold">Alamat</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -37,7 +36,6 @@ $breadcrumbs = [
                             <td>{{$loop->iteration}}</td>
                             <td>{{$data->nama}}</td>
                             <td>{{$data->point}}</td>
-                            <td>{{$data->alamat}}</td>
                             <td>{{$data->telp}}</td>
                             <td>{{$data->email}}</td>
                             <td>
@@ -49,7 +47,6 @@ $breadcrumbs = [
                                         data-id="{{$data->id}}"
                                         data-point="{{$data->point}}"
                                         data-nama="{{$data->nama}}"
-                                        data-alamat="{{$data->alamat}}"
                                         data-telp="{{$data->telp}}"
                                         data-email="{{$data->email}}">
                                         <span class="badge rounded-pill bg-label-info"><i class="bx bx-edit-alt text-dark"></i></span>
@@ -80,7 +77,6 @@ $breadcrumbs = [
             $('#jenis-form').attr('action', "{{ route('member.store') }}");
             $('#form-method').val('POST');
             $('#nama').val('');
-            $('#alamat').val('');
             $('#telp').val('');
             $('#email').val('');
             $('#submit-btn').text('Tambah');
@@ -90,7 +86,6 @@ $breadcrumbs = [
             let id = $(this).data('id');
             let point = $(this).data('point');
             let nama = $(this).data('nama');
-            let alamat = $(this).data('alamat');
             let telp = $(this).data('telp');
             let email = $(this).data('email');
 
@@ -101,7 +96,6 @@ $breadcrumbs = [
             $('#id').val(id);
             $('#point').val(point);
             $('#nama').val(nama);
-            $('#alamat').val(alamat);
             $('#telp').val(telp);
             $('#email').val(email);
             $('#submit-btn').text('Edit');

@@ -270,12 +270,6 @@
                             <div data-i18n="Transaksi">Transaksi</div>
                         </a>
                     </li>
-                    <li class="menu-item {{ request()->routeIs('penjualan.index') ? 'active' : '' }}">
-                        <a href="{{ route('penjualan.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-receipt"></i>
-                            <div data-i18n="Data Transaksi">Data Transaksi</div>
-                        </a>
-                    </li>
                     @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('pembelian.create') ? 'active' : '' }}">
                         <a href="{{ route('pembelian.create') }}" class="menu-link">
@@ -283,10 +277,23 @@
                             <div data-i18n="Pembelian">Pembelian</div>
                         </a>
                     </li>
+                    @endif
+
+                    <!-- Laporan -->
+                    <li class="menu-header small">
+                        <span class="menu-header-text">Laporan</span>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('penjualan.index') ? 'active' : '' }}">
+                        <a href="{{ route('penjualan.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-receipt"></i>
+                            <div data-i18n="Laporan Transaksi">Laporan Transaksi</div>
+                        </a>
+                    </li>
+                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('pembelian.index') ? 'active' : '' }}">
                         <a href="{{ route('pembelian.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-receipt"></i>
-                            <div data-i18n="Data Pembelian">Data Pembelian</div>
+                            <div data-i18n="Laporan Pembelian">Laporan Pembelian</div>
                         </a>
                     </li>
                     @endif
@@ -768,13 +775,27 @@
                             text: '<span class="d-flex align-items-center"><i class="icon-base bx bx-file me-1"></i>Csv</span>',
                             className: "dropdown-item",
                         }, {
-                            extend: "excel",
                             text: '<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-export me-1"></i>Excel</span>',
                             className: "dropdown-item",
+                            action: function(e, dt, node, config) {
+                                let tipe = table.attr('data-tipe');
+                                if (tipe) {
+                                    window.location.href = `/export/excel?tipe=${tipe}`;
+                                } else {
+                                    alert('Tipe laporan tidak ditemukan.');
+                                }
+                            }
                         }, {
-                            extend: "pdf",
                             text: '<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-pdf me-1"></i>Pdf</span>',
                             className: "dropdown-item",
+                            action: function(e, dt, node, config) {
+                                let tipe = table.attr('data-tipe');
+                                if (tipe) {
+                                    window.location.href = `/export/pdf?tipe=${tipe}`;
+                                } else {
+                                    alert('Tipe laporan tidak ditemukan.');
+                                }
+                            }
                         }, {
                             extend: "copy",
                             text: '<i class="icon-base bx bx-copy me-1"></i>Copy',
@@ -798,6 +819,7 @@
                 });
             });
         });
+    </script>
     </script>
     <!-- table pengajuan -->
     <script>

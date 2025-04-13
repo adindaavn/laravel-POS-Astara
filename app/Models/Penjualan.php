@@ -16,12 +16,10 @@ class Penjualan extends Model
         "no_transaksi",
         "member_id",
         "user_id",
-        "nama_cust",
         "tgl",
         "total_bayar",
         "total_bersih",
         "diskon",
-        "pajak",
         "metode_bayar"
     ];
 
@@ -48,7 +46,26 @@ class Penjualan extends Model
     {
         return $this->hasMany(PenjualanDetail::class, 'penjualan_id');
     }
-
+    // Dalam model Penjualan
+    public function toExportArray()
+    {
+        return [
+            'no_transaksi' => $this->no_transaksi,
+            'kasir' => $this->user->name,
+            'member' => optional($this->member)->nama ?? 'Non-Member',
+            'detail_buku' => $this->detailPenjualan->map(function ($detail) {
+                return sprintf(
+                    "%s (%d x Rp. %s = Rp. %s)",
+                    $detail->buku->judul,
+                    $detail->jumlah,
+                    number_format($detail->harga_jual, 0, ',', '.'),
+                    number_format($detail->subtotal, 0, ',', '.')
+                );
+            })->implode("\n"),
+            'total' => 'Rp. ' . number_format($this->total_bayar, 0, ',', '.'),
+            'tgl' => $this->tgl,
+        ];
+    }
     /**
      * Event: Auto-generate nomor transaksi saat membuat penjualan baru
      */

@@ -35,6 +35,22 @@ class PengajuanBuku extends Model
         return $this->belongsTo(Member::class, 'member_id');
     }
 
+    public function toExportArray()
+    {
+        return [
+            'id' => $this->id,
+            'nama_pengaju' => $this->nama_pengaju,
+            'no_telp' => $this->no_telp,
+            'member_id' => $this->member_id ?? '-',
+            'judul' => $this->judul,
+            'penulis' => $this->penulis,
+            'qty' => $this->qty,
+            'catatan' => $this->catatan,
+            'status' => $this->status == 1 ? 'Terpenuhi' : 'Belum Terpenuhi',
+            'tanggal' => $this->tgl
+        ];
+    }
+
     /**
      * Auto-log setiap perubahan data.
      */

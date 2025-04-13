@@ -13,17 +13,16 @@ $breadcrumbs = [
         <div class="card">
             <h5 class="card-header pb-0 fw-bold">Data Penjualan</h5>
             <div id="tableData" class="table-responsive text-nowrap p-5">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped table-bordered" data-tipe="penjualan">
                     <thead>
                         <tr class="table-primary">
                             <th class="fw-bold">No. Transaksi</th>
                             <th class="fw-bold">User</th>
                             <th class="fw-bold">Member</th>
                             <th class="fw-bold">Daftar Buku</th>
-                            <th class="fw-bold">Total (+PPn)</th>
+                            <th class="fw-bold">Total</th>
                             <th class="fw-bold">Tanggal</th>
                             <th class="fw-bold">Metode Bayar</th>
-                            <th class="fw-bold">No. Rekening</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -49,7 +48,6 @@ $breadcrumbs = [
                             <td>Rp. {{ number_format($data->total_bayar, 0, ',', '.') }}</td>
                             <td>{{ $data->tgl }}</td>
                             <td>{{ $data->metode_bayar }}</td>
-                            <td>{{ $data->no_rekening }}</td>
                         </tr>
                         @endforeach
                     </tbody>

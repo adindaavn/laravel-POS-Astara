@@ -15,14 +15,12 @@ return new class extends Migration
         Schema::create('penjualan', function (Blueprint $table) {
             $table->id();
             $table->string('no_transaksi')->unique();
-            $table->string('nama_cust')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('member_id')->nullable()->constrained('member')->nullOnDelete()->cascadeOnUpdate();
             $table->date('tgl');
             $table->double('total_bersih');
             $table->double('total_bayar')->nullable();
             $table->double('diskon')->nullable()->default(0);
-            $table->double('pajak')->nullable()->default(0);
             $table->enum('metode_bayar', ['cash', 'qris'])->default('cash')->nullable();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));;

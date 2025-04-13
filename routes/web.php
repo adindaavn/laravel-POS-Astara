@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
+use App\Http\Controllers\exportLaporan;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MemberController;
@@ -38,5 +39,8 @@ Route::middleware(['auth'], CekUserRole::class)->group(
         Route::get('/pengajuan/pdf', [PengajuanController::class, 'generatePDF']);
         Route::get('/pengajuan/excel', [PengajuanController::class, 'exportExcel']);
         Route::post('/pengajuan/update-status', [PengajuanController::class, 'updateStatus'])->name('pengajuan.updateStatus');
+
+        Route::get('/export/pdf', [exportLaporan::class, 'exportPDF'])->name('export.pdf');
+        Route::get('/export/excel', [exportLaporan::class, 'exportExcel'])->name('export.excel');
     }
 );

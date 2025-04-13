@@ -23,7 +23,6 @@ class MemberFactory extends Factory
             "point"      => $faker->numberBetween(0, 500),
             "email"     => $faker->safeEmail(),
             "telp"      => $faker->phoneNumber(),
-            "alamat"    => $faker->address(),
         ];
     }
 }

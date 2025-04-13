@@ -51,8 +51,8 @@
         @if(session()->has('buku') && count(session('buku')) > 0)
         @foreach(session('buku') as $b)
         <tr>
-            <td colspan="2">{{$b['judul']}}</td>
-            <td class="text-right">{{ number_format($b['harga_jual'], 0, ',', '.') }} x{{$b['jumlah']}}</td>
+            <td>{{$b['judul']}}</td>
+            <td class="text-right">{{$b['jumlah']}}x {{ number_format($b['harga_jual'], 0, ',', '.') }}</td>
             <td class="text-right">{{ number_format($b['subtotal'], 0, ',', '.') }}</td>
         </tr>
         @endforeach
@@ -67,8 +67,8 @@
             <td class="text-right" colspan="2">{{ number_format(session('total_bersih'), 0, ',', '.') ?? 0 }}</td>
         </tr>
         <tr>
-            <td colspan="3">Pajak</td>
-            <td class="text-right" colspan="2">{{ number_format(session('pajak'), 0, ',', '.') ?? 0 }}</td>
+            <td colspan="3">Diskon</td>
+            <td class="text-right" colspan="2">{{ number_format(session('diskon'), 0, ',', '.') ?? 0 }}</td>
         </tr>
         <tr class="fw-bold">
             <td colspan="3">Total</td>

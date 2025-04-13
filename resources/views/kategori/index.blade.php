@@ -54,7 +54,7 @@ $breadcrumbs = [
         <div class="card">
             <h5 class="card-header pb-0 fw-bold">Data Kategori</h5>
             <div id="tableData" class="table-responsive text-nowrap p-5">
-                <table class="table table-striped table-bordered">
+                <table class="table table-striped table-bordered" data-tipe="kategori">
                     <thead>
                         <tr class="table-primary">
                             <th class="fw-bold">No</th>

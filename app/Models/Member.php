@@ -17,6 +17,16 @@ class Member extends Model
         "point",
         "email",
         "telp",
-        "alamat"
     ];
+
+    public function toExportArray()
+    {
+        return [
+            'id' => $this->id,
+            'nama' => $this->nama,
+            'point' => $this->point,
+            'telp' => $this->telp,
+            'email' => $this->email,
+        ];
+    }
 }

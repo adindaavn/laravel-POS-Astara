@@ -37,7 +37,6 @@ class MemberController extends Controller
         $validated = $request->validate(
             [
                 'nama' => 'required|string|max:100',
-                'alamat' => 'nullable|string',
                 'telp' => 'nullable|string|max:20',
                 'email' => 'nullable|email'
             ]
@@ -84,7 +83,6 @@ class MemberController extends Controller
         $validated = $request->validate(
             [
                 'nama' => 'required|string|max:100',
-                'alamat' => 'nullable|string',
                 'telp' => 'nullable|string|max:20',
                 'email' => 'nullable|string'
             ]

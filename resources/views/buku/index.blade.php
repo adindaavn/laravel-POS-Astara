@@ -25,7 +25,7 @@ $breadcrumbs = [
                 <div class="col-lg-12 mb-4 order-0">
                     <h5 class="card-header pb-0 fw-bold">Data Buku</h5>
                     <div id="tableData" class="table-responsive text-nowrap p-5">
-                        <table class="table table-striped table-bordered">
+                        <table class="table table-striped table-bordered" data-tipe="buku">
                             <thead>
                                 <tr class="table-primary">
                                     <th class="fw-bold">No</th>

@@ -32,6 +32,7 @@ class KategoriController extends Controller
      * @param Request $request Permintaan HTTP yang berisi data kategori baru.
      * @return \Illuminate\Http\RedirectResponse Redirect kembali dengan pesan sukses atau error.
      */
+    
     public function store(Request $request)
     {
         // Validasi input
