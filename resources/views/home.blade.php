@@ -7,11 +7,11 @@
             <div class="d-flex align-items-end row">
                 <div class="col-7">
                     <div class="card-body">
-                        <h5 class="card-title mb-1 text-nowrap">Congratulations Katie! 🎉</h5>
-                        <p class="card-subtitle text-nowrap mb-3">Best seller of the month</p>
+                        <h5 class="card-title mb-1 text-nowrap">Keep up the good work! 🎉</h5>
+                        <p class="card-subtitle text-nowrap mb-3">Have fun serving customers :D</p>
 
                         <h5 class="card-title text-primary mb-0">Rp. {{ number_format($performaKasir['total_penjualan'], 0, ',', '.') }}</h5>
-                        <p class="mb-3">{{ $performaKasir['total_transaksi'] }} transaksi 🚀</p>
+                        <p class="mb-3">{{ $performaKasir['total_transaksi'] }} transaksi today 🚀</p>
 
                         <a href="javascript:;" class="btn btn-sm btn-primary mb-1">View sales</a>
                     </div>
@@ -37,7 +37,7 @@
                         <div class="d-flex justify-content-between">
                             <div class="mt-auto">
                                 <h3 class="mb-1">{{ $rowPenjualan }}</h3>
-                                <small class="text-danger text-nowrap fw-medium"><i class="icon-base bx bx-down-arrow-alt"></i> -13.24%</small>
+                                <small class="text-success text-nowrap fw-medium"><i class="icon-base bx bx-up-arrow-alt"></i> 13.5%</small>
                             </div>
                             <div id="visitorsChart"></div>
                         </div>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="d-flex justify-content-between">
                             <div class="mt-auto">
-                                <h3 class="mb-1">{{ $rowPenjualan }}</h3>
+                                <h3 class="mb-1">{{ $rowPembelian }}</h3>
                                 <small class="text-success text-nowrap fw-medium"><i class="icon-base bx bx-up-arrow-alt"></i> 24.8%</small>
                             </div>
                             <div id="activityChart"></div>
@@ -83,7 +83,7 @@
                             </div>
                         </div>
                         <p class="mb-1">Sales</p>
-                        <h4 class="card-title mb-3">Rp. {{ number_format($penjualan['current']) }}</h4>
+                        <h5 class="card-title mb-3">Rp. {{ number_format($penjualan['current']) }}</h5>
                         <small class="text-{{ $penjualan['percent'] >= 0 ? 'success' : 'danger' }} fw-medium">
                             <i class="icon-base bx {{ $penjualan['percent'] >= 0 ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt' }}"></i>
                             {{ $penjualan['percent'] >= 0 ? '+' : '' }}{{ $penjualan['percent'] }}%
@@ -95,7 +95,7 @@
                 <div class="card h-100">
                     <div class="card-body pb-2">
                         <span class="d-block fw-medium mb-1">Profit</span>
-                        <h4 class="card-title mb-4">Rp. {{ number_format($profit['profit']) }}</h4>
+                        <h5 class="card-title mb-4">Rp. {{ number_format($profit['profit']) }}</h5>
                         <div id="profitChart"></div>
                     </div>
                 </div>
@@ -107,7 +107,7 @@
                     </div>
                     <div id="expensesChart" class="mb-2"></div>
                     <div class="p-4 pt-2">
-                        <small class="d-block text-center">$21k Expenses more than last month</small>
+                        <small class="d-block text-center">Rp. {{ number_format($pembelian['current']) }}</small>
                     </div>
                 </div>
             </div>
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                         <p class="mb-1">Transactions</p>
-                        <h4 class="card-title mb-3">Rp. {{ number_format($transactions['transactions']) }}</h4>
+                        <h5 class="card-title mb-3">Rp. {{ number_format($transactions['transactions']) }}</h5>
                         <small class="text-{{ $transactions['percent'] >= 0 ? 'success' : 'danger' }} fw-medium">
                             <i class="icon-base bx {{ $transactions['percent'] >= 0 ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt' }}"></i>
                             {{ $transactions['percent'] >= 0 ? '+' : '' }}{{ $transactions['percent'] }}%
@@ -271,26 +271,20 @@
 </div>
 <!-- / Content -->
 <script>
-    /* const penjualanData = @json($dailyPenjualan['data']);
-    const penjualanCategories = @json($dailyPenjualan['categories']);
-
-    console.log(penjualanData, penjualanCategories);
-
+    // Load the chart on DOM ready
     document.addEventListener("DOMContentLoaded", function() {
-        const isDark = isDarkStyle;
-        const cardColor = config.colors.cardColor;
-        const textColor = config.colors.textMuted;
-        const borderColor = config.colors.borderColor;
-        const fontFamily = config.fontFamily;
+        // Initialize variables for the chart
+        let chart;
 
-        const totalIncomeChart = document.querySelector("#totalIncomeChart");
-
-        if (totalIncomeChart) {
+        // Function to render the chart
+        function renderChart(data, categories) {
             const options = {
                 chart: {
                     height: 290,
                     type: "area",
-                    toolbar: false,
+                    toolbar: {
+                        show: false
+                    },
                     dropShadow: {
                         enabled: true,
                         top: 14,
@@ -298,11 +292,11 @@
                         blur: 3,
                         color: config.colors.primary,
                         opacity: 0.15,
-                    },
+                    }
                 },
                 series: [{
-                    data: penjualanData,
-                }, ],
+                    data: data
+                }],
                 dataLabels: {
                     enabled: false
                 },
@@ -316,63 +310,78 @@
                     gradient: {
                         shadeIntensity: 1,
                         opacityFrom: 0.3,
-                        gradientToColors: [cardColor],
+                        gradientToColors: [config.colors.cardColor],
                         opacityTo: 0.3,
                         stops: [0, 100],
-                    },
+                    }
                 },
                 grid: {
                     show: true,
-                    strokeDashArray: 10,
-                    borderColor: borderColor,
+                    borderColor: config.colors.borderColor,
                     padding: {
                         top: -15,
                         bottom: -10,
                         left: 0,
                         right: 0
-                    },
+                    }
                 },
                 xaxis: {
-                    categories: penjualanCategories,
+                    categories: categories,
                     labels: {
-                        offsetX: 0,
                         style: {
-                            colors: textColor,
-                            fontFamily: fontFamily,
-                            fontSize: "13px",
-                        },
+                            colors: config.colors.textMuted,
+                            fontFamily: config.fontFamily,
+                            fontSize: "13px"
+                        }
                     },
                     axisBorder: {
                         show: false
                     },
                     axisTicks: {
                         show: false
-                    },
-                    lines: {
-                        show: false
-                    },
+                    }
                 },
                 yaxis: {
                     labels: {
                         offsetX: -15,
-                        formatter: function(val) {
-                            return "$" + parseInt(val / 1000) + "k";
+                        formatter: function(value) {
+                            return "Rp. " + parseInt(value / 1000) + "k";
                         },
                         style: {
                             fontSize: "13px",
-                            fontFamily: fontFamily,
-                            colors: textColor,
-                        },
+                            fontFamily: config.fontFamily,
+                            colors: config.colors.textMuted
+                        }
                     },
-                    min: 1000,
-                    max: 6000,
                     tickAmount: 5,
-                },
+                }
             };
 
-            new ApexCharts(totalIncomeChart, options).render();
+            const chartElement = document.querySelector("#totalIncomeChart");
+            if (chart) {
+                chart.updateOptions(options);
+            } else {
+                chart = new ApexCharts(chartElement, options);
+                chart.render();
+            }
         }
+
+        // Function to fetch new data from the server
+        function fetchData() {
+            fetch('/home/daily-penjualan') // Adjust the URL to your API endpoint
+                .then(response => response.json())
+                .then(data => {
+                    renderChart(data.data, data.categories);
+                    console.log(data);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Initial data fetch and chart render
+        fetchData();
+
+        // Set an interval to fetch data every 60 seconds
+        setInterval(fetchData, 60000);
     });
-    */
 </script>
 @endsection

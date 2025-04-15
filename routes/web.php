@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\exportLaporan;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\importLaporan;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\PemasokController;
@@ -24,8 +25,7 @@ Route::middleware(['auth'], CekUserRole::class)->group(
 
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::get('/home', [HomeController::class, 'index'])->name('home');
-        Route::get('/home/transaksi-per-hari', [HomeController::class, 'getTransaksiPerHari']);
-        Route::get('/home/dashboard-data', [HomeController::class, 'getDashboardData']);
+        Route::get('/home/daily-penjualan', [HomeController::class, 'dailyPenjualan'])->name('daily-penjualan');
 
         Route::resource('kategori', KategoriController::class);
         Route::resource('pemasok', PemasokController::class);
@@ -42,5 +42,7 @@ Route::middleware(['auth'], CekUserRole::class)->group(
 
         Route::get('/export/pdf', [exportLaporan::class, 'exportPDF'])->name('export.pdf');
         Route::get('/export/excel', [exportLaporan::class, 'exportExcel'])->name('export.excel');
+        Route::get('/import/excel', [importLaporan::class, 'importExcel'])->name('import.excel');
+
     }
 );

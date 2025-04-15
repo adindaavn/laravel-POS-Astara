@@ -71,7 +71,7 @@ class Pembelian extends Model
 
         static::creating(function ($model) {
             $model->tgl = now();
-            $model->user_id = Auth::id();
+            $model->user_id = $model->user_id ?? request()->user()->id ?? null;
         });
     }
 }

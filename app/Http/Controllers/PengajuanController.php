@@ -9,6 +9,7 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use Illuminate\Support\Facades\View;
 use App\Exports\PengajuanBukuExport;
+use App\Models\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
 class PengajuanController extends Controller
@@ -54,7 +55,8 @@ class PengajuanController extends Controller
                 }
             }
 
-            $pengajuan = PengajuanBuku::create($validated); // Membuat data pengajuan baru
+            $data = PengajuanBuku::create($validated); // Membuat data pengajuan baru
+            Log::createLog('pengajuan', 'create', $data);
             return redirect()->back()->with('success', 'Pengajuan buku berhasil ditambahkan');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Pengajuan buku gagal ditambahkan :' . $e->getMessage());
@@ -93,6 +95,8 @@ class PengajuanController extends Controller
 
         try {
             $pengajuan->update($validated); // Memperbarui data pengajuan
+
+            Log::createLog('pengajuan', 'update', $pengajuan);
             return redirect()->back()->with('success', 'Pengajuan buku berhasil diedit');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Pengajuan buku gagal diedit :' . $e->getMessage());
@@ -111,6 +115,7 @@ class PengajuanController extends Controller
         }
 
         try {
+            Log::createLog('pengajuan', 'delete', $pengajuan);
             $pengajuan->delete(); // Menghapus data
             return redirect()->back()->with('success', 'Pengajuan buku berhasil dihapus.');
         } catch (\Exception $e) {

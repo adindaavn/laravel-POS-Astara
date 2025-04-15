@@ -65,34 +65,5 @@ class PengajuanBuku extends Model
                 $model->status = '0';
             }
         );
-        static::created(function ($pengajuan) {
-            Log::create([
-                'table_name' => 'pengajuan_buku',
-                'action' => 'create',
-                'user_id' => Auth::id(),
-                'data' => $pengajuan->toArray(),
-                'ip_address' => request()->ip(),
-            ]);
-        });
-
-        static::updated(function ($pengajuan) {
-            Log::create([
-                'table_name' => 'pengajuan_buku',
-                'action' => 'update',
-                'user_id' => Auth::id(),
-                'data' => $pengajuan->toArray(),
-                'ip_address' => request()->ip(),
-            ]);
-        });
-
-        static::deleted(function ($pengajuan) {
-            Log::create([
-                'table_name' => 'pengajuan_buku',
-                'action' => 'delete',
-                'user_id' => Auth::id(),
-                'data' => $pengajuan->toArray(),
-                'ip_address' => request()->ip(),
-            ]);
-        });
     }
 }

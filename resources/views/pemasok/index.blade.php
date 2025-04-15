@@ -19,6 +19,12 @@ $breadcrumbs = [
                     <span>Tambah</span>
                 </div>
             </button>
+            <button type="button" class="btn btn-outline-secondary btn-import"
+                data-bs-toggle="modal"
+                data-bs-target="#modalImport">
+                <i class="icon-base bx bx-upload me-1"></i>
+                <span>Import</span>
+            </button>
             <h5 class="card-header pb-0 fw-bold">Data Pemasok</h5>
             <div id="tableData" class="table-responsive text-nowrap p-5" data-tipe="pemasok">
                 <table class="table table-striped table-bordered">
@@ -70,6 +76,7 @@ $breadcrumbs = [
 </div>
 
 @include('pemasok.modal')
+@include('import.modal')
 
 <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 <script>

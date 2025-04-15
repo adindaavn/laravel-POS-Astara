@@ -46,13 +46,14 @@ class Penjualan extends Model
     {
         return $this->hasMany(PenjualanDetail::class, 'penjualan_id');
     }
+
     // Dalam model Penjualan
     public function toExportArray()
     {
         return [
             'no_transaksi' => $this->no_transaksi,
             'kasir' => $this->user->name,
-            'member' => optional($this->member)->nama ?? 'Non-Member',
+            'member' => optional($this->member)->nama ?? '-',
             'detail_buku' => $this->detailPenjualan->map(function ($detail) {
                 return sprintf(
                     "%s (%d x Rp. %s = Rp. %s)",
@@ -90,8 +91,7 @@ class Penjualan extends Model
             // Format nomor transaksi baru
             $model->no_transaksi = "TRX{$tahun}" . str_pad($newNum, 4, '0', STR_PAD_LEFT);
 
-            // Set default user_id (hindari error di CLI seperti saat seeding)
-            $model->user_id = request()->user()->id ?? null;
+            $model->user_id = $model->user_id ?? request()->user()->id ?? null;
             $model->tgl = now();
         });
     }

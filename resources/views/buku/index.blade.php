@@ -20,6 +20,12 @@ $breadcrumbs = [
                         <i class="icon-base bx bx-plus me-1"></i>
                         <span>Tambah</span>
                     </button>
+                    <button type="button" class="btn btn-outline-secondary btn-import"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalImport">
+                        <i class="icon-base bx bx-upload me-1"></i>
+                        <span>Import</span>
+                    </button>
                 </div>
 
                 <div class="col-lg-12 mb-4 order-0">
@@ -106,6 +112,7 @@ $breadcrumbs = [
 </div>
 
 @include('buku.modal')
+@include('import.modal')
 <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
 <script>
     $(document).ready(function() {

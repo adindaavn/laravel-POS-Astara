@@ -6,6 +6,7 @@ use App\Exports\UniversalExport;
 use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\Member;
+use App\Models\Pemasok;
 use App\Models\Pembelian;
 use App\Models\PengajuanBuku;
 use App\Models\Penjualan;
@@ -34,6 +35,11 @@ class exportLaporan extends Controller
         'member' => [
             'model' => Member::class,
             'headers' => ['ID', 'Nama', 'Point', 'No. Telepon', 'E-mail'],
+            'view' => 'export.pdf'
+        ],
+        'pemasok' => [
+            'model' => Pemasok::class,
+            'headers' => ['ID', 'Nama', 'No. Telepon', 'E-mail', 'Alamat'],
             'view' => 'export.pdf'
         ],
         'pengajuan' => [

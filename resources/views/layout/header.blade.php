@@ -757,7 +757,7 @@
 
                 table.DataTable({
                     dom: "<'row'<'col-sm-6 d-flex align-items-center'<'table-title fw-bold mx-3'>>" +
-                        "<'col-sm-6 d-flex justify-content-end'B<<'btn-add-wrapper'>> >>" +
+                        "<'col-sm-6 d-flex justify-content-end'<'btn-add-wrapper d-flex'>>>" +
                         "<'row'<'col-sm-6 my-0'l><'col-sm-6 my-0'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
                         "<'row'<'col-sm-5 px-1'i><'col-sm-7 d-flex justify-content-end'p>>",
@@ -812,76 +812,25 @@
                         },
                     },
                     initComplete: function() {
-                        table.closest('.card').find('.table-title').html(`<h5 class="fw-bold mb-0">${tableTitle}</h5>`);
-                        table.closest('.card').find(".btn-add-wrapper").append(table.closest('.card').find(".btn-add")).addClass('ms-3');
-                        table.closest('.card').find(".buttons-collection").removeClass("btn-secondary").addClass("btn-label-primary");
+                        const card = table.closest('.card');
+                        card.find('.table-title').html(`<h5 class="fw-bold mb-0">${tableTitle}</h5>`);
+
+                        card.find(".btn-add-wrapper")
+                            .append(card.find(".btn-import")) // tambahin tombol import di sini
+                            .append(card.find(".btn-add"))
+                            .addClass('ms-3');
+
+                        card.find(".buttons-collection")
+                            .removeClass("btn-secondary")
+                            .addClass("btn-label-primary");
                     }
+
                 });
             });
         });
-    </script>
-    </script>
-    <!-- table pengajuan -->
-    <script>
-        $(document).ready(function() {
-            $('#tablePengajuan table').each(function() {
-                let table = $(this);
-                let tableTitle = table.closest('.card').find('.card-header').text().trim();
-                table.closest('.card').find('.card-header').remove();
-
-                table.DataTable({
-                    dom: "<'row'<'col-sm-6 d-flex align-items-center'<'table-title fw-bold mx-3'>>" +
-                        "<'col-sm-6 d-flex justify-content-end'B<<'btn-add-wrapper'>> >>" +
-                        "<'row'<'col-sm-6 my-0'l><'col-sm-6 my-0'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5 px-1'i><'col-sm-7 d-flex justify-content-end'p>>",
-
-                    buttons: [{
-                        extend: 'collection',
-                        className: "btn btn-label-primary dropdown-toggle",
-                        text: '<span class="d-flex align-items-center gap-2"><i class="icon-base bx bx-export me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span></span>',
-                        buttons: [{
-                            extend: "print",
-                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bx-printer me-1"></i>Print</span>',
-                            className: "dropdown-item",
-                        }, {
-                            extend: "csv",
-                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bx-file me-1"></i>Csv</span>',
-                            className: "dropdown-item",
-                        }, {
-                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-export me-1"></i>Excel</span>',
-                            className: "dropdown-item",
-                            action: function() {
-                                window.location.href = "{{ url('/pengajuan/excel') }}";
-                            }
-                        }, {
-                            text: '<span class="d-flex align-items-center"><i class="icon-base bx bxs-file-pdf me-1"></i>Pdf</span>',
-                            className: "dropdown-item",
-                            action: function() {
-                                window.location.href = "{{ url('/pengajuan/pdf') }}";
-                            }
-                        }, {
-                            extend: "copy",
-                            text: '<i class="icon-base bx bx-copy me-1"></i>Copy',
-                            className: "dropdown-item",
-                        }]
-                    }],
-                    paging: true,
-                    searching: true,
-                    ordering: true,
-                    language: {
-                        paginate: {
-                            next: '<i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-sm"></i>',
-                            previous: '<i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-sm"></i>',
-                        },
-                    },
-                    initComplete: function() {
-                        table.closest('.card').find('.table-title').html(`<h5 class="fw-bold mb-0">${tableTitle}</h5>`);
-                        table.closest('.card').find(".btn-add-wrapper").append(table.closest('.card').find(".btn-add")).addClass('ms-3');
-                        table.closest('.card').find(".buttons-collection").removeClass("btn-secondary").addClass("btn-label-primary");
-                    }
-                });
-            });
+        $('.btn-import').on('click', function() {
+            let tipe = $(this).closest('.card').find('table').data('tipe');
+            $('#importTipe').val(tipe);
         });
     </script>
     <!-- table transaksi -->
@@ -910,18 +859,18 @@
                     let row = data[i];
 
                     rowHtml += `
-                        <div class="col-4 col-md-3 mb-3">
+                        <div class="col-6 col-sm-4 col-lg-3 col-md-3 mb-3">
                             <div class="card shadow-sm" style="border-radius: 10px;">
                             <img src="/gambar/${row[8]}" class="card-img-top mx-auto d-block py-1" alt="${row[3]}" style="width: 100px; height: 140px; object-fit: cover;">
                                 <div class="card-body text-center">
-                                    <h6 class="card-title fs-7 mb-1">${row[3]}</h6>
-                                    <p class="card-text text-muted fs-7 mb-1">${row[4]}</p>
-                                    <p class="card-text fw-bold text-primary fs-7 mb-1">${row[5]}</p> 
+                                <h6 class="card-title fs-7 mb-1">${row[3]}</h6>
+                                <p class="card-text text-muted fs-7 mb-1">${row[4]}</p>
+                                <p class="badge rounded-pill bg-label-dark fs-7 mb-1">${row[2]}</p>
                                     <div class="d-flex justify-content-between align-items-center mb-1">
                                         <small class="text-muted fs-7">Stok: ${row[7]}</small>
-                                        <span class="badge rounded-pill bg-label-dark fs-7">${row[6]}</span>
+                                        <p class="card-text fw-bold text-primary fs-7">${row[5]}</p> 
                                     </div>
-                                    <button class="btn rounded-pill btn-primary btn-outline-primary btn-sm add-buku mt-1"
+                                    <button class="btn rounded-pill btn-primary btn-outline-primary btn-sm add-buku mt-1 text-center"
                                         data-id="${row[1]}" data-judul="${row[3]}" data-harga="${row[5]}" data-stok="${row[7]}">
                                         <i class="bx bx-plus"></i> Tambah
                                     </button>
@@ -959,12 +908,6 @@
                         renderCards();
                     }, 50);
                 }
-            });
-
-            $('#kategori_id').on('change', function() {
-                let selectedCategory = $(this).val();
-                console.log(selectedCategory);
-                tableTransaksi.column(6).search(selectedCategory ? '^' + selectedCategory + '$' : '', true, false).draw();
             });
         });
     </script>

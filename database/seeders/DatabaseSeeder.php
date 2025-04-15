@@ -45,5 +45,8 @@ class DatabaseSeeder extends Seeder
 
         Buku::factory()->count(30)->create();
         Member::factory()->count(10)->create();
+
+        $this->call(PembelianSeeder::class);
+        $this->call(PenjualanSeeder::class);
     }
 }

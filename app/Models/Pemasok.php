@@ -28,4 +28,15 @@ class Pemasok extends Model
     {
         return $this->hasManyThrough(PembelianDetail::class, Buku::class, 'pemasok_id', 'buku_id');
     }
+
+    public function toExportArray()
+    {
+        return [
+            'id' => $this->id,
+            'nama' => $this->nama,
+            'telp' => $this->telp,
+            'email' => $this->email,
+            'alamat' => $this->alamat,
+        ];
+    }
 }

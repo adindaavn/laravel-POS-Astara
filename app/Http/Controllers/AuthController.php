@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Log;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,6 +40,7 @@ class AuthController extends Controller
 
         // Mencari pengguna berdasarkan username
         $user = User::where('username', $request->username)->first();
+        Log::createLog('user', 'login', $user);
 
         // Memeriksa password dan melakukan login
         if ($user && Hash::check($request->password, $user->password)) {
@@ -58,6 +60,8 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
+        Log::createLog('user', 'logout', $request);
+        
         Auth::logout(); // Keluar dari sesi autentikasi
         $request->session()->invalidate(); // Menghapus sesi
         $request->session()->regenerateToken(); // Regenerasi token CSRF

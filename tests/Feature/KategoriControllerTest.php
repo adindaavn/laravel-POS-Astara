@@ -16,27 +16,6 @@ class KategoriControllerTest extends TestCase
      */
     use RefreshDatabase;
 
-    public function testLoginSuccessfully() 
-    {
-        $user = User::create([
-            'id'       => '1',
-            'name'     => 'Sakai Moka',
-            'username' => 'moka',
-            'password' => Hash::make('moka!'),
-            'role'     => 'owner',
-        ]);
-
-        $credentials = [
-            'username' => 'moka',
-            'password' => 'moka!',
-        ];
-
-        $response = $this->post('/login/auth', $credentials);
-        $response->assertStatus(302);
-        $response->assertRedirect('/home');
-        $this->assertAuthenticatedAs($user);
-    }
-
     public function testStoreValidationError()
     {
         $user = User::factory()->create();

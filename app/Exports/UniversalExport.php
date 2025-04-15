@@ -5,24 +5,24 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromArray;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class UniversalExport implements FromArray, WithHeadings
-{
-    protected $data;
-    protected $headings;
-
-    public function __construct(array $data, array $headings)
+    class UniversalExport implements FromArray, WithHeadings
     {
-        $this->data = $data;
-        $this->headings = $headings;
-    }
+        protected $data;
+        protected $headings;
 
-    public function array(): array
-    {
-        return $this->data;
-    }
+        public function __construct(array $data, array $headings)
+        {
+            $this->data = $data;
+            $this->headings = $headings;
+        }
 
-    public function headings(): array
-    {
-        return $this->headings;
+        public function array(): array
+        {
+            return $this->data;
+        }
+
+        public function headings(): array
+        {
+            return $this->headings;
+        }
     }
-}

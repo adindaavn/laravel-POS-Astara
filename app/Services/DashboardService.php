@@ -102,40 +102,6 @@ class DashboardService
         ];
     }
 
-    public function getDailyPenjualanThisMonth()
-    {
-        $from = Carbon::now()->startOfMonth()->format('Y-m-d');
-        $to = Carbon::now()->endOfMonth()->format('Y-m-d');
-
-        $results = DB::table('penjualan')
-            ->select(DB::raw('DAY(tgl) as day'), DB::raw('SUM(total_bersih) as total'))
-            ->whereBetween('tgl', [$from, $to])
-            ->groupBy(DB::raw('DAY(tgl)'))
-            ->orderBy('day')
-            ->get();
-
-        // Inisialisasi array untuk 1 - 31
-        $daysInMonth = Carbon::now()->daysInMonth;
-        $data = [];
-        $categories = [];
-
-        for ($i = 1; $i <= $daysInMonth; $i++) {
-            $categories[] = str_pad($i, 2, '0', STR_PAD_LEFT);
-
-            $found = $results->firstWhere('day', $i);
-            $total = $found ? (int)$found->total : 0;
-
-            // Duplikat sesuai format kamu (tiap hari dua kali)
-            $data[] = $total;
-            $data[] = $total;
-        }
-
-        return [
-            'data' => $data,
-            'categories' => $categories,
-        ];
-    }
-
     public function getKasirPerformanceToday($userId)
     {
         $today = Carbon::today();

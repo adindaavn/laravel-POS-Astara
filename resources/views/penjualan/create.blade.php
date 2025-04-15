@@ -27,15 +27,6 @@
                 </div>
                 <div class="card-body">
                     <div id="tableTransaksi" class="table-responsive text-nowrap">
-                        <div class="d-flex justify-content-between align-items-center row gap-6 gap-md-0 g-md-6 mb-3">
-                            <div class="col-md-4 product_category">
-                                <select id="kategori_id" name="kategori_id" class="select2 form-select text-capitalize" data-allow-clear="true" aria-placeholder="Pilih Kategori">
-                                    @foreach($kategori as $k)
-                                    <option value="{{ $k->nama }}">{{ $k->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
                         <div id="tableContainer">
                             <table id="tableBuku" class="table table-striped table-bordered">
                                 <thead>
@@ -100,7 +91,9 @@
                             <select class="select2 form-select" id="member_id" name="member_id" data-allow-clear="true" aria-placeholder="Pilih Member">
                                 <option value="">Search Member</option>
                                 @foreach($member as $m)
-                                <option value="{{$m->id}}">{{$m->nama}} (XP {{$m->point}})</option>
+                                <option value="{{$m->id}}" data-point="{{$m->point}}">
+                                    {{$m->nama}} (XP {{$m->point}})
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -138,18 +131,19 @@
 
                     <hr class="px-2" />
                     <dl class="row mb-0">
-                        <dt class="col-6">Subtotal</dt>
-                        <dd class="subtotal col-6 fw-medium text-end mb-1">0</dd>
-                        <dt class="col-6">Diskon</dt>
-                        <dd class="diskon col-6 fw-medium text-end mb-1">0</dd>
-                        <dt class="col-6 text-heading">Total</dt>
-                        <dd class="total col-6 fw-medium text-end text-heading mb-1">0</dd>
+                        <dt class="col-8">Subtotal</dt>
+                        <dd class="subtotal col-4 fw-medium text-end mb-1">0</dd>
+                        <dt class="col-8 diskon-text">Diskon</dt>
+                        <dd class="diskon col-4 fw-medium text-end mb-1">0</dd>
+                        <dt class="col-8 text-heading fs-5">Total</dt>
+                        <dd class="total col-4 fw-medium text-end text-heading mb-1 fs-5">0</dd>
                     </dl>
                     <input type="hidden" id="total_bersih" name="total_bersih" step="0.01" />
                     <input type="hidden" id="total_bayar" name="total_bayar" step="0.01" />
                     <input type="hidden" id="kembali" name="kembali">
                     <input type="hidden" id="bayar" name="bayar">
                     <input type="hidden" id="diskon" name="diskon">
+                    <input type="hidden" id="minus_point" name="minus_point">
                     <input type="hidden" name="buku" id="bukuData">
                 </div>
                 <div class="d-grid card-footer">
@@ -201,21 +195,6 @@
 <script>
     $(document).ready(function() {
 
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get("print") === "true") {
-            const fraktur = document.getElementById("fraktur");
-            if (fraktur) {
-                const originalContents = document.body.innerHTML;
-                document.body.innerHTML = fraktur.outerHTML;
-                window.print();
-                document.body.innerHTML = originalContents;
-
-                // Hapus "print=true" dari URL tanpa refresh
-                const newUrl = window.location.pathname;
-                history.replaceState(null, "", newUrl);
-            }
-        }
-
         let selectedBuku = [];
         $(document).on("click", ".add-buku", function() {
             let id = $(this).data("id");
@@ -251,7 +230,7 @@
             }
 
             let jumlahInput = `
-            <div class="d-flex align-items-center justify-content-center gap-1" style="font-size: 0.85rem;">
+            <div class="d-flex align-items-center justify-content-center gap-1 jumlah-input" style="font-size: 0.85rem;">
                 <button class="btn btn-outline-danger btn-sm rounded-pill px-2 btn-minus" data-id="${id}" style="min-width: 30px;">-</button>
                 <input type="number" class="form-control text-center form-control-sm input-jumlah" data-id="${id}" value="1" min="1" max="${stok}" 
                     style="width: 50px; border-radius: 50px;">
@@ -311,12 +290,15 @@
                 data-id="${id}" data-judul="${item.judul}" data-harga="${item.harga_jual}" data-stok="${item.stok}">
                 <i class="bx bx-plus"></i> Tambah
             </button>`;
-                    input.closest(".input-group").replaceWith(tombolTambah);
+                    input.closest(".jumlah-input").replaceWith(tombolTambah);
                 }
             }
             updateTable();
         });
 
+        $("#member_id").on("change", function() {
+            updateTable();
+        });
 
         function updateTable() {
             let itemList = $(".itemList");
@@ -340,13 +322,37 @@
 
             });
 
-            // diskon = (subtotal * 10 / 100);
+            let selectedMember = $('#member_id').find(':selected');
+            let point = parseInt(selectedMember.data('point')) || 0;
+
+            let persentaseDiskon = 0;
+            let minusPoint = 0;
+            if (point >= 400) {
+                persentaseDiskon = 20;
+                minusPoint = 400;
+            } else if (point >= 300) {
+                persentaseDiskon = 15;
+                minusPoint = 300;
+            } else if (point >= 200) {
+                persentaseDiskon = 10;
+                minusPoint = 200;
+            } else if (point >= 100) {
+                persentaseDiskon = 5;
+                minusPoint = 100;
+            }
+
+            diskon = subtotal * (persentaseDiskon / 100);
             total = subtotal - diskon;
+
+            persentaseDiskon == 0 ?
+                $(".diskon-text").text('Diskon') :
+                $(".diskon-text").text("Diskon " + persentaseDiskon + "% (-" + minusPoint + " point member)");
 
             $(".subtotal").text(subtotal.toLocaleString());
             $(".diskon").text(diskon.toLocaleString());
             $(".total").text(total.toLocaleString());
 
+            $("#minus_point").val(minus_point);
             $("#diskon").val(diskon);
             $("#total_bayar").val(total);
             $("#total_bersih").val(subtotal);
@@ -362,65 +368,63 @@
 </script>
 <script>
     $(document).ready(function() {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get("print") === "true") {
-            setTimeout(() => {
-                const fraktur = document.getElementById("fraktur");
-                if (fraktur) {
-                    const originalContents = document.body.innerHTML;
-                    document.body.innerHTML = fraktur.outerHTML;
-                    window.print();
-                    document.body.innerHTML = originalContents;
-
-                    history.replaceState(null, "", window.location.pathname);
-                }
-            }, 500);
-        }
-
-        $('#modalCash').on('show.bs.modal', function(event) {
-            $("#nominal_bayar").focus();
-            let totalBayar = $("#btn-bayar").attr('data-total_bayar');
-            let totalFormat = $("#btn-bayar").attr('data-total_format');
-            $("#bayar_cash").text(totalFormat);
-            $("#cash").val(totalBayar);
-        });
-
-        $("#nominal_bayar").on("input", function() {
-            let totalBayar = parseFloat($("#cash").val()) || 0;
-            let nominalBayar = parseFloat($(this).val()) || 0;
-            let kembalian = nominalBayar - totalBayar;
-
-            $("#kembalian").text(kembalian >= 0 ? kembalian.toLocaleString() : "Nominal kurang");
-            $("#kembali").val(kembalian);
-            $("#bayar").val(nominalBayar);
-        });
-
+        // Ubah target modal sesuai metode bayar yang dipilih
         $('input[name="metode_bayar"]').change(function() {
-            let metodeBayar = $('input[name="metode_bayar"]:checked').val();
-            let targetModal = '';
-
-            switch (metodeBayar) {
-                case 'cash':
-                    targetModal = '#modalCash';
-                    break;
-                case 'qris':
-                    targetModal = '#modalQris';
-                    break;
-            }
-
+            const metode = $('input[name="metode_bayar"]:checked').val();
+            const targetModal = metode === 'qris' ? '#modalQris' : '#modalCash';
             $('#btn-bayar').attr('data-bs-target', targetModal);
         });
-        
-        $("#modalCash .btn-primary").on("click", function() {
-            $("input[name='metode_bayar']").val("cash");
 
+        // Modal Cash muncul
+        $('#modalCash').on('show.bs.modal', function() {
+            const total = $("#btn-bayar").data('total_bayar');
+            const format = $("#btn-bayar").data('total_format');
+            $("#bayar_cash").text("Rp. " + format);
+            $("#cash").val(total);
+        });
+
+        // Fokus input nominal saat modal cash dibuka
+        $('#modalCash').on('shown.bs.modal', function() {
+            $('#nominal_bayar').trigger('focus');
+        });
+
+        // Hitung kembalian saat input nominal berubah
+        $("#nominal_bayar").on("input", function() {
+            const total = parseFloat($("#cash").val()) || 0;
+            const bayar = parseFloat($(this).val()) || 0;
+            const kembali = bayar - total;
+
+            $("#kembalian").text(kembali >= 0 ? "Rp. " + kembali.toLocaleString() : "Nominal kurang");
+            $("#kembali").val(kembali);
+            $("#bayar").val(bayar);
+        });
+
+        // Modal QRIS muncul
+        $('#modalQris').on('show.bs.modal', function() {
+            const total = $("#btn-bayar").data('total_bayar');
+            const format = $("#btn-bayar").data('total_format');
+
+            $("#qris-total").text("Rp. " + format);
+            $("#bayar").val(total);
+            $("#kembali").val(0);
+        });
+
+        // Submit QRIS langsung via tombol
+        $("#btn-qris-paid").on("click", function() {
+            $("input[name='metode_bayar']").val("qris");
             submitWithPrint();
         });
 
+        // Submit form cash
+        $('#formBayarCash').on('submit', function(e) {
+            e.preventDefault();
+            $("input[name='metode_bayar']").val("cash");
+            submitWithPrint();
+        });
+
+        // Fungsi submit dan cetak
         function submitWithPrint() {
-            const form = $("#formPenjualan");
-            form.attr("action", form.attr("action") + "?print=true"); // Tambah param print
-            form.submit();
+            $("#formPenjualan").submit(); // tanpa ?print=true
         }
     });
 </script>

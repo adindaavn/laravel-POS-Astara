@@ -41,19 +41,23 @@
     </a>
     <div class="text-center">Jl. Buku No. 123</div>
     <hr>
-    <div>No. Transaksi: {{ session('no_transaksi') ?? '-' }}</div>
-    <div>Kasir: {{ auth()->user()->name }}</div>
+    <div class="d-flex justify-content-between">
+        <div>{{ session('no_transaksi') ?? '-' }}</div>
+        <div>Kasir: {{ auth()->user()->name }}</div>
+    </div>
     <hr>
-    <hr />
 
     <div>Order Details</div>
     <table class="mb-2">
         @if(session()->has('buku') && count(session('buku')) > 0)
         @foreach(session('buku') as $b)
         <tr>
-            <td>{{$b['judul']}}</td>
-            <td class="text-right">{{$b['jumlah']}}x {{ number_format($b['harga_jual'], 0, ',', '.') }}</td>
-            <td class="text-right">{{ number_format($b['subtotal'], 0, ',', '.') }}</td>
+            <td colspan="5" class="fw-bold">{{$b['judul']}}</td>
+        </tr>
+        <tr>
+            <td colspan="2"></td>
+            <td colspan="3">{{$b['jumlah']}}x {{ number_format($b['harga_jual'], 0, ',', '.') }}</td>
+            <td colspan="2">{{ number_format($b['subtotal'], 0, ',', '.') }}</td>
         </tr>
         @endforeach
         @else
@@ -63,24 +67,29 @@
     <hr />
     <table class="mb-2">
         <tr>
+            <td colspan="2"></td>
             <td colspan="3">Subtotal</td>
-            <td class="text-right" colspan="2">{{ number_format(session('total_bersih'), 0, ',', '.') ?? 0 }}</td>
+            <td colspan="2">{{ number_format(session('total_bersih'), 0, ',', '.') ?? 0 }}</td>
         </tr>
         <tr>
+            <td colspan="2"></td>
             <td colspan="3">Diskon</td>
-            <td class="text-right" colspan="2">{{ number_format(session('diskon'), 0, ',', '.') ?? 0 }}</td>
+            <td colspan="2">{{ number_format(session('diskon'), 0, ',', '.') ?? 0 }}</td>
         </tr>
         <tr class="fw-bold">
+            <td colspan="2"></td>
             <td colspan="3">Total</td>
-            <td class="text-right" colspan="2">{{ number_format(session('total_bayar'), 0, ',', '.') ?? 0 }}</td>
+            <td colspan="2">{{ number_format(session('total_bayar'), 0, ',', '.') ?? 0 }}</td>
         </tr>
         <tr>
+            <td colspan="2"></td>
             <td colspan="3">Bayar</td>
-            <td class="text-right" colspan="2">{{ number_format(session('bayar'), 0, ',', '.') ?? 0 }}</td>
+            <td colspan="2">{{ number_format(session('bayar'), 0, ',', '.') ?? 0 }}</td>
         </tr>
         <tr>
+            <td colspan="2"></td>
             <td colspan="3">Kembalian</td>
-            <td class="text-right" colspan="2">{{ number_format(session('kembali'), 0, ',', '.') ?? 0 }}</td>
+            <td colspan="2">{{ number_format(session('kembali'), 0, ',', '.') ?? 0 }}</td>
         </tr>
     </table>
 
