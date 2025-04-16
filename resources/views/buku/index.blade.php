@@ -20,12 +20,22 @@ $breadcrumbs = [
                         <i class="icon-base bx bx-plus me-1"></i>
                         <span>Tambah</span>
                     </button>
-                    <button type="button" class="btn btn-outline-secondary btn-import"
-                        data-bs-toggle="modal"
-                        data-bs-target="#modalImport">
-                        <i class="icon-base bx bx-upload me-1"></i>
-                        <span>Import</span>
-                    </button>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-outline-secondary btn-import"
+                            data-bs-toggle="modal"
+                            data-bs-target="#modalImport">
+                            <i class="icon-base bx bx-import me-1"></i>
+                            <span>Import</span>
+                        </button>
+                        <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <button type="button" class="btn btn-outline-secondary btn-format-import">
+                                <span>Unduh format import</span>
+                            </button>
+                        </ul>
+                    </div>
                 </div>
 
                 <div class="col-lg-12 mb-4 order-0">
@@ -41,6 +51,7 @@ $breadcrumbs = [
                                     <th class="fw-bold">Harga</th>
                                     <th class="fw-bold">Stok</th>
                                     <th class="fw-bold">Penerbit (Thn terbit)</th>
+                                    <th class="fw-bold">Barcode</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -76,6 +87,7 @@ $breadcrumbs = [
                                                 @endif
                                     </td>
                                     <td>{{$data->penerbit}} ({{$data->thn_terbit}})</td>
+                                    <td><img src="data:image/png;base64,{{ $data->barcode }}" alt="Barcode ISBN"></td>
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center">
                                             <button type="button"

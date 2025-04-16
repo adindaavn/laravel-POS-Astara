@@ -57,13 +57,9 @@ class PengajuanBuku extends Model
     protected static function boot()
     {
         parent::boot();
-
-
-        static::creating(
-            function ($model) {
-                $model->tgl = now();
-                $model->status = '0';
-            }
-        );
+        static::creating(function ($model) {
+            if (!$model->tgl) $model->tgl = now();
+            if (!$model->status) $model->status = '0';
+        });
     }
 }

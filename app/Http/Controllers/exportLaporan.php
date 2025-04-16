@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\UniversalExport;
+use App\Models\Absensi;
 use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\Member;
@@ -59,6 +60,11 @@ class exportLaporan extends Controller
             'headers' => ['User', 'Pemasok', 'Buku', 'Total', 'Tanggal'],
             'view' => 'export.pdf'
         ],
+        'absensi' => [
+            'model' => Absensi::class,
+            'headers' => ['Nama Karyawan', 'Tanggal Masuk', 'Jam Masuk', 'Jam Keluar', 'Status'],
+            'view' => 'export.pdf'
+        ],
     ];
 
     public function exportExcel(Request $request)
@@ -84,7 +90,7 @@ class exportLaporan extends Controller
 
         return Excel::download(
             new UniversalExport($data->toArray(), $config['headers']),
-            "{$tipe}.xlsx"
+            "{$tipe}-export.xlsx"
         );
     }
 
@@ -126,6 +132,6 @@ class exportLaporan extends Controller
 
         return response($dompdf->output(), 200)
             ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', "attachment; filename=\"{$tipe}.pdf\"");
+            ->header('Content-Disposition', "attachment; filename=\"{$tipe}-export.pdf\"");
     }
 }

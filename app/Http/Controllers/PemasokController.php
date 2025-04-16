@@ -18,10 +18,6 @@ class PemasokController extends Controller
         return view('pemasok.index', compact('pemasok'));
     }
 
-    /**
-     * Menampilkan form untuk menambahkan pemasok baru.
-     * (Saat ini belum diimplementasikan)
-     */
     public function create()
     {
         //
@@ -56,23 +52,11 @@ class PemasokController extends Controller
         }
     }
 
-    /**
-     * Menampilkan detail pemasok berdasarkan ID.
-     * (Saat ini belum diimplementasikan)
-     * 
-     * @param  string  $id
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Menampilkan form edit pemasok berdasarkan ID.
-     * (Saat ini belum diimplementasikan)
-     * 
-     * @param  string  $id
-     */
     public function edit(string $id)
     {
         //

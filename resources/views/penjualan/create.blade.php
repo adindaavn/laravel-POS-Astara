@@ -26,6 +26,7 @@
                     </div>
                 </div>
                 <div class="card-body">
+                    <input type="text" class="barcode-input form-control form-control-md mb-2 w-25" placeholder="Scan Barcode ISBN" autofocus/>
                     <div id="tableTransaksi" class="table-responsive text-nowrap">
                         <div id="tableContainer">
                             <table id="tableBuku" class="table table-striped table-bordered">
@@ -40,6 +41,7 @@
                                         <th class="fw-bold">Kategori</th>
                                         <th class="fw-bold">Stok</th>
                                         <th class="fw-bold">Cover</th>
+                                        <th class="fw-bold">Barcode</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -61,6 +63,7 @@
                                         <td>{{$data->kategori}}</td>
                                         <td>{{$data->stok}}</td>
                                         <td>{{$data->gambar}}</td>
+                                        <td><img src="data:image/png;base64,{{ $data->barcode }}" alt="Barcode ISBN" width="150"></td>
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -196,6 +199,75 @@
     $(document).ready(function() {
 
         let selectedBuku = [];
+
+        let semuaBuku = [];
+
+        $(".add-buku").each(function() {
+            let $btn = $(this);
+            let tr = $btn.closest("tr");
+
+            semuaBuku.push({
+                buku_id: $btn.data("id"),
+                isbn: tr.find("td").eq(2).text().trim(),
+                judul: $btn.data("judul"),
+                harga_jual: parseFloat($btn.data("harga")),
+                stok: parseInt(tr.find("td").eq(7).text().trim()) || 0
+            });
+        });
+
+        $(".barcode-input").on("keypress", function(e) {
+            if (e.which === 13) {
+                e.preventDefault();
+                let barcode = $(this).val().trim();
+                if (!barcode) return;
+
+                let buku = semuaBuku.find(item => item.isbn == barcode);
+                if (!buku) {
+                    alert("Buku dengan barcode tersebut tidak ditemukan!");
+                    $(this).val("").focus();
+                    return;
+                }
+
+                let existing = selectedBuku.find(item => item.buku_id == buku.buku_id);
+                if (existing) {
+                    if (existing.jumlah < buku.stok) {
+                        existing.jumlah++;
+                        existing.subtotal = existing.jumlah * existing.harga_jual;
+
+                        // ✅ Update input value-nya juga
+                        let input = $(`.input-jumlah[data-id='${existing.buku_id}']`);
+                        if (input.length) {
+                            input.val(existing.jumlah);
+                        }
+                    }
+                } else {
+                    selectedBuku.push({
+                        buku_id: buku.buku_id,
+                        judul: buku.judul,
+                        harga_jual: buku.harga_jual,
+                        jumlah: 1,
+                        subtotal: buku.harga_jual,
+                        stok: buku.stok
+                    });
+
+                    // 🔁 Replace tombol add-buku dengan input jumlah
+                    let $btn = $(`.add-buku[data-id='${buku.buku_id}']`);
+                    let jumlahInput = `
+                        <div class="d-flex align-items-center justify-content-center gap-1 jumlah-input" style="font-size: 0.85rem;">
+                            <button class="btn btn-outline-danger btn-sm rounded-pill px-2 btn-minus" data-id="${buku.buku_id}" style="min-width: 30px;">-</button>
+                            <input type="number" class="form-control text-center form-control-sm input-jumlah" data-id="${buku.buku_id}" value="1" min="1" max="${buku.stok}" 
+                                style="width: 50px; border-radius: 50px;">
+                            <button class="btn btn-outline-success btn-sm rounded-pill px-2 btn-plus" data-id="${buku.buku_id}" style="min-width: 30px;">+</button>
+                        </div>
+                    `;
+                                    $btn.replaceWith(jumlahInput);
+                                }
+
+                updateTable();
+                $(this).val("").focus();
+            }
+        });
+
         $(document).on("click", ".add-buku", function() {
             let id = $(this).data("id");
             let judul = $(this).data("judul");

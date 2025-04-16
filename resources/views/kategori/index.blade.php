@@ -49,10 +49,25 @@ $breadcrumbs = [
             </div>
         </div>
     </div>
-
     <div class="col-lg-12 mb-4 order-0">
         <div class="card">
             <h5 class="card-header pb-0 fw-bold">Data Kategori</h5>
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-secondary btn-import"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalImport">
+                    <i class="icon-base bx bx-import me-1"></i>
+                    <span>Import</span>
+                </button>
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <button type="button" class="btn btn-outline-secondary btn-format-import">
+                        <span>Unduh format import</span>
+                    </button>
+                </ul>
+            </div>
             <div id="tableData" class="table-responsive text-nowrap p-5">
                 <table class="table table-striped table-bordered" data-tipe="kategori">
                     <thead>

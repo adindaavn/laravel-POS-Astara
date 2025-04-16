@@ -297,6 +297,17 @@
                         </a>
                     </li>
                     @endif
+
+                    <!-- Karyawan -->
+                    <li class="menu-header small">
+                        <span class="menu-header-text">Karyawan</span>
+                    </li>
+                    <li class="menu-item {{ request()->routeIs('absensi.index') ? 'active' : '' }}">
+                        <a href="{{ route('absensi.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user-badge"></i>
+                            <div data-i18n="Absensi">Absensi</div>
+                        </a>
+                    </li>
                 </ul>
 
             </aside>
@@ -692,6 +703,7 @@
     <script src="{{ asset('assets') }}/js/main.js"></script>
 
     <!-- Page JS -->
+    <script src="{{ asset('assets') }}/js/ui-popover.js"></script>
     <script src="{{ asset('assets') }}/js/forms-extras.js"></script>
     <script src="{{ asset('assets') }}/js/forms-selects.js"></script>
     <script src="{{ asset('assets') }}/js/tables-datatables-basic.js"></script>
@@ -757,7 +769,7 @@
 
                 table.DataTable({
                     dom: "<'row'<'col-sm-6 d-flex align-items-center'<'table-title fw-bold mx-3'>>" +
-                        "<'col-sm-6 d-flex justify-content-end'<'btn-add-wrapper d-flex'>>>" +
+                        "<'col-sm-6 d-flex justify-content-end'<'btn-add-wrapper d-flex gap-2'>>>" +
                         "<'row'<'col-sm-6 my-0'l><'col-sm-6 my-0'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
                         "<'row'<'col-sm-5 px-1'i><'col-sm-7 d-flex justify-content-end'p>>",
@@ -816,7 +828,8 @@
                         card.find('.table-title').html(`<h5 class="fw-bold mb-0">${tableTitle}</h5>`);
 
                         card.find(".btn-add-wrapper")
-                            .append(card.find(".btn-import")) // tambahin tombol import di sini
+                            .prepend(card.find(".btn-group"))
+                            .append(table.DataTable().buttons().container())
                             .append(card.find(".btn-add"))
                             .addClass('ms-3');
 
@@ -828,15 +841,36 @@
                 });
             });
         });
+
         $('.btn-import').on('click', function() {
             let tipe = $(this).closest('.card').find('table').data('tipe');
             $('#importTipe').val(tipe);
+        });
+        $('.btn-format-import').on('click', function() {
+            let tipe = $(this).closest('.card').find('table').data('tipe');
+            if (tipe) {
+                window.location.href = `import/format-excel?tipe=${tipe}`;
+            } else {
+                alert('Tipe laporan tidak ditemukan.');
+            }
         });
     </script>
     <!-- table transaksi -->
     <script>
         $(document).ready(function() {
             let tableTransaksi;
+
+            function inisialisasiPopover() {
+                const popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+                popoverTriggerList.map(function(el) {
+                    return new bootstrap.Popover(el, {
+                        html: true,
+                        sanitize: false, // penting untuk support gambar dan <br>
+                        trigger: 'focus', // biar klik di luar bisa nutup popover
+                        placement: 'top'
+                    });
+                });
+            }
 
             function renderCards() {
                 if (!tableTransaksi) {
@@ -857,23 +891,52 @@
                 let rowHtml = '<div class="row">';
                 for (let i = 0; i < data.length; i++) {
                     let row = data[i];
-
+                    let popoverContent = `
+                        <b>Judul: </b> ${row[3]}<br>
+                        <b>Penulis: </b> ${row[4]}<br>
+                        <b>ISBN: </b> ${row[2]}<br>
+                        <b>Stok: </b> ${row[7]}<br>
+                         ${row[9]}
+                    `.replace(/(\r\n|\n|\r)/gm, "").replace(/"/g, '&quot;');
                     rowHtml += `
                         <div class="col-6 col-sm-4 col-lg-3 col-md-3 mb-3">
                             <div class="card shadow-sm" style="border-radius: 10px;">
-                            <img src="/gambar/${row[8]}" class="card-img-top mx-auto d-block py-1" alt="${row[3]}" style="width: 100px; height: 140px; object-fit: cover;">
-                                <div class="card-body text-center">
-                                <h6 class="card-title fs-7 mb-1">${row[3]}</h6>
-                                <p class="card-text text-muted fs-7 mb-1">${row[4]}</p>
-                                <p class="badge rounded-pill bg-label-dark fs-7 mb-1">${row[2]}</p>
-                                    <div class="d-flex justify-content-between align-items-center mb-1">
-                                        <small class="text-muted fs-7">Stok: ${row[7]}</small>
-                                        <p class="card-text fw-bold text-primary fs-7">${row[5]}</p> 
+                                <!-- Gambar -->
+                                <img src="/gambar/${row[8]}" 
+                                    class="card-img-top mx-auto d-block py-1" 
+                                    alt="${row[3]}" 
+                                    style="width: 100px; height: 140px; object-fit: cover;">
+                                    
+                                <div class="card-body px-4">
+                                    <!-- Judul -->
+                                    <h6 class="card-title fs-7 mb-2 text-start">${row[3]}</h6>
+
+                                    <!-- Harga dan Popover Button -->
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <p class="card-text fw-bold text-primary fs-7 mb-0">${row[5]}</p>
+                                        <button 
+                                            type="button"
+                                            class="btn btn-sm btn-outline-secondary detail-btn"
+                                            data-bs-toggle="popover"
+                                            data-bs-offset="0,14"
+                                            data-bs-placement="top"
+                                            data-bs-html="true"
+                                            data-bs-content="${popoverContent}">
+                                            <i class="bx bx-info-circle"></i>
+                                        </button>
                                     </div>
-                                    <button class="btn rounded-pill btn-primary btn-outline-primary btn-sm add-buku mt-1 text-center"
-                                        data-id="${row[1]}" data-judul="${row[3]}" data-harga="${row[5]}" data-stok="${row[7]}">
-                                        <i class="bx bx-plus"></i> Tambah
-                                    </button>
+
+                                    <!-- Tombol Tambah (tengah) -->
+                                    <div class="text-center">
+                                        <button 
+                                            class="btn rounded-pill btn-primary btn-outline-primary btn-sm add-buku mt-1"
+                                            data-id="${row[1]}" 
+                                            data-judul="${row[3]}" 
+                                            data-harga="${row[5]}" 
+                                            data-stok="${row[7]}">
+                                            <i class="bx bx-plus"></i> Tambah
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -881,6 +944,8 @@
                 }
                 rowHtml += '</div>';
                 $("#cardContainer").html(rowHtml);
+
+                inisialisasiPopover();
             }
 
             tableTransaksi = $('#tableBuku').DataTable({

@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Member;
 use Illuminate\Http\Request;
 
+/**
+ * Class MemberController
+ *
+ * Controller untuk mengelola data member, termasuk menampilkan, menambah, mengedit, dan menghapus member.
+ */
 class MemberController extends Controller
 {
     /**
@@ -18,12 +23,10 @@ class MemberController extends Controller
         return view('member.index', compact('member'));
     }
 
-    /**
-     * Menampilkan form untuk membuat member baru.
-     */
+
     public function create()
     {
-        // Tidak ada implementasi saat ini
+        // 
     }
 
     /**
@@ -49,24 +52,14 @@ class MemberController extends Controller
         }
     }
 
-    /**
-     * Menampilkan detail member berdasarkan ID.
-     *
-     * @param string $id
-     */
     public function show(string $id)
     {
-        // Tidak ada implementasi saat ini
+        // 
     }
 
-    /**
-     * Menampilkan form untuk mengedit data member berdasarkan ID.
-     *
-     * @param string $id
-     */
     public function edit(string $id)
     {
-        // Tidak ada implementasi saat ini
+        // 
     }
 
     /**

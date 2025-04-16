@@ -25,6 +25,7 @@ return new class extends Migration
                 k.id AS kategori_id, 
                 b.harga, 
                 b.gambar, 
+                b.barcode, 
                 (
                     COALESCE((SELECT SUM(jumlah) FROM detail_pembelian WHERE buku_id = b.id), 0) 
                     - COALESCE((SELECT SUM(jumlah) FROM detail_penjualan WHERE buku_id = b.id), 0)

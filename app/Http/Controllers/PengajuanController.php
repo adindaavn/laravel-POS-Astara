@@ -12,21 +12,25 @@ use App\Exports\PengajuanBukuExport;
 use App\Models\Log;
 use Maatwebsite\Excel\Facades\Excel;
 
+/**
+ * Class PengajuanController
+ *
+ * Controller untuk mengelola data pengajuan buku, termasuk menampilkan, menambah, mengedit, dan menghapus pengajuan.
+ */
 class PengajuanController extends Controller
 {
     /**
      * Menampilkan daftar pengajuan buku.
+     * 
+     * @return \Illuminate\View\View
      */
     function index()
     {
-        $pengajuan = PengajuanBuku::all(); // Mengambil semua data pengajuan buku
-        $member = Member::all(); // Mengambil semua data member
+        $pengajuan = PengajuanBuku::all(); 
+        $member = Member::all();
         return view('pengajuan.index', compact('pengajuan', 'member'));
     }
 
-    /**
-     * Menampilkan form pembuatan pengajuan buku (tidak digunakan saat ini).
-     */
     public function create()
     {
         //
@@ -34,6 +38,8 @@ class PengajuanController extends Controller
 
     /**
      * Menyimpan pengajuan buku baru ke database.
+     * 
+     * @return \Illuminate\View\View
      */
     function store(Request $request)
     {
@@ -55,7 +61,7 @@ class PengajuanController extends Controller
                 }
             }
 
-            $data = PengajuanBuku::create($validated); // Membuat data pengajuan baru
+            $data = PengajuanBuku::create($validated); 
             Log::createLog('pengajuan', 'create', $data);
             return redirect()->back()->with('success', 'Pengajuan buku berhasil ditambahkan');
         } catch (\Exception $e) {
@@ -63,28 +69,26 @@ class PengajuanController extends Controller
         }
     }
 
-    /**
-     * Menampilkan detail pengajuan buku tertentu (belum diimplementasikan).
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Menampilkan form edit pengajuan buku (belum diimplementasikan).
-     */
     public function edit(string $id)
     {
         //
     }
 
     /**
-     * Memperbarui data pengajuan buku.
+     * Memperbarui data pengajuan buku berdasarkan ID.
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, $id)
     {
-        $pengajuan = PengajuanBuku::findOrFail($id); // Mencari data berdasarkan ID
+        $pengajuan = PengajuanBuku::findOrFail($id);
 
         $validated = $request->validate([
             'nama' => 'required|string',
@@ -94,7 +98,7 @@ class PengajuanController extends Controller
         ]);
 
         try {
-            $pengajuan->update($validated); // Memperbarui data pengajuan
+            $pengajuan->update($validated);
 
             Log::createLog('pengajuan', 'update', $pengajuan);
             return redirect()->back()->with('success', 'Pengajuan buku berhasil diedit');
@@ -104,11 +108,15 @@ class PengajuanController extends Controller
     }
 
     /**
-     * Menghapus pengajuan buku berdasarkan ID.
+     * Memperbarui data pengajuan buku berdasarkan ID.
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {
-        $pengajuan = PengajuanBuku::where('id', $id)->first(); // Mencari data
+        $pengajuan = PengajuanBuku::where('id', $id)->first();
 
         if (!$pengajuan) {
             return redirect()->back()->with('error', 'Pengajuan buku tidak ditemukan');
@@ -116,57 +124,25 @@ class PengajuanController extends Controller
 
         try {
             Log::createLog('pengajuan', 'delete', $pengajuan);
-            $pengajuan->delete(); // Menghapus data
+            $pengajuan->delete(); 
             return redirect()->back()->with('success', 'Pengajuan buku berhasil dihapus.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menghapus pengajuan buku : ' . $e->getMessage());
         }
     }
 
-    /**
-     * Menghasilkan file PDF dari daftar pengajuan buku.
-     */
-    public function generatePdf()
-    {
-        $pengajuan = PengajuanBuku::all(); // Mengambil semua data pengajuan
-        $data = [
-            'title' => 'Pengajuan Buku',
-            'date' => date('m/d/Y'),
-            'pengajuan' => $pengajuan
-        ];
-
-        $html = View::make('pengajuan.pdf_view', $data)->render(); // Mengubah data menjadi HTML
-
-        $options = new Options();
-        $options->set('defaultFont', 'Helvetica');
-
-        $dompdf = new Dompdf($options);
-        $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait'); // Ukuran kertas A4
-        $dompdf->render();
-
-        return response($dompdf->output(), 200)
-            ->header('Content-Type', 'application/pdf')
-            ->header('Content-Disposition', 'attachment; filename="pengajuan.pdf"');
-    }
-
-    /**
-     * Mengekspor data pengajuan buku ke dalam format Excel.
-     */
-    public function exportExcel()
-    {
-        return Excel::download(new PengajuanBukuExport, 'pengajuan.xlsx');
-    }
 
     /**
      * Memperbarui status pengajuan buku berdasarkan ID.
+     * 
+     * @param  \Illuminate\Http\Request  $request
      */
     public function updateStatus(Request $request)
     {
         $pengajuan = PengajuanBuku::findOrFail($request->id); // Mencari data berdasarkan ID
         $pengajuan->status = $request->status; // Memperbarui status
         $pengajuan->save(); // Menyimpan perubahan
-
+        Log::createLog('pengajuan', 'updateStatus', $pengajuan);
         return response()->json([
             'message' => 'Status berhasil diperbarui!',
             'status' => $pengajuan->status

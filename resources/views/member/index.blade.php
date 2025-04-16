@@ -17,12 +17,22 @@ $breadcrumbs = [
                 <i class="icon-base bx bx-plus me-1"></i>
                 <span>Tambah</span>
             </button>
-            <button type="button" class="btn btn-outline-secondary btn-import"
-                data-bs-toggle="modal"
-                data-bs-target="#modalImport">
-                <i class="icon-base bx bx-upload me-1"></i>
-                <span>Import</span>
-            </button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-outline-secondary btn-import"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalImport">
+                    <i class="icon-base bx bx-import me-1"></i>
+                    <span>Import</span>
+                </button>
+                <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu">
+                    <button type="button" class="btn btn-outline-secondary btn-format-import">
+                        <span>Unduh format import</span>
+                    </button>
+                </ul>
+            </div>
             <h5 class="card-header pb-0 fw-bold">Data Member</h5>
             <div id="tableData" class="table-responsive text-nowrap p-5">
                 <table class="table table-striped table-bordered" data-tipe="member">

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 
 /**
  * Class AuthController
+ *
  * Controller untuk menangani proses autentikasi pengguna (login dan logout).
  */
 class AuthController extends Controller
@@ -28,24 +29,24 @@ class AuthController extends Controller
      * Melakukan autentikasi pengguna berdasarkan username dan password.
      *
      * @param Request $request Permintaan HTTP yang berisi data login.
-     * @return \Illuminate\Http\RedirectResponse Redirect ke halaman home jika berhasil, kembali ke login jika gagal.
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function auth(Request $request)
     {
-        // Validasi input dari pengguna
+        // Validasi input pengguna
         $request->validate([
-            'username' => 'required', // Username wajib diisi
-            'password' => 'required'  // Password wajib diisi
+            'username' => 'required',
+            'password' => 'required' 
         ]);
 
         // Mencari pengguna berdasarkan username
         $user = User::where('username', $request->username)->first();
-        Log::createLog('user', 'login', $user);
-
+        
         // Memeriksa password dan melakukan login
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);
-            session(['user_id' => $user->id]); // Menyimpan ID pengguna di sesi
+            session(['user_id' => $user->id]);
+            Log::createLog('user', 'login', $user);
             return redirect()->intended('home');
         } else {
             return back()->withErrors(['loginError' => 'Username atau password salah'])->withInput();
@@ -56,15 +57,14 @@ class AuthController extends Controller
      * Melakukan logout pengguna dan menghapus sesi.
      *
      * @param Request $request Permintaan HTTP.
-     * @return \Illuminate\Http\RedirectResponse Redirect ke halaman login setelah logout.
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function logout(Request $request)
     {
         Log::createLog('user', 'logout', $request);
-        
-        Auth::logout(); // Keluar dari sesi autentikasi
-        $request->session()->invalidate(); // Menghapus sesi
-        $request->session()->regenerateToken(); // Regenerasi token CSRF
+        Auth::logout(); 
+        $request->session()->invalidate(); 
+        $request->session()->regenerateToken(); 
         return redirect()->intended(route('login'));
     }
 }

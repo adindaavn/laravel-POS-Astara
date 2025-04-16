@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Picqer\Barcode\BarcodeGeneratorPNG;
 
 /**
  * Model untuk menyimpan data buku.
@@ -24,6 +25,7 @@ class Buku extends Model
         "harga",
         "gambar",
         "thn_terbit",
+        "barcode",
     ];
 
     /**
@@ -33,5 +35,17 @@ class Buku extends Model
     public function kategori()
     {
         return $this->belongsTo(Kategori::class, 'kategori_id');
+    }
+
+    protected static function booted()
+    {
+        static::saving(function ($buku) {
+            if ($buku->isbn && !$buku->barcode) {
+                $generator = new BarcodeGeneratorPNG();
+                $buku->barcode = base64_encode(
+                    $generator->getBarcode($buku->isbn, $generator::TYPE_EAN_13)
+                );
+            }
+        });
     }
 }

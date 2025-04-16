@@ -10,6 +10,11 @@ use App\Models\PembelianDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class PembelianController
+ *
+ * Controller untuk mengelola data pembelian, termasuk menampilkan, dan menambah pembelian.
+ */
 class PembelianController extends Controller
 {
     /**
@@ -58,12 +63,12 @@ class PembelianController extends Controller
 
         // Validasi input dari request
         $request->validate([
-            'total'        => 'required|numeric',
-            'pemasok_id'   => 'required|integer|exists:pemasok,id',
-            'buku'         => 'required|array',
-            'buku.*.buku_id' => 'required|integer|exists:buku,id',
+            'total'             => 'required|numeric',
+            'pemasok_id'        => 'required|integer|exists:pemasok,id',
+            'buku'              => 'required|array',
+            'buku.*.buku_id'    => 'required|integer|exists:buku,id',
             'buku.*.harga_beli' => 'required|numeric|min:0',
-            'buku.*.jumlah'  => 'required|integer|min:1',
+            'buku.*.jumlah'     => 'required|integer|min:1',
         ]);
         try {
             DB::beginTransaction();
@@ -95,46 +100,21 @@ class PembelianController extends Controller
         }
     }
 
-    /**
-     * Menampilkan detail pembelian berdasarkan ID.
-     * (Saat ini belum diimplementasikan)
-     * 
-     * @param  string  $id
-     */
     public function show(string $id)
     {
         //
     }
 
-    /**
-     * Menampilkan form edit pembelian berdasarkan ID.
-     * (Saat ini belum diimplementasikan)
-     * 
-     * @param  string  $id
-     */
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Memperbarui data pembelian berdasarkan ID.
-     * (Saat ini belum diimplementasikan)
-     * 
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     */
     public function update(Request $request, $id)
     {
         //
     }
 
-    /**
-     * Menghapus data pembelian berdasarkan ID.
-     * (Saat ini belum diimplementasikan)
-     * 
-     * @param  int  $id
-     */
     public function destroy($id)
     {
         //

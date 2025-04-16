@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FormatImport;
 use Illuminate\Http\Request;
 use App\Imports\UniversalImport;
+use App\Models\Absensi;
 use App\Models\Buku;
 use App\Models\Kategori;
 use App\Models\Member;
@@ -34,7 +36,7 @@ class importLaporan extends Controller
         ],
         'pengajuan' => [
             'model' => PengajuanBuku::class,
-            'fields' => ['member_id','tgl','judul','penulis','nama_pengaju','no_telp','qty','catatan','status'],
+            'fields' => ['nama_pengaju', 'no_telp','member_id','judul','penulis','qty','catatan','status', 'tgl'],
         ],
         'penjualan' => [
             'model' => Penjualan::class,
@@ -43,6 +45,10 @@ class importLaporan extends Controller
         'pembelian' => [
             'model' => Pembelian::class,
             'fields' => ['pemasok_id','user_id','tgl','total'],
+        ],
+        'absensi' => [
+            'model' => Absensi::class,
+            'fields' => ['nama_karyawan', 'tgl_masuk', 'jam_masuk', 'jam_selesai', 'status'],
         ],
     ];
 
@@ -59,5 +65,22 @@ class importLaporan extends Controller
         Excel::import(new UniversalImport($config['model'], $config['fields']), $request->file('file'));
 
         return redirect()->back()->with('success', 'Data berhasil diimport!');
+    }
+
+
+    public function formatImport(Request $request)
+    {
+        $tipe = $request->get('tipe');
+
+        if (!array_key_exists($tipe, $this->importConfig)) {
+            return response()->json(['error' => 'Jenis laporan tidak ditemukan'], 404);
+        }
+
+        $config = $this->importConfig[$tipe];
+
+        return Excel::download(
+            new FormatImport($config['fields']),
+            "{$tipe}-import-format.xlsx"
+        );
     }
 }

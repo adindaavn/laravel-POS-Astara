@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbsensiController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\exportLaporan;
@@ -13,6 +14,7 @@ use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PenjualanController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Middleware\CekUserRole;
+use App\Models\Absensi;
 use App\Models\PengajuanBuku;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +28,7 @@ Route::middleware(['auth'], CekUserRole::class)->group(
         Route::get('/', [HomeController::class, 'index'])->name('home');
         Route::get('/home', [HomeController::class, 'index'])->name('home');
         Route::get('/home/daily-penjualan', [HomeController::class, 'dailyPenjualan'])->name('daily-penjualan');
+        Route::get('/home/daily-pembelian', [HomeController::class, 'dailyPembelian'])->name('daily-pembelian');
 
         Route::resource('kategori', KategoriController::class);
         Route::resource('pemasok', PemasokController::class);
@@ -36,13 +39,17 @@ Route::middleware(['auth'], CekUserRole::class)->group(
         Route::resource('pembelian', PembelianController::class);
         
         Route::resource('pengajuan', PengajuanController::class);
-        Route::get('/pengajuan/pdf', [PengajuanController::class, 'generatePDF']);
-        Route::get('/pengajuan/excel', [PengajuanController::class, 'exportExcel']);
         Route::post('/pengajuan/update-status', [PengajuanController::class, 'updateStatus'])->name('pengajuan.updateStatus');
+        
+        Route::resource('absensi', AbsensiController::class);
+        Route::post('/absensi/update-status', [AbsensiController::class, 'updateStatus'])->name('absensi.updateStatus');
+        Route::post('/absensi/selesai-kerja', [AbsensiController::class, 'selesaiKerja'])->name('absensi.selesaiKerja');
 
         Route::get('/export/pdf', [exportLaporan::class, 'exportPDF'])->name('export.pdf');
         Route::get('/export/excel', [exportLaporan::class, 'exportExcel'])->name('export.excel');
-        Route::get('/import/excel', [importLaporan::class, 'importExcel'])->name('import.excel');
-
+        Route::post('/import/excel', [importLaporan::class, 'importExcel'])->name('import.excel');
+        Route::get('/import/format-excel', [importLaporan::class, 'formatImport'])->name('import.format-excel');
+        
+        Route::get('/buku/cari-isbn/${isbn}', [BukuController::class, 'cariIsbn'])->name('buku.cari-isbn');
     }
 );

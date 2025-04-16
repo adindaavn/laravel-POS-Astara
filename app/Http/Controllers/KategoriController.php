@@ -7,6 +7,7 @@ use App\Models\Kategori;
 
 /**
  * Class KategoriController
+ * 
  * Mengelola kategori buku, termasuk CRUD (Create, Read, Update, Delete).
  */
 class KategoriController extends Controller
@@ -32,7 +33,6 @@ class KategoriController extends Controller
      * @param Request $request Permintaan HTTP yang berisi data kategori baru.
      * @return \Illuminate\Http\RedirectResponse Redirect kembali dengan pesan sukses atau error.
      */
-    
     public function store(Request $request)
     {
         // Validasi input

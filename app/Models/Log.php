@@ -37,7 +37,7 @@ class Log extends Model
     public static function createLog($tableName, $action, $data = [])
     {
         // Ambil user_id dari session (jika ada) atau set null jika tidak ada user
-        $userId = Auth::id() ?? null;
+        $userId = Auth::id();
 
         // Ambil IP Address pengguna
         $ipAddress = Request::ip();

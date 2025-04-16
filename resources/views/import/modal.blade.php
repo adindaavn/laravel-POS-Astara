@@ -1,9 +1,9 @@
 <div class="modal fade" id="modalImport" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered">
         <form id="importForm" action="{{ route('import.excel') }}" method="POST" enctype="multipart/form-data" class="modal-content">
             @csrf
             <div class="modal-header">
-                <h5 class="modal-title">Import Data</h5>
+                <h5 class="modal-title">Import Data Excel</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
             </div>
             <div class="modal-body">

@@ -14,10 +14,17 @@ use Illuminate\Support\Facades\DB;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
 
+/**
+ * Class PembelianController
+ *
+ * Controller untuk mengelola data pembelian, termasuk menampilkan, dan menambah pembelian.
+ */
 class PenjualanController extends Controller
 {
     /**
      * Menampilkan daftar semua transaksi penjualan.
+     * 
+     * @return \Illuminate\View\View
      */
     function index()
     {
@@ -27,6 +34,8 @@ class PenjualanController extends Controller
 
     /**
      * Menampilkan form untuk membuat transaksi penjualan baru.
+     * 
+     * @return \Illuminate\View\View
      */
     public function create()
     {
@@ -39,7 +48,10 @@ class PenjualanController extends Controller
     }
 
     /**
-     * Menyimpan transaksi penjualan baru ke database.
+     * Menyimpan transaksi penjualan baru ke database lalu print
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     function store(Request $request)
     {
@@ -131,7 +143,7 @@ class PenjualanController extends Controller
                 $printer->text("Jl. Bintang 444\n");
                 $printer->text($penjualan->no_transaksi . "\n");
                 $printer->text("--------------------------------\n");
-                
+
                 $printer->setJustification(Printer::JUSTIFY_LEFT);
                 $labelKasir = "Kasir:";
                 $namaKasir = $penjualan->user->name ?? '-';
@@ -166,6 +178,9 @@ class PenjualanController extends Controller
                 $printer->setJustification(Printer::JUSTIFY_CENTER);
                 $printer->text($penjualan->created_at->format('d-m-Y H:i') . "\n");
                 $printer->text("~ Terima kasih ~\n");
+                $printer->barcode($penjualan->no_transaksi, Printer::BARCODE_CODE128); 
+                $printer->qrCode("https://tokobuku-astara.test/qr-dummy", Printer::QR_ECLEVEL_L, 6);
+
                 $printer->pulse();
                 $printer->cut();
             } catch (\Exception $e) {
@@ -198,35 +213,23 @@ class PenjualanController extends Controller
         }
     }
 
-    /**
-     * Menampilkan detail transaksi penjualan berdasarkan ID.
-     */
     public function show(string $id)
     {
-        // Implementasi jika diperlukan
+        // 
     }
 
-    /**
-     * Menampilkan form edit transaksi penjualan.
-     */
     public function edit(string $id)
     {
-        // Implementasi jika diperlukan
+        // 
     }
 
-    /**
-     * Memperbarui transaksi penjualan yang sudah ada.
-     */
     public function update(Request $request, $id)
     {
-        // Implementasi jika diperlukan
+        // 
     }
 
-    /**
-     * Menghapus transaksi penjualan berdasarkan ID.
-     */
     public function destroy($id)
     {
-        // Implementasi jika diperlukan
+        // 
     }
 }

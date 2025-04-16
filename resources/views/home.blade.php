@@ -368,7 +368,14 @@
 
         // Function to fetch new data from the server
         function fetchData() {
-            fetch('/home/daily-penjualan') // Adjust the URL to your API endpoint
+            fetch('/home/daily-penjualan') 
+                .then(response => response.json())
+                .then(data => {
+                    renderChart(data.data, data.categories);
+                    console.log(data);
+                })
+                .catch(error => console.error('Error fetching data:', error));
+            fetch('/home/daily-pembelian') 
                 .then(response => response.json())
                 .then(data => {
                     renderChart(data.data, data.categories);

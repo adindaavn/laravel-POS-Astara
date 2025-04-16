@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Kategori;
+use App\Models\PembelianDetail;
+use App\Models\PenjualanDetail;
+use App\Models\StokBuku;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 /**
  * Class BukuController
+ *
  * Controller untuk mengelola data buku, termasuk menampilkan, menambah, mengedit, dan menghapus buku.
  */
 class BukuController extends Controller
@@ -56,7 +61,6 @@ class BukuController extends Controller
             'thn_terbit' => 'required|integer|min:1900|max:' . date('Y'),
         ]);
         
-
         // Cek kalau ada file gambar diupload
         if ($request->hasFile('gambar')) {
             $file = $request->file('gambar');
@@ -71,28 +75,14 @@ class BukuController extends Controller
         return redirect()->route('buku.index')->with('success', 'Buku berhasil ditambahkan.');
     }
 
-    /**
-     * Menampilkan detail buku berdasarkan ID.
-     *
-     * @param int $id ID buku.
-     * @return \Illuminate\View\View
-     */
     public function show($id)
     {
-        $buku = Buku::findOrFail($id); // Mencari buku berdasarkan ID atau gagal jika tidak ditemukan
-        return view('buku.show', compact('buku'));
+        //
     }
 
-    /**
-     * Menampilkan formulir untuk mengedit buku.
-     *
-     * @param int $id ID buku.
-     * @return \Illuminate\View\View
-     */
     public function edit($id)
     {
-        $buku = Buku::findOrFail($id);
-        return view('buku.edit', compact('buku'));
+        //
     }
 
     /**
@@ -147,18 +137,50 @@ class BukuController extends Controller
     public function destroy($id)
     {
         $buku = Buku::where('id', $id)->first();
+        $pembelianDetail = PembelianDetail::where('buku_id', $id)->exists();
+        $penjualanDetail = PenjualanDetail::where('buku_id', $id)->exists();
 
         if (!$buku) {
-            return redirect()->back()->with('error', 'buku not found.');
+            return redirect()->back()->with('error', 'Buku tidak ditemukan.');
+        }
+        if ($pembelianDetail || $penjualanDetail) {
+            return redirect()->back()->with('error', 'Buku tidak bisa dihapus karna masuk histori transaksi.');
         }
         if ($buku->gambar) {
             Storage::disk('public')->delete($buku->gambar);
         }
+        
         try {
+            dd($buku);
             $buku->delete();
-            return redirect()->back()->with('success', 'buku deleted successfully.');
+            return redirect()->back()->with('success', 'Buku berhasil dihapus!.');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to delete buku : ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Gagal menghapus buku : ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Mencari buku dari database berdasarkan isbn.
+     *
+     * @param int $isbn ISBN buku yang akan dicari.
+     */
+    public function cariIsbn(Request $request)
+    {
+        $isbn = $request->get('isbn');
+        Log::info("Searching for ISBN: $isbn"); // Log the ISBN being searched
+        $buku = StokBuku::where('isbn', $isbn)->first();
+
+        if (!$buku) {
+            Log::info("Book not found for ISBN: $isbn");
+            return response()->json([
+                'message' => 'Buku tidak ditemukan',
+            ], 404);
+        }
+
+        Log::info("Book found: ", $buku->toArray()); // Log the found book details
+        return response()->json([
+            'buku' => $buku,
+            'message' => 'Buku ditemukan'
+        ]);
     }
 }
