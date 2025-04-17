@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('no_transaksi')->unique();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->cascadeOnUpdate();
             $table->foreignId('member_id')->nullable()->constrained('member')->nullOnDelete()->cascadeOnUpdate();
+            $table->foreignId('voucher_id')->nullable()->constrained('voucher')->nullOnDelete()->cascadeOnUpdate();
             $table->date('tgl');
             $table->double('total_bersih');
             $table->double('total_bayar')->nullable();

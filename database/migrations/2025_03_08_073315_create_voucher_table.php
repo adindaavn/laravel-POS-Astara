@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('kode')->unique();
             $table->double('diskon');
             $table->enum('tipe', ['persen','nominal']);
-            $table->double('min_beli')->default(0);
-            $table->double('max_diskon')->default(0);
-            $table->integer('kuota')->default(0);
-            $table->integer('point')->default(0);
+            $table->double('min_beli')->default(0)->nullable();
+            $table->double('max_diskon')->default(0)->nullable();
+            $table->integer('kuota')->default(0)->nullable();
+            $table->integer('point')->default(0)->nullable();
             $table->text('deskripsi')->nullable();
             $table->date('kadaluarsa');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));

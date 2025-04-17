@@ -12,10 +12,9 @@ use App\Http\Controllers\PemasokController;
 use App\Http\Controllers\PembelianController;
 use App\Http\Controllers\PengajuanController;
 use App\Http\Controllers\PenjualanController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\VoucherController;
 use App\Http\Middleware\CekUserRole;
-use App\Models\Absensi;
-use App\Models\PengajuanBuku;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/login', [AuthController::class, 'index'])->name('login');
@@ -34,6 +33,7 @@ Route::middleware(['auth'], CekUserRole::class)->group(
         Route::resource('pemasok', PemasokController::class);
         Route::resource('buku', BukuController::class);
         Route::resource('member', MemberController::class);
+        Route::resource('user', UserController::class);
         Route::resource('voucher', VoucherController::class);
         Route::resource('penjualan', PenjualanController::class);
         Route::resource('pembelian', PembelianController::class);
@@ -51,5 +51,6 @@ Route::middleware(['auth'], CekUserRole::class)->group(
         Route::get('/import/format-excel', [importLaporan::class, 'formatImport'])->name('import.format-excel');
         
         Route::get('/buku/cari-isbn/${isbn}', [BukuController::class, 'cariIsbn'])->name('buku.cari-isbn');
+        Route::get('/get-vouchers', [VoucherController::class, 'getVouchers']);
     }
 );

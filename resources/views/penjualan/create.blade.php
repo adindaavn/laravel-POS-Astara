@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <input type="text" class="barcode-input form-control form-control-md mb-2 w-25" placeholder="Scan Barcode ISBN" autofocus/>
+                    <input type="text" class="barcode-input form-control form-control-md mb-2 w-25" placeholder="Scan Barcode ISBN" autofocus />
                     <div id="tableTransaksi" class="table-responsive text-nowrap">
                         <div id="tableContainer">
                             <table id="tableBuku" class="table table-striped table-bordered">
@@ -92,7 +92,7 @@
                         </div>
                         <div class="col-8">
                             <select class="select2 form-select" id="member_id" name="member_id" data-allow-clear="true" aria-placeholder="Pilih Member">
-                                <option value="">Search Member</option>
+                                <option value="">Pilih Member</option>
                                 @foreach($member as $m)
                                 <option value="{{$m->id}}" data-point="{{$m->point}}">
                                     {{$m->nama}} (XP {{$m->point}})
@@ -111,26 +111,21 @@
                     <h6>Order Details</h6>
                     <dl class="col-12 mb-0 text-heading itemList">
                     </dl>
-                    <!-- 
+
                     <hr class="px-2" />
                     <div class="row">
                         <div class="col-1 d-flex align-items-center">
                             <span><i class="icon-base bx bxs-discount"></i></span>
                         </div>
-                        <div class="col-7">
+                        <div class="col-11">
                             <select class="select2 form-select" id="voucher_id" name="voucher_id" data-allow-clear="true" aria-placeholder="Pilih Voucher">
-                                <option value="">Search Voucher</option>
+                                <option value="">Pilih Voucher</option>
                                 @foreach($voucher as $v)
                                 <option value="{{$v->id}}">{{$v->kode}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-4">
-                            <div class="d-grid">
-                                <button type="button" class="btn btn-label-primary">Apply</button>
-                            </div>
-                        </div>
-                    </div> -->
+                    </div>
 
                     <hr class="px-2" />
                     <dl class="row mb-0">
@@ -199,8 +194,9 @@
     $(document).ready(function() {
 
         let selectedBuku = [];
-
         let semuaBuku = [];
+
+        fetchVouchers();
 
         $(".add-buku").each(function() {
             let $btn = $(this);
@@ -260,8 +256,8 @@
                             <button class="btn btn-outline-success btn-sm rounded-pill px-2 btn-plus" data-id="${buku.buku_id}" style="min-width: 30px;">+</button>
                         </div>
                     `;
-                                    $btn.replaceWith(jumlahInput);
-                                }
+                    $btn.replaceWith(jumlahInput);
+                }
 
                 updateTable();
                 $(this).val("").focus();
@@ -302,13 +298,13 @@
             }
 
             let jumlahInput = `
-            <div class="d-flex align-items-center justify-content-center gap-1 jumlah-input" style="font-size: 0.85rem;">
-                <button class="btn btn-outline-danger btn-sm rounded-pill px-2 btn-minus" data-id="${id}" style="min-width: 30px;">-</button>
-                <input type="number" class="form-control text-center form-control-sm input-jumlah" data-id="${id}" value="1" min="1" max="${stok}" 
-                    style="width: 50px; border-radius: 50px;">
-                <button class="btn btn-outline-success btn-sm rounded-pill px-2 btn-plus" data-id="${id}" style="min-width: 30px;">+</button>
-            </div>
-        `;
+                <div class="d-flex align-items-center justify-content-center gap-1 jumlah-input" style="font-size: 0.85rem;">
+                    <button class="btn btn-outline-danger btn-sm rounded-pill px-2 btn-minus" data-id="${id}" style="min-width: 30px;">-</button>
+                    <input type="number" class="form-control text-center form-control-sm input-jumlah" data-id="${id}" value="1" min="1" max="${stok}" 
+                        style="width: 50px; border-radius: 50px;">
+                    <button class="btn btn-outline-success btn-sm rounded-pill px-2 btn-plus" data-id="${id}" style="min-width: 30px;">+</button>
+                </div>
+            `;
             $(this).replaceWith(jumlahInput);
             updateTable();
         });
@@ -372,13 +368,72 @@
             updateTable();
         });
 
+        $('#voucher_id').change(function() {
+            updateTable();
+        });
+
+        function fetchVouchers() {
+            let total = parseInt($('#total_bersih').val()) || 0;
+            let member_id = $('#member_id').val();
+
+            $.ajax({
+                url: '/get-vouchers',
+                type: 'GET',
+                data: {
+                    total: total,
+                    member_id: member_id
+                },
+                success: function(res) {
+                    let voucherSelect = $('#voucher_id');
+
+                    if (voucherSelect.hasClass("select2-hidden-accessible")) {
+                        voucherSelect.select2('destroy');
+                    }
+
+                    voucherSelect.empty().append('<option value="">Pilih Voucher</option>');
+
+                    res.forEach(function(v) {
+                        voucherSelect.append(`
+                    <option value="${v.id}" 
+                            data-diskon="${v.diskon}" 
+                            data-tipe="${v.tipe}" 
+                            data-max_diskon="${v.max_diskon}" 
+                            data-point="${v.point || 0}">
+                        ${v.kode}
+                    </option>`);
+                    });
+
+                    voucherSelect.select2({
+                        placeholder: 'Pilih Voucher',
+                        allowClear: true
+                    }).trigger('change');
+                }
+            });
+        }
+
+        let lastSubtotal = 0;
+        let lastMemberId = null;
+
+        function tryFetchVouchers() {
+            let currentSubtotal = parseInt($('#total_bersih').val()) || 0;
+            let currentMemberId = $('#member_id').val();
+
+            if (currentSubtotal !== lastSubtotal || currentMemberId !== lastMemberId) {
+                lastSubtotal = currentSubtotal;
+                lastMemberId = currentMemberId;
+                fetchVouchers();
+            }
+        }
+
         function updateTable() {
             let itemList = $(".itemList");
-
             itemList.empty();
+
             let subtotal = 0;
             let diskon = 0;
             let total = 0;
+            let persentaseDiskon = 0;
+            let minusPoint = 0;
 
             $.each(selectedBuku, function(index, buku) {
                 subtotal += buku.subtotal;
@@ -395,37 +450,39 @@
             });
 
             let selectedMember = $('#member_id').find(':selected');
-            let point = parseInt(selectedMember.data('point')) || 0;
+            let memberPoint = parseInt(selectedMember.data('point')) || 0;
 
-            let persentaseDiskon = 0;
-            let minusPoint = 0;
-            if (point >= 400) {
-                persentaseDiskon = 20;
-                minusPoint = 400;
-            } else if (point >= 300) {
-                persentaseDiskon = 15;
-                minusPoint = 300;
-            } else if (point >= 200) {
-                persentaseDiskon = 10;
-                minusPoint = 200;
-            } else if (point >= 100) {
-                persentaseDiskon = 5;
-                minusPoint = 100;
+            let selectedVoucher = $('#voucher_id').find(':selected');
+            if (selectedVoucher.length && selectedVoucher.val()) {
+                let tipe = selectedVoucher.data('tipe');
+                let voucherDiskon = parseInt(selectedVoucher.data('diskon')) || 0;
+                let maxDiskon = parseInt(selectedVoucher.data('max_diskon')) || 0;
+                minusPoint = parseInt(selectedVoucher.data('point')) || 0;
+
+                if (tipe === 'persen') {
+                    persentaseDiskon = voucherDiskon;
+                    diskon = Math.floor(subtotal * persentaseDiskon / 100);
+                    if (maxDiskon > 0 && diskon > maxDiskon) {
+                        diskon = maxDiskon;
+                    }
+                } else {
+                    diskon = voucherDiskon;
+                }
             }
-
-            diskon = subtotal * (persentaseDiskon / 100);
             total = subtotal - diskon;
 
-            persentaseDiskon == 0 ?
-                $(".diskon-text").text('Diskon') :
-                $(".diskon-text").text("Diskon " + persentaseDiskon + "% (-" + minusPoint + " point member)");
+            if (persentaseDiskon > 0) {
+                $(".diskon-text").text(`Diskon ${persentaseDiskon}% (-${minusPoint} point member)`);
+            } else {
+                $(".diskon-text").text('Diskon');
+            }
 
             $(".subtotal").text(subtotal.toLocaleString());
             $(".diskon").text(diskon.toLocaleString());
             $(".total").text(total.toLocaleString());
 
-            $("#minus_point").val(minus_point);
             $("#diskon").val(diskon);
+            $("#minus_point").val(minusPoint);
             $("#total_bayar").val(total);
             $("#total_bersih").val(subtotal);
 
@@ -435,6 +492,11 @@
 
             console.log("Data dikirim:", JSON.stringify(selectedBuku));
             console.log($("#formPenjualan").serializeArray());
+
+            if (subtotal !== lastSubtotal) {
+                lastSubtotal = subtotal;
+                tryFetchVouchers();
+            }
         }
     });
 </script>

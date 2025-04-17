@@ -75,7 +75,9 @@ $breadcrumbs = [
                             <th class="fw-bold">No</th>
                             <th class="fw-bold">Nama Kategori</th>
                             <th class="fw-bold">Total Buku</th>
+                            @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                             <th></th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -84,6 +86,7 @@ $breadcrumbs = [
                             <td>{{$loop->iteration}}</td>
                             <td>{{$data->nama}}</td>
                             <td>{{$data->buku_count}}</td>
+                            @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                             <td>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <button type="button"
@@ -101,6 +104,7 @@ $breadcrumbs = [
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

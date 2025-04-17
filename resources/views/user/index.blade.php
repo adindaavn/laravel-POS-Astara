@@ -1,9 +1,9 @@
 @extends('layout.header')
-@section('title', 'Member')
+@section('title', 'User')
 @php
 $breadcrumbs = [
-['label' => 'Toko', 'route' => 'member.index'],
-['label' => 'Member', 'route' => 'member.index'],
+['label' => 'Toko', 'route' => 'user.index'],
+['label' => 'User', 'route' => 'user.index'],
 ];
 @endphp
 @section('content')
@@ -13,7 +13,7 @@ $breadcrumbs = [
         <div class="card">
             <button type="button" class="btn btn-primary btn-add"
                 data-bs-toggle="modal"
-                data-bs-target="#modalMember">
+                data-bs-target="#modalUser">
                 <i class="icon-base bx bx-plus me-1"></i>
                 <span>Tambah</span>
             </button>
@@ -33,47 +33,45 @@ $breadcrumbs = [
                     </button>
                 </ul>
             </div>
-            <h5 class="card-header pb-0 fw-bold">Data Member</h5>
+            <h5 class="card-header pb-0 fw-bold">Data User</h5>
             <div id="tableData" class="table-responsive text-nowrap p-5">
-                <table class="table table-striped table-bordered" data-tipe="member">
+                <table class="table table-striped table-bordered" data-tipe="user">
                     <thead>
                         <tr class="table-primary">
                             <th class="fw-bold">No</th>
                             <th class="fw-bold">Nama</th>
-                            <th class="fw-bold">Point</th>
-                            <th class="fw-bold">No. Telepon</th>
-                            <th class="fw-bold">Email</th>
+                            <th class="fw-bold">Username</th>
+                            <th class="fw-bold">Password</th>
+                            <th class="fw-bold">Role</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($member as $data)
+                        @foreach ($user as $data)
                         <tr>
                             <td>{{$loop->iteration}}</td>
-                            <td>{{$data->nama}}</td>
-                            <td>{{$data->point}}</td>
-                            <td>{{$data->telp}}</td>
-                            <td>{{$data->email}}</td>
+                            <td>{{$data->name}}</td>
+                            <td>{{$data->username}}</td>
+                            <td>{{$data->password}}</td>
+                            <td>{{$data->role}}</td>
                             <td>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <button type="button"
                                         class="btn btn-edit"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#modalMember"
+                                        data-bs-target="#modalUser"
                                         data-id="{{$data->id}}"
-                                        data-point="{{$data->point}}"
-                                        data-nama="{{$data->nama}}"
-                                        data-telp="{{$data->telp}}"
-                                        data-email="{{$data->email}}">
+                                        data-username="{{$data->username}}"
+                                        data-name="{{$data->name}}"
+                                        data-password="{{$data->password}}"
+                                        data-role="{{$data->role}}">
                                         <span class="badge rounded-pill bg-label-info"><i class="bx bx-edit-alt text-dark"></i></span>
                                     </button>
-                                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
-                                    <form action="{{ route('member.destroy', $data->id) }}" method="post">
+                                    <form action="{{ route('user.destroy', $data->id) }}" method="post">
                                         @csrf
                                         @method('delete')
                                         <button type="submit" class="btn btn-destroy"><span class="badge rounded-pill bg-label-danger"><i class="bx bx-trash text-danger"></i></span></button>
                                     </form>
-                                    @endif
                                 </div>
                             </td>
                         </tr>
@@ -84,7 +82,7 @@ $breadcrumbs = [
         </div>
     </div>
 </div>
-@include('member.modal')
+@include('user.modal')
 @include('import.modal')
 
 <script src="{{ asset('assets') }}/vendor/libs/jquery/jquery.js"></script>
@@ -92,31 +90,34 @@ $breadcrumbs = [
     $(document).ready(function() {
 
         $('.btn-add').click(function() {
-            $('.modal-title').text('Tambah Member');
-            $('#jenis-form').attr('action', "{{ route('member.store') }}");
+            $('.modal-title').text('Tambah User');
+            $('#jenis-form').attr('action', "{{ route('user.store') }}");
             $('#form-method').val('POST');
-            $('#nama').val('');
-            $('#telp').val('');
-            $('#email').val('');
+            $('#name').val('');
+            $('#username').val('');
+            $('#password').val('');
+            $('#role').val('');
             $('#submit-btn').text('Tambah');
         });
 
         $('.btn-edit').click(function() {
             let id = $(this).data('id');
             let point = $(this).data('point');
-            let nama = $(this).data('nama');
-            let telp = $(this).data('telp');
-            let email = $(this).data('email');
+            let name = $(this).data('name');
+            let username = $(this).data('username');
+            let password = $(this).data('password');
+            let role = $(this).data('role');
 
-            $('.modal-title').text('Edit Member');
-            $('#jenis-form').attr('action', `/member/${id}`);
+            $('.modal-title').text('Edit User');
+            $('#jenis-form').attr('action', `/user/${id}`);
             $('#form-method').val('PUT');
             $('#submit-btn').text('Edit');
             $('#id').val(id);
             $('#point').val(point);
-            $('#nama').val(nama);
-            $('#telp').val(telp);
-            $('#email').val(email);
+            $('#name').val(name);
+            $('#username').val(username);
+            $('#password').val(password);
+            $('#role').val(role);
             $('#submit-btn').text('Edit');
         });
 

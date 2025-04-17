@@ -46,7 +46,9 @@ $breadcrumbs = [
                             <th class="fw-bold">Waktu Masuk</th>
                             <th class="fw-bold">Status</th>
                             <th class="fw-bold">Waktu Selesai Kerja</th>
+                            @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                             <th></th>
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -70,6 +72,7 @@ $breadcrumbs = [
                                 <button type="button" class="btn btn-primary selesai-kerja" data-id="{{ $data->id }}">Selesai</button>
                                 @endif
                             </td>
+                            @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                             <td>
                                 <div class="d-flex align-items-center justify-content-center">
                                     <button type="button"
@@ -91,6 +94,7 @@ $breadcrumbs = [
                                     </form>
                                 </div>
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

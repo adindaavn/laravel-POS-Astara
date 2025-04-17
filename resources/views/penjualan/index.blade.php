@@ -9,7 +9,6 @@ $breadcrumbs = [
 @section('content')
 <div class="row">
     <x-breadcrumb :breadcrumbs="$breadcrumbs" />
-    <div class="col-lg-12 mb-4 order-0">
         <div class="card">
             <h5 class="card-header pb-0 fw-bold">Data Penjualan</h5>
             <div id="tableData" class="table-responsive text-nowrap p-5">
@@ -20,6 +19,7 @@ $breadcrumbs = [
                             <th class="fw-bold">User</th>
                             <th class="fw-bold">Member</th>
                             <th class="fw-bold">Daftar Buku</th>
+                            <th class="fw-bold">Diskon</th>
                             <th class="fw-bold">Total</th>
                             <th class="fw-bold">Tanggal</th>
                             <th class="fw-bold">Metode Bayar</th>
@@ -45,6 +45,7 @@ $breadcrumbs = [
                                     </ul>
                                 </div>
                             </td>
+                            <td>Rp. {{ number_format($data->diskon, 0, ',', '.') }}</td>
                             <td>Rp. {{ number_format($data->total_bayar, 0, ',', '.') }}</td>
                             <td>{{ $data->tgl }}</td>
                             <td>{{ $data->metode_bayar }}</td>

@@ -38,47 +38,51 @@ $breadcrumbs = [
             <h5 class="card-header pb-0 fw-bold">Data Pemasok</h5>
             <div id="tableData" class="table-responsive text-nowrap p-5">
                 <table class="table table-striped table-bordered" data-tipe="pemasok">
-                <thead>
-                    <tr class="table-primary">
-                        <th class="fw-bold">No</th>
-                        <th class="fw-bold">Nama</th>
-                        <th class="fw-bold">No. Telepon</th>
-                        <th class="fw-bold">Email</th>
-                        <th class="fw-bold">Alamat</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($pemasok as $data)
-                    <tr>
-                        <td>{{$loop->iteration}}</td>
-                        <td>{{$data->nama}}</td>
-                        <td>{{$data->telp}}</td>
-                        <td>{{$data->email}}</td>
-                        <td>{{$data->alamat}}</td>
-                        <td>
-                            <div class="d-flex align-items-center justify-content-center">
-                                <button type="button"
-                                    class="btn btn-edit"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalPemasok"
-                                    data-id="{{$data->id}}"
-                                    data-nama="{{$data->nama}}"
-                                    data-alamat="{{$data->alamat}}"
-                                    data-telp="{{$data->telp}}"
-                                    data-email="{{$data->email}}">
-                                    <span class="badge rounded-pill bg-label-info"><i class="bx bx-edit-alt text-dark"></i></span>
-                                </button>
-                                <form action="{{ route('pemasok.destroy', $data->id) }}" method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <button type="submit" class="btn btn-destroy"><span class="badge rounded-pill bg-label-danger"><i class="bx bx-trash text-danger"></i></span></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    @endforeach
-                </tbody>
+                    <thead>
+                        <tr class="table-primary">
+                            <th class="fw-bold">No</th>
+                            <th class="fw-bold">Nama</th>
+                            <th class="fw-bold">No. Telepon</th>
+                            <th class="fw-bold">Email</th>
+                            <th class="fw-bold">Alamat</th>
+                            @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
+                            <th></th>
+                            @endif
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($pemasok as $data)
+                        <tr>
+                            <td>{{$loop->iteration}}</td>
+                            <td>{{$data->nama}}</td>
+                            <td>{{$data->telp}}</td>
+                            <td>{{$data->email}}</td>
+                            <td>{{$data->alamat}}</td>
+                            @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
+                            <td>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <button type="button"
+                                        class="btn btn-edit"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalPemasok"
+                                        data-id="{{$data->id}}"
+                                        data-nama="{{$data->nama}}"
+                                        data-alamat="{{$data->alamat}}"
+                                        data-telp="{{$data->telp}}"
+                                        data-email="{{$data->email}}">
+                                        <span class="badge rounded-pill bg-label-info"><i class="bx bx-edit-alt text-dark"></i></span>
+                                    </button>
+                                    <form action="{{ route('pemasok.destroy', $data->id) }}" method="post">
+                                        @csrf
+                                        @method('delete')
+                                        <button type="submit" class="btn btn-destroy"><span class="badge rounded-pill bg-label-danger"><i class="bx bx-trash text-danger"></i></span></button>
+                                    </form>
+                                </div>
+                            </td>
+                            @endif
+                        </tr>
+                        @endforeach
+                    </tbody>
                 </table>
             </div>
         </div>

@@ -14,12 +14,14 @@ $breadcrumbs = [
         <div class="card">
             <div class="row">
                 <div class="mb-4 order-0">
+                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <button type="button" class="btn btn-primary btn-add"
                         data-bs-toggle="modal"
                         data-bs-target="#modalBuku">
                         <i class="icon-base bx bx-plus me-1"></i>
                         <span>Tambah</span>
                     </button>
+                    @endif
                     <div class="btn-group">
                         <button type="button" class="btn btn-outline-secondary btn-import"
                             data-bs-toggle="modal"
@@ -52,7 +54,9 @@ $breadcrumbs = [
                                     <th class="fw-bold">Stok</th>
                                     <th class="fw-bold">Penerbit (Thn terbit)</th>
                                     <th class="fw-bold">Barcode</th>
+                                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                                     <th></th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -88,6 +92,7 @@ $breadcrumbs = [
                                     </td>
                                     <td>{{$data->penerbit}} ({{$data->thn_terbit}})</td>
                                     <td><img src="data:image/png;base64,{{ $data->barcode }}" alt="Barcode ISBN"></td>
+                                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                                     <td>
                                         <div class="d-flex align-items-center justify-content-center">
                                             <button type="button"
@@ -112,6 +117,7 @@ $breadcrumbs = [
                                             </form>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             </tbody>

@@ -214,7 +214,6 @@
                     <li class="menu-header small">
                         <span class="menu-header-text">Produk</span>
                     </li>
-                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('kategori.index') ? 'active' : '' }}">
                         <a href="{{ route('kategori.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-category-alt"></i>
@@ -227,7 +226,6 @@
                             <div data-i18n="Pemasok">Pemasok</div>
                         </a>
                     </li>
-                    @endif
                     <li class="menu-item {{ request()->routeIs('buku.index') ? 'active' : '' }}">
                         <a href="{{ route('buku.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bx-book"></i>
@@ -245,20 +243,33 @@
                     <li class="menu-header small">
                         <span class="menu-header-text">Toko</span>
                     </li>
+
+                    <li class="menu-item {{ request()->routeIs('absensi.index') ? 'active' : '' }}">
+                        <a href="{{ route('absensi.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user-check"></i>
+                            <div data-i18n="Absensi">Absensi</div>
+                        </a>
+                    </li>
                     <li class="menu-item {{ request()->routeIs('member.index') ? 'active' : '' }}">
                         <a href="{{ route('member.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-user-badge"></i>
                             <div data-i18n="Member">Member</div>
                         </a>
                     </li>
-                    <!-- @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('voucher.index') ? 'active' : '' }}">
                         <a href="{{ route('voucher.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-discount"></i>
                             <div data-i18n="Voucher">Voucher</div>
                         </a>
                     </li>
-                    @endif -->
+                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
+                    <li class="menu-item {{ request()->routeIs('user.index') ? 'active' : '' }}">
+                        <a href="{{ route('user.index') }}" class="menu-link">
+                            <i class="menu-icon tf-icons bx bxs-user"></i>
+                            <div data-i18n="User">User</div>
+                        </a>
+                    </li>
+                    @endif
 
                     <!-- Transaksi -->
                     <li class="menu-header small">
@@ -270,14 +281,12 @@
                             <div data-i18n="Transaksi">Transaksi</div>
                         </a>
                     </li>
-                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('pembelian.create') ? 'active' : '' }}">
                         <a href="{{ route('pembelian.create') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-package"></i>
                             <div data-i18n="Pembelian">Pembelian</div>
                         </a>
                     </li>
-                    @endif
 
                     <!-- Laporan -->
                     <li class="menu-header small">
@@ -289,25 +298,13 @@
                             <div data-i18n="Laporan Transaksi">Laporan Transaksi</div>
                         </a>
                     </li>
-                    @if(auth()->user()->role == 'owner' || auth()->user()->role == 'admin')
                     <li class="menu-item {{ request()->routeIs('pembelian.index') ? 'active' : '' }}">
                         <a href="{{ route('pembelian.index') }}" class="menu-link">
                             <i class="menu-icon tf-icons bx bxs-receipt"></i>
                             <div data-i18n="Laporan Pembelian">Laporan Pembelian</div>
                         </a>
                     </li>
-                    @endif
 
-                    <!-- Karyawan -->
-                    <li class="menu-header small">
-                        <span class="menu-header-text">Karyawan</span>
-                    </li>
-                    <li class="menu-item {{ request()->routeIs('absensi.index') ? 'active' : '' }}">
-                        <a href="{{ route('absensi.index') }}" class="menu-link">
-                            <i class="menu-icon tf-icons bx bxs-user-badge"></i>
-                            <div data-i18n="Absensi">Absensi</div>
-                        </a>
-                    </li>
                 </ul>
 
             </aside>
@@ -540,7 +537,7 @@
                                             </div>
                                         </a>
                                     </li>
-                                    <li>
+                                    <!-- <li>
                                         <div class="dropdown-divider my-1"></div>
                                     </li>
                                     <li>
@@ -565,19 +562,19 @@
                                     </li>
                                     <li>
                                         <a class="dropdown-item" href="pages-faq.html"> <i class="icon-base bx bx-help-circle icon-md me-3"></i><span>FAQ</span> </a>
-                                    </li>
+                                    </li> -->
                                     <li>
                                         <div class="dropdown-divider my-1"></div>
                                     </li>
                                     <li>
-                                        <a class="dropdown-item" href="auth-login-cover.html" target="_blank">
+                                        <div class="dropdown-item">
                                             <form action="{{ route('logout')}}" method="post">
                                                 @csrf
                                                 <button type="submit" class="btn btn-label-primary">
                                                     <i class="icon-base bx bx-power-off icon-md me-3"></i><span>Log Out</span></i>
                                                 </button>
                                             </form>
-                                        </a>
+                                        </div>
                                     </li>
                                 </ul>
                             </li>

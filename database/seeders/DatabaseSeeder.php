@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Buku;
 use App\Models\Member;
 use App\Models\User;
+use App\Models\Voucher;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -45,6 +46,7 @@ class DatabaseSeeder extends Seeder
 
         Buku::factory()->count(30)->create();
         Member::factory()->count(10)->create();
+        Voucher::factory()->count(15)->create();
 
         $this->call(PembelianSeeder::class);
         $this->call(PenjualanSeeder::class);

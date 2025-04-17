@@ -172,7 +172,7 @@
     <!--/ Total Income -->
 </div>
 <div class="row">
-    <div class="col-lg-7 col-xxl-8 mb-6 mb-lg-0">
+    <div class="col-lg-12 col-xxl-12 mb-6 mb-lg-0">
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title m-0 me-2">Top Penjualan Buku</h5>
@@ -218,7 +218,7 @@
         </div>
     </div>
     <!-- Total Balance -->
-    <div class="col-lg-5 col-xxl-4">
+    <!-- <div class="col-lg-5 col-xxl-4">
         <div class="card h-100">
             <div class="card-header d-flex align-items-center justify-content-between">
                 <h5 class="card-title m-0 me-2">Total Balance</h5>
@@ -266,7 +266,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!--/ Total Balance -->
 </div>
 <!-- / Content -->

@@ -11,6 +11,7 @@ use App\Models\PenjualanDetail;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log as FacadesLog;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
 use Mike42\Escpos\Printer;
 
@@ -68,6 +69,8 @@ class PenjualanController extends Controller
             'total_bersih' => 'required|numeric|min:0',
             'diskon' => 'nullable|numeric|min:0',
             'member_id' => 'nullable|exists:member,id',
+            'voucher_id' => 'nullable|exists:voucher,id',
+            'minus_point' => 'nullable|integer|min:0',
             'buku' => 'required|array',
             'buku.*.buku_id' => 'required|integer|exists:buku,id',
             'buku.*.harga_jual' => 'required|numeric|min:0',
@@ -84,17 +87,27 @@ class PenjualanController extends Controller
             $penjualan = Penjualan::create([
                 'member_id' => $request->member_id,
                 'user_id' => $request->user_id,
+                'voucher_id' => $request->voucher_id,
                 'metode_bayar' => $request->metode_bayar,
                 'total_bersih' => $request->total_bersih,
                 'total_bayar' => $request->total_bayar,
                 'diskon' => $request->diskon,
-                'pajak' => $request->pajak,
             ]);
 
             if ($request->member_id) {
-                $id = $request->member_id;
-                $member = Member::findOrFail($id);
-                $member->point - $request->minus_point;
+                $member = Member::findOrFail($request->member_id);
+                $member->point -= $request->minus_point ?? 0;
+
+                $earnedPoints = floor($request->total_bayar / 1000);
+                $member->point += $earnedPoints;
+
+                $member->save();
+            }
+
+            if ($request->voucher_id) {
+                $voucher = Voucher::findOrFail($request->voucher_id);
+                $voucher->kuota -= 1;
+                $voucher->save();
             }
 
             foreach ($request->buku as $item) {
@@ -135,9 +148,22 @@ class PenjualanController extends Controller
 
             try {
                 $penjualan->load('user', 'detailPenjualan.buku', 'member');
+            } catch (\Exception $e) {
+                $printError = true;
+                FacadesLog::error('Gagal cetak struk: ' . $e->getMessage());
+                return redirect()->back();
+            }
+
+            try {
                 $connector = new WindowsPrintConnector("POS-58");
                 $printer = new Printer($connector);
+            } catch (\Exception $e) {
+                $printError = true;
+                FacadesLog::error('Gagal cetak struk: ' . $e->getMessage());
+                return redirect()->back();
+            }
 
+            try {
                 $printer->setJustification(Printer::JUSTIFY_CENTER);
                 $printer->text("Toko Buku Astara\n");
                 $printer->text("Jl. Bintang 444\n");
@@ -168,9 +194,9 @@ class PenjualanController extends Controller
                 $printer->setJustification(Printer::JUSTIFY_LEFT);
                 $printer->text("Subtotal  : Rp. " . number_format($request->total_bersih, 0, ',', '.') . "\n");
                 $printer->text("Diskon    : Rp. " . number_format($request->diskon ?? 0, 0, ',', '.') . "\n");
-                $printer->setEmphasis(true); // Mulai bold
+                $printer->setEmphasis(true); 
                 $printer->text("Total     : Rp. " . number_format($request->total_bayar, 0, ',', '.') . "\n");
-                $printer->setEmphasis(false); // Balik ke normal
+                $printer->setEmphasis(false); 
                 $printer->text("Bayar     : Rp. " . number_format($request->bayar, 0, ',', '.') . "\n");
                 $printer->text("Kembalian : Rp. " . number_format($request->kembali, 0, ',', '.') . "\n");
 
@@ -178,12 +204,13 @@ class PenjualanController extends Controller
                 $printer->setJustification(Printer::JUSTIFY_CENTER);
                 $printer->text($penjualan->created_at->format('d-m-Y H:i') . "\n");
                 $printer->text("~ Terima kasih ~\n");
-                $printer->barcode($penjualan->no_transaksi, Printer::BARCODE_CODE128); 
-                $printer->qrCode("https://tokobuku-astara.test/qr-dummy", Printer::QR_ECLEVEL_L, 6);
+                $printer->barcode($penjualan->no_transaksi, Printer::BARCODE_CODE39);
+
 
                 $printer->pulse();
                 $printer->cut();
             } catch (\Exception $e) {
+                FacadesLog::error('Gagal cetak struk: ' . $e->getMessage());
                 $printError = true;
             } finally {
                 if (isset($printer)) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 
@@ -25,9 +26,14 @@ class VoucherController extends Controller
     {
         // Validasi input dari request
         $validated = $request->validate([
-            'diskon' => 'required|numeric', // Wajib, harus angka
-            'deskripsi' => 'nullable|string', // Boleh kosong, harus string
-            'expired' => 'nullable|date' // Boleh kosong, harus format tanggal
+            'diskon' => 'required|numeric',
+            'tipe' => 'required|string|in:persen,nominal',
+            'min_beli' => 'nullable|numeric',
+            'max_diskon' => 'nullable|numeric',
+            'kuota' => 'nullable|integer',
+            'point' => 'nullable|integer',
+            'deskripsi' => 'nullable|string',
+            'kadaluarsa' => 'nullable|date',
         ]);
 
         try {
@@ -60,9 +66,14 @@ class VoucherController extends Controller
 
         // Validasi input dari request
         $validated = $request->validate([
-            'diskon' => 'required|numeric', // Wajib, harus angka
-            'deskripsi' => 'nullable|string', // Boleh kosong, harus string
-            'expired' => 'nullable|date' // Boleh kosong, harus format tanggal
+            'diskon' => 'required|numeric',
+            'tipe' => 'required|string|in:persen,nominal',
+            'min_beli' => 'nullable|numeric',
+            'max_diskon' => 'nullable|numeric',
+            'kuota' => 'nullable|integer',
+            'point' => 'nullable|integer',
+            'deskripsi' => 'nullable|string',
+            'kadaluarsa' => 'nullable|date',
         ]);
 
         try {
@@ -93,5 +104,31 @@ class VoucherController extends Controller
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Gagal menghapus voucher: ' . $e->getMessage());
         }
+    }
+
+    public function getVouchers(Request $request)
+    {
+        $total = $request->get('total');
+        $member_id = $request->get('member_id');
+        $point = 0;
+
+        if ($member_id) {
+            $member = Member::find($member_id);
+            $point = $member?->point ?? 0;
+        }
+
+        $vouchers = Voucher::where(function ($q) use ($point, $member_id) {
+            $q->whereNull('point')->orWhere('point', '<=', $point);
+        })
+            ->where('kuota', '>', 0)
+            ->where(function ($q) {
+                $q->whereNull('kadaluarsa')->orWhere('kadaluarsa', '>', now());
+            })
+            ->where(function ($q) use ($request) {
+                $q->whereNull('min_beli')->orWhere('min_beli', '<=', $request->total);
+            })
+            ->get();
+
+        return response()->json($vouchers);
     }
 }
